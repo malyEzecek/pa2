@@ -3,10 +3,19 @@
 //
 #include "Model.h"
 
-unsigned Model::getHight() const {
-    return hight;
+unsigned Model::getHeight() const {
+    return height;
 }
 
 unsigned Model::getWidth() const {
     return width;
+}
+
+Model::Model(): width(20), height(30) {}
+
+Model::Model(const int &width, const int &height) {
+
+    this->width = width;
+    this->height = height;
+
 }

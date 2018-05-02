@@ -5,10 +5,15 @@
 #ifndef EDITOR_VIEW_H
 #define EDITOR_VIEW_H
 
+#include "Model.h"
+
 class View{
 private:
+    void createTable(const Model & model);
+    void clearTable();
 public:
     void Refresh();
+
 };
 
 
