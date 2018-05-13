@@ -19,20 +19,28 @@ void View::createTable( const Model & model ) {
     for( int i = 0, actualPositionLastLetter = 5, traverse = 0; i < model.getWidth(); ++i ){
         if( i % 26 ){
             if( traverse % 2 ){
-                for(int t = 0; t < (int) columnName.size(); ++t)
+                for(int t = 0; t < (int) columnName.size(); ++t){
+                    columnName[t] = columnName[t + 1];
+                }
+                columnName[actualPositionLastLetter - 1] = 'A';
+                columnName[actualPositionLastLetter] = 'A';
+            } else {
+                columnName[actualPositionLastLetter] = 'A';
+                ++actualPositionLastLetter;
+                columnName[actualPositionLastLetter] = 'A';
             }
-
-            columnName[actualPositionLastLetter] = 'A';
-            ++actualPositionLastLetter;
-            columnName[actualPositionLastLetter]
+            std::cout << columnName;
+        } else {
+            ++columnName[actualPositionLastLetter];
+            std::cout << columnName;
         }
-        std::cout << columnName;
+        std::cout << "\n";
+    }
 
-    }
-    for( unsigned i = 0; i < model.getHeight(); ++i ){
-        for( unsigned t = 0; t < model.getWidth(); ++t ){
-            // todo vykreslit element
-        }
-    }
+//    for( unsigned i = 0; i < model.getHeight(); ++i ){
+//        for( unsigned t = 0; t < model.getWidth(); ++t ){
+//            // todo vykreslit element
+//        }
+//    }
 }
 void View::clearTable() {}
