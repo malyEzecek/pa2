@@ -11,11 +11,29 @@ unsigned Model::getWidth() const {
     return width;
 }
 
-Model::Model(): width(20), height(30) {}
+Model::Model(): width(20), height(30) {
+    spreadSheet.resize(height);
+    for( int i = 0; i < height; ++i )
+        spreadSheet[i].resize(width);
+//    for( int i = 0; i < height; ++i ){
+//        for( int t = 0; t < width; ++t )
+//            spreadSheet[i][t] = new Cell;
+//    }
+}
 
-Model::Model(const int &width, const int &height) {
-
-    this->width = width;
-    this->height = height;
-
+Model::Model(const int &width, const int &height): width(width), height(height) {
+    spreadSheet.resize(height);
+    for( int i = 0; i < height; ++i )
+        spreadSheet[i].resize(width);
+//
+//    for( int i = 0; i < height; ++i ){
+//        for( int t = 0; t < width; ++t )
+//            spreadSheet[i][t] = new Cell();
+//    }
+}
+Model::~Model() {
+//    for( int i = 0; i < height; ++i ){
+//        for( int t = 0; t < width; ++t )
+//            delete spreadSheet[i][t];
+//    }
 }

@@ -1,7 +1,12 @@
 #include <iostream>
+#include "View.h"
 #include "Model.h"
-#include <View.h>
 
 int main() {
-    Model modeFirst;
+
+    Model modelFirst;
+    std::cout << "Write something on your monitor.\n";
+    View newView;
+    newView.createTable( modelFirst );
+    return 0;
 }

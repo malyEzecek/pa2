@@ -9,9 +9,9 @@
 
 class View{
 private:
-    void createTable(const Model & model);
     void clearTable();
 public:
+    void createTable(const Model & model);
     void Refresh();
 
 };

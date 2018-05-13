@@ -1,8 +1,9 @@
 //
 // Created by julinka on 2.5.18.
 //
+#pragma once
 #include <vector>
-#include "Column.h"
+#include "Cell.h"
 
 #ifndef EDITOR_MODEL_H
 #define EDITOR_MODEL_H
@@ -12,13 +13,14 @@ private:
     unsigned width;
     unsigned height;
     /**
-     * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad cellem
+     * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
      */
-    std::vector<Column> spreadSheet;
+    std::vector<std::vector<Cell>> spreadSheet;
 
 public:
 
     Model();
+    ~Model();
 
     Model( const int & width, const int & height );
 
