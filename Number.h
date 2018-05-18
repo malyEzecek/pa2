@@ -14,10 +14,11 @@ private:
 public:
     explicit Number(const double & newNumber);
 
-    CommandType getType() const;
-    const Cell & getValue() const;
-    Cell & getValue();
+    CommandType getType() const override;
+    const double & getValue() const;
+    double & getValue();
     void setValue(const double & newNumber);
+    const std::string ToString() const override;
 };
 
 

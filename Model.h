@@ -15,7 +15,7 @@ private:
     /**
      * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
      */
-    std::vector<std::vector<Cell>> spreadSheet;
+    std::vector<std::vector<Cell *>> spreadSheet;
 
 public:
 
@@ -27,6 +27,8 @@ public:
     unsigned getHeight() const;
 
     unsigned getWidth() const;
+
+    const Cell * getElement(const int & width, const int & height) const;
 
 };
 

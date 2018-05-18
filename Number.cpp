@@ -4,19 +4,25 @@
 
 #include "Number.h"
 
-Number::Number(const double & newNumber): number(newNumber) {}
+Number::Number(const double & newNumber): Cell(), number(newNumber) {}
 
 CommandType Number::getType() const {
     return CommandType::NUMBER;
 }
-const Cell & Number::getValue() const {
-    return *this;
+
+const double & Number::getValue() const {
+    return number;
 }
 
-Cell & Number::getValue() {
-    return *this;
+double & Number::getValue() {
+    return number;
 }
 
 void Number::setValue(const double & newNumber) {
     number = newNumber;
+}
+
+const std::string Number::ToString() const {
+    std::string editString = std::to_string(number);
+    return Cell::editToWideOfCell(editString);
 }

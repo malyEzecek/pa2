@@ -4,33 +4,28 @@
 
 #include "Reference.h"
 
-Reference::Reference(const std::string &newPosition) : position(newPosition) {}
+Reference::Reference(const int & XPosition, const int & YPosition) : Cell(), XCoor(XPosition), YCoor(YPosition) {}
 
 CommandType Reference::getType() const {
     return CommandType::REFERENCE;
 }
 
-const Cell &Reference::getValue() const {
-    return *this;
+
+void Reference::setValue(const int & XPosition, const int & YPosition) {
+    XCoor = XPosition;
+    YCoor = YPosition;
 }
 
-Cell &Reference::getValue() {
-    return *this;
+const int Reference::getXCoor() const {
+    return XCoor;
 }
 
-void Reference::setValue(const std::string &newPosition) {
-    position = newPosition;
+const int Reference::getYCoor() const {
+    return YCoor;
 }
 
-int Reference::getXCoor() const {
-/*
- * todo
- */
-}
-
-int Reference::getYCoor() const {
-    /*
-     * todo
-     */
-
+const std::string Reference::ToString() const {
+    std::string editString = "$";
+    editString += std::to_string(XCoor) += std::to_string(YCoor);
+    return Cell::editToWideOfCell(editString);
 }

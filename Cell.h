@@ -6,6 +6,9 @@
 #define EDITOR_CELL_H
 
 #endif //EDITOR_CELL_H
+
+#include <string>
+
 enum class CommandType {
     BOOLEAN = 0,
     TEXT = 1,
@@ -19,11 +22,16 @@ enum class CommandType {
 struct Cell{
 private:
     int sizeOfCell;
+
+protected:
+    const int defaultWidthOfCell = 11; // defaultni nastaveni pro promennou mode;
+    int mode;
+    std::string editToWideOfCell(const std::string & editString) const;
+
 public:
     Cell();
-    virtual ~Cell();
+    virtual ~Cell() {}
     int getCellSize() const;
-    virtual CommandType getType() const {}
-    virtual const Cell & getValue() const {}
-    virtual Cell & getValue() {}
+    virtual CommandType getType() const = 0;
+    virtual const std::string ToString() const = 0;
 };

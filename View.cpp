@@ -14,33 +14,66 @@ void View::Refresh() {}
  */
 
 void View::createTable( const Model & model ) {
-    std::string columnName = "    A     ";
-    int line = 0;
-    for( int i = 0, actualPositionLastLetter = 5, traverse = 0; i < model.getWidth(); ++i ){
-        if( i % 26 ){
-            if( traverse % 2 ){
-                for(int t = 0; t < (int) columnName.size(); ++t){
-                    columnName[t] = columnName[t + 1];
-                }
-                columnName[actualPositionLastLetter - 1] = 'A';
-                columnName[actualPositionLastLetter] = 'A';
-            } else {
-                columnName[actualPositionLastLetter] = 'A';
-                ++actualPositionLastLetter;
-                columnName[actualPositionLastLetter] = 'A';
-            }
-            std::cout << columnName;
-        } else {
+    std::string columnName = "         A     ";
+
+    if( model.getWidth() > WIDTHMAX )
+        throw "The table can not be wider!\n";
+    if( model.getHeight() > HEIGHTMAX )
+        throw "The table can not be higher!\n";
+
+    //initscr(); //open window
+    //move(2,0); // posun vystupu o 2 radky dolu
+    for( int i = 0, actualPositionLastLetter = 9; i < model.getWidth(); ++i ) {
+        std::cout << columnName;
+        if( i < 25 ){
             ++columnName[actualPositionLastLetter];
-            std::cout << columnName;
+        } else if ( i > 25 ){
+            if( !(  (i - 25) % 26 ) ){
+                ++columnName[actualPositionLastLetter - 1];
+                columnName[actualPositionLastLetter] = 'A';
+            } else{
+                ++columnName[actualPositionLastLetter];
+            }
+        }
+        else {
+            columnName = "     A     " ;
+            actualPositionLastLetter = 6;
+            columnName[actualPositionLastLetter] = 'A';
+        }
+    }
+    std::cout<< "\n";
+
+    int amountOfNumber;
+    for( int i = 1; i <= model.getHeight(); ++i ){
+        amountOfNumber = (int)log10( i ) + 1;
+        std::string numberColumn;
+        if( amountOfNumber == 1 ){
+            numberColumn = "   ";
+            numberColumn += std::to_string(i);
+        } else if( amountOfNumber == 2 ){
+            numberColumn = "  ";
+            numberColumn += std::to_string(i);
+        } else if( amountOfNumber == 3 ){
+            numberColumn = " ";
+            numberColumn += std::to_string(i);
+        } else {
+            numberColumn += std::to_string(i);
+        }
+        std::cout<< numberColumn;
+
+        const Cell * pointerOnCell;
+        for( int j = 0; j < model.getWidth(); ++j ){
+            if( !( pointerOnCell = model.getElement(i, j) ))
+                std::cout<< "           ";
+            else {
+                std::cout << pointerOnCell->ToString();
+            }
         }
         std::cout << "\n";
-    }
 
-//    for( unsigned i = 0; i < model.getHeight(); ++i ){
-//        for( unsigned t = 0; t < model.getWidth(); ++t ){
-//            // todo vykreslit element
-//        }
-//    }
+        //refresh(); //make it appear on the screen!!!!!
+        //endwin(); //close window
+    }
 }
+
 void View::clearTable() {}

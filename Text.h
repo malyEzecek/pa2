@@ -8,7 +8,6 @@
 #endif //EDITOR_TEXT_H
 
 #include "Cell.h"
-#include <string>
 
 class Text : public Cell {
 public:
@@ -16,10 +15,11 @@ public:
 
 private:
 
-    explicit Text(const std::string newText);
+    explicit Text(const std::string & newText);
 
-    virtual CommandType getType() const;
-    virtual const Cell & getValue() const;
-    virtual Cell & getValue();
-    void setValue(const std::string newText);
+    CommandType getType() const override;
+    const std::string & getValue() const;
+    std::string & getValue();
+    void setValue(const std::string & newText);
+    const std::string ToString() const override;
 };

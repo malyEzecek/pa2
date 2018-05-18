@@ -9,14 +9,19 @@
 
 #include "Cell.h"
 
+
 class Bool : public Cell {
 private:
     bool value;
-public:
-    explicit Bool(const bool & newValue);
+    const int trueStringSize = 4;
+    const int falseStringSize = 5;
 
-    CommandType getType() const;
-    virtual const Cell & getValue() const;
-    virtual Cell & getValue();
+
+public:
+    Bool(const bool & newValue);
+    CommandType getType() const override;
+    bool getValue() const;
+    bool getValue();
     void setValue(const bool & value);
+    const std::string ToString() const override;
 };

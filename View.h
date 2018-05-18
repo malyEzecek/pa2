@@ -5,10 +5,14 @@
 #ifndef EDITOR_VIEW_H
 #define EDITOR_VIEW_H
 
+#include <math.h>
+#include <ncurses.h>
 #include "Model.h"
 
 class View{
 private:
+    const int WIDTHMAX = 676;
+    const int HEIGHTMAX = 9999;
     void clearTable();
 public:
     void createTable(const Model & model);
