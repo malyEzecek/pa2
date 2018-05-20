@@ -6,15 +6,15 @@
 
 Text::Text(const std::string &newText) : Cell(), text(newText) {}
 
-CommandType Text::getType() const {
-    return CommandType::TEXT;
+CellType Text::getType() const {
+    return CellType::TEXT;
 }
 
-const std::string &Text::getValue() const {
+const std::string & Text::getValue() const {
     return text;
 }
 
-std::string &Text::getValue() {
+std::string & Text::getValue() {
     return text;
 }
 

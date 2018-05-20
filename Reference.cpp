@@ -6,8 +6,8 @@
 
 Reference::Reference(const int & XPosition, const int & YPosition) : Cell(), XCoor(XPosition), YCoor(YPosition) {}
 
-CommandType Reference::getType() const {
-    return CommandType::REFERENCE;
+CellType Reference::getType() const {
+    return CellType::REFERENCE;
 }
 
 

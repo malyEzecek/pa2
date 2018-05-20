@@ -1,7 +1,7 @@
 //
 // Created by julinka on 10.5.18.
 //
-
+#pragma once
 #ifndef EDITOR_BOOL_H
 #define EDITOR_BOOL_H
 
@@ -13,13 +13,11 @@
 class Bool : public Cell {
 private:
     bool value;
-    const int trueStringSize = 4;
-    const int falseStringSize = 5;
-
 
 public:
     Bool(const bool & newValue);
-    CommandType getType() const override;
+    Bool(const Bool & other);
+    CellType getType() const override;
     bool getValue() const;
     bool getValue();
     void setValue(const bool & value);

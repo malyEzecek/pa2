@@ -6,8 +6,8 @@
 
 Number::Number(const double & newNumber): Cell(), number(newNumber) {}
 
-CommandType Number::getType() const {
-    return CommandType::NUMBER;
+CellType Number::getType() const {
+    return CellType::NUMBER;
 }
 
 const double & Number::getValue() const {

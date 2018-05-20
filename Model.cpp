@@ -2,11 +2,7 @@
 // Created by julinka on 2.5.18.
 //
 #include "Model.h"
-#include "Bool.h"
-#include "Reference.h"
-#include "Number.h"
-#include "Text.h"
-#include "Expression.h"
+
 
 Model *Model::instance = 0;
 

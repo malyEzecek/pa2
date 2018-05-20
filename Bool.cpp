@@ -7,8 +7,14 @@
 
 Bool::Bool(const bool &newValue) : Cell(), value(newValue) {}
 
-CommandType Bool::getType() const {
-    return CommandType::BOOLEAN;
+Bool::Bool(const Bool &other) {
+    this->Cell();
+    this->Cell::mode = other.Cell::mode;
+    this->value = other.value;
+}
+
+CellType Bool::getType() const {
+    return CellType::BOOLEAN;
 }
 
 bool Bool::getValue() const {
@@ -32,3 +38,5 @@ const std::string Bool::ToString() const {
     return Cell::editToWideOfCell(editString);
 
 }
+
+

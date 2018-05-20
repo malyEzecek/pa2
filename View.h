@@ -7,15 +7,16 @@
 
 #include <math.h>
 #include <ncurses.h>
-#include "Model.h"
+#include "Command.h"
 
 class View{
 private:
     const int WIDTHMAX = 676;
     const int HEIGHTMAX = 9999;
     void clearTable();
+    void StringToLower(std::string &stringToBeChanged);
 public:
-    void createTable(const Model & model);
+    void createTable();
     void Refresh();
 
 };

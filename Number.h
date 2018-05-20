@@ -2,6 +2,7 @@
 // Created by julinka on 11.5.18.
 //
 
+#pragma once
 #ifndef EDITOR_NUMBER_H
 #define EDITOR_NUMBER_H
 
@@ -14,7 +15,7 @@ private:
 public:
     explicit Number(const double & newNumber);
 
-    CommandType getType() const override;
+    CellType getType() const override;
     const double & getValue() const;
     double & getValue();
     void setValue(const double & newNumber);

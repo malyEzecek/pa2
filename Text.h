@@ -2,6 +2,7 @@
 // Created by julinka on 11.5.18.
 //
 
+#pragma once
 #ifndef EDITOR_TEXT_H
 #define EDITOR_TEXT_H
 
@@ -10,14 +11,14 @@
 #include "Cell.h"
 
 class Text : public Cell {
-public:
-    std::string text;
-
 private:
+    std::string text;
 
     explicit Text(const std::string & newText);
 
-    CommandType getType() const override;
+public:
+
+    CellType getType() const override;
     const std::string & getValue() const;
     std::string & getValue();
     void setValue(const std::string & newText);
