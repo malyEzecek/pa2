@@ -3,32 +3,46 @@
 //
 #pragma once
 #include <vector>
-#include "Cell.h"
+#include "Bool.h"
+#include "Reference.h"
+#include "Number.h"
+#include "Text.h"
+#include "Expression.h"
 
 #ifndef EDITOR_MODEL_H
 #define EDITOR_MODEL_H
 
 class Model {
 private:
-    unsigned width;
-    unsigned height;
-    /**
-     * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
-     */
-    std::vector<std::vector<Cell *>> spreadSheet;
 
-public:
+    static unsigned width;
+    static unsigned height;
 
     Model();
     ~Model();
+    /**
+     * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
+     */
+    static std::vector<std::vector<Cell *>> spreadSheet;
+    static Model * instance;
 
-    Model( const int & width, const int & height );
+public:
 
     unsigned getHeight() const;
 
     unsigned getWidth() const;
 
+    static Model * getInstance();
+
     const Cell * getElement(const int & width, const int & height) const;
+
+    void setWidth(unsigned int width);
+
+    void setHeight(unsigned int height);
+
+    void resizeTable(const int & xCoor, const int & yCoor);
+
+    void setValue(const int & xCoor, const int & yCoor, const Cell * cell);
 
 };
 
