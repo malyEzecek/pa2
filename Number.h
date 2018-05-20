@@ -14,7 +14,7 @@ private:
 public:
     explicit Number(const double & newNumber);
 
-    CommandType getType() const override;
+    CellType getType() const override;
     const double & getValue() const;
     double & getValue();
     void setValue(const double & newNumber);

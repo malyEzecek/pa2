@@ -14,8 +14,10 @@ private:
     const int WIDTHMAX = 676;
     const int HEIGHTMAX = 9999;
     void clearTable();
+    static void StringToLower(std::string & stringToBeChanged);
+
 public:
-    void createTable(const Model & model);
+    void createTable();
     void Refresh();
 
 };

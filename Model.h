@@ -10,25 +10,34 @@
 
 class Model {
 private:
-    unsigned width;
-    unsigned height;
+
+    static unsigned width;
+    static unsigned height;
+
+    Model();
     /**
      * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
      */
-    std::vector<std::vector<Cell *>> spreadSheet;
+    static std::vector<std::vector<Cell>> spreadSheet;
+    static Model * instance;
 
 public:
-
-    Model();
-    ~Model();
-
-    Model( const int & width, const int & height );
 
     unsigned getHeight() const;
 
     unsigned getWidth() const;
 
-    const Cell * getElement(const int & width, const int & height) const;
+    static Model * getInstance();
+
+    const Cell & getElement(const int & width, const int & height) const;
+
+    void setWidth(unsigned int width);
+
+    void setHeight(unsigned int height);
+
+    void resizeTable();
+
+    void setValue(const int & xCoor, const int & yCoor, const Cell & cell);
 
 };
 

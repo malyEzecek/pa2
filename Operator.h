@@ -20,7 +20,7 @@ private:
 
 public:
     Operator(const int & newOperator);
-    CommandType getType() const;
+    CellType getType() const;
     const Cell & getValue() const;
     Cell & getValue();
     void setValue(const int & newOperator);

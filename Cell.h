@@ -9,17 +9,17 @@
 
 #include <string>
 
-enum class CommandType {
-    BOOLEAN = 0,
-    TEXT = 1,
-    REFERENCE= 2,
-    EXPRESSION = 3,
-    NUMBER = 4,
-    OPERATION = 5,
-    BASICOPERATOR = 6
+enum class CellType {
+    BOOLEAN,
+    TEXT,
+    REFERENCE,
+    EXPRESSION,
+    NUMBER,
+    OPERATION,
+    BASICOPERATOR
 };
 
-struct Cell{
+class Cell{
 private:
     int sizeOfCell;
 
@@ -32,6 +32,8 @@ public:
     Cell();
     virtual ~Cell() {}
     int getCellSize() const;
-    virtual CommandType getType() const = 0;
-    virtual const std::string ToString() const = 0;
+
+    virtual CellType getType() const {};
+    virtual const std::string ToString() const {};
+    Cell & operator=(const Cell & other);
 };

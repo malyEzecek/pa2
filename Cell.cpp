@@ -22,3 +22,8 @@ std::string Cell::editToWideOfCell(const std::string &editString) const {
         returnString = editString;
     return returnString;
 }
+
+Cell & Cell::operator=(const Cell & other) {
+    this->sizeOfCell = other.sizeOfCell;
+    return *this;
+}

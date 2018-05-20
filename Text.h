@@ -17,7 +17,7 @@ private:
 
     explicit Text(const std::string & newText);
 
-    CommandType getType() const override;
+    CellType getType() const override;
     const std::string & getValue() const;
     std::string & getValue();
     void setValue(const std::string & newText);

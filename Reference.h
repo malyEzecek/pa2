@@ -16,7 +16,7 @@ private:
 
 public:
     explicit Reference(const int & XPosition, const int & YPosition);
-    CommandType getType() const override ;
+    CellType getType() const override ;
     virtual const std::string ToString() const override;
     const int getXCoor() const;
     const int getYCoor() const;

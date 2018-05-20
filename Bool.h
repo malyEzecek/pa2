@@ -19,9 +19,10 @@ private:
 
 public:
     Bool(const bool & newValue);
-    CommandType getType() const override;
+    CellType getType() const override;
     bool getValue() const;
     bool getValue();
     void setValue(const bool & value);
     const std::string ToString() const override;
+    //Bool & operator(const Bool & other);
 };

@@ -7,8 +7,8 @@
 
 Bool::Bool(const bool &newValue) : Cell(), value(newValue) {}
 
-CommandType Bool::getType() const {
-    return CommandType::BOOLEAN;
+CellType Bool::getType() const {
+    return CellType::BOOLEAN;
 }
 
 bool Bool::getValue() const {

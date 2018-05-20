@@ -6,8 +6,8 @@
 
 Operator::Operator(const int & newOperator) : basicOperator((OperatorType)newOperator) {}
 
-CommandType Operator::getType() const {
-    return CommandType::BASICOPERATOR;
+CellType Operator::getType() const {
+    return CellType::BASICOPERATOR;
 }
 
 const Cell & Operator::getValue() const {
