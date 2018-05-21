@@ -26,3 +26,7 @@ const std::string Number::ToString() const {
     std::string editString = std::to_string(number);
     return Cell::editToWideOfCell(editString);
 }
+
+Number *Number::clone() const {
+    return new Number(*this);
+}

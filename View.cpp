@@ -25,26 +25,24 @@ void View::createTable() {
 //    if (model->getHeight() > HEIGHTMAX)
 //        throw "The table can not be higher!\n";
 
-    initscr(); //open window
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_WHITE);
-    nocbreak(); // let the terminal do the line editing
-
-    printw("Please, enter a command : ");
+//    initscr(); //open window
+//    start_color();
+//    init_pair(1, COLOR_BLACK, COLOR_WHITE);
+//    nocbreak(); // let the terminal do the line editing
 
     int inputCharacter;
     std::string inputString;
     bool changed = true;
-    move(3, 0); // posun vystupu o 3 radky dolu
+   // move(3, 0); // posun vystupu o 3 radky dolu
     do {
         if (changed) {
             for (int i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
 
-                attron(COLOR_PAIR(1));
-                attron(A_BOLD);
-                printw(const_cast<char *>(columnName.c_str()));
-                attroff(A_BOLD);
-                attroff(COLOR_PAIR(1));
+//                attron(COLOR_PAIR(1));
+//                attron(A_BOLD);
+                std::cout << columnName; // todo const_cast<char *>(columnName.c_str()));
+//                attroff(A_BOLD);
+//                attroff(COLOR_PAIR(1));
 
                 if (i < 25) {
                     ++columnName[actualPositionLastLetter];
@@ -61,7 +59,7 @@ void View::createTable() {
                     columnName[actualPositionLastLetter] = 'A';
                 }
             }
-            printw("\n");
+            std::cout << std::endl;// todo printw("\n");
 
             int amountOfNumber;
             for (int i = 1; i <= model->getHeight(); ++i) {
@@ -80,44 +78,51 @@ void View::createTable() {
                     numberColumn += std::to_string(i);
                 }
 
-                attron(COLOR_PAIR(1));
-                attron(A_BOLD);
-                printw(const_cast<char *>(numberColumn.c_str()));
-                attroff(A_BOLD);
-                attroff(COLOR_PAIR(1));
+//                attron(COLOR_PAIR(1));
+//                attron(A_BOLD);
+                std::cout << numberColumn; //todo printw(const_cast<char *>(numberColumn.c_str()));
+//                attroff(A_BOLD);
+//                attroff(COLOR_PAIR(1));
 
                 for (int j = 0; j < model->getWidth(); ++j) {
                     if (!model->getElement(i, j))
-                        printw("           ");
+                        std::cout << "           "; //todo
                     else {
-                        printw(const_cast<char *>(model->getElement(i, j)->ToString().c_str()));
+                        std::cout << model->getElement(i, j)->ToString();//todo (const_cast<char *>(model->getElement(i, j)->ToString().c_str()));
                     }
                 }
-                printw("\n");
+                std::cout << std::endl; // todo
             }
-            refresh(); //make it appear on the screen!!!!!
+            //refresh(); //make it appear on the screen!!!!!
         }
         changed = false;
-        move(0, 26);
-        inputCharacter = getch();
-        inputString += (char) inputCharacter;
-        if (inputCharacter == '\n') {
+        std::cout << "Please, enter a command : "; //todo in the beginning
+       // move(0, 26);
+//        inputCharacter = getch();
+//        inputString += (char) inputCharacter;
+
+        getline(std::cin, inputString);
+        //if (inputCharacter == '\n') {
             StringToLower(inputString);
-            controller.SetCommand(inputString);
-        }
+        controller.SetCommand(inputString);
+        //}
 
-    } while (inputString != "exit\n");
+    } while (changed);
 
-    endwin();
+    //endwin();
 
 }
 
 void View::clearTable() {}
 
 void View::StringToLower(std::string &stringToBeChanged) {
-    for (char i : stringToBeChanged) {
-        if (i < 97 || i > 122)
+    int i = 0;
+    while (stringToBeChanged[i]) {
+        if (stringToBeChanged[i] < 65 || i > stringToBeChanged[i]){
+            ++i;
             continue;
-        i = (char) tolower(i);
+        }
+        stringToBeChanged[i] = (char) tolower(stringToBeChanged[i]);
+        ++i;
     }
 }

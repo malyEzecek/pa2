@@ -14,12 +14,14 @@ private:
 
 public:
     explicit Number(const double & newNumber);
-
+    Number() = default;
+    ~Number() = default;
     CellType getType() const override;
     const double & getValue() const;
     double & getValue();
     void setValue(const double & newNumber);
     const std::string ToString() const override;
+    Number * clone() const override;
 };
 
 

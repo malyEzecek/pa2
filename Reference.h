@@ -16,11 +16,13 @@ private:
     int YCoor;
 
 public:
+    Reference() = default;
+    ~Reference() = default;
     explicit Reference(const int & XPosition, const int & YPosition);
     CellType getType() const override ;
     virtual const std::string ToString() const override;
     const int getXCoor() const;
     const int getYCoor() const;
     void setValue(const int & XPosition, const int & YPosition);
-
+    Reference* clone() const override;
 };

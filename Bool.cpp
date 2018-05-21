@@ -7,12 +7,6 @@
 
 Bool::Bool(const bool &newValue) : Cell(), value(newValue) {}
 
-Bool::Bool(const Bool &other) {
-    this->Cell();
-    this->Cell::mode = other.Cell::mode;
-    this->value = other.value;
-}
-
 CellType Bool::getType() const {
     return CellType::BOOLEAN;
 }
@@ -39,4 +33,6 @@ const std::string Bool::ToString() const {
 
 }
 
-
+Bool *Bool::clone() const {
+    return new Bool(*this);
+}

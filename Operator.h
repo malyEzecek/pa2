@@ -19,11 +19,15 @@ private:
     OperatorType basicOperator;
 
 public:
+    Operator() = default;
+    ~Operator() = default;
     Operator(const int & newOperator);
     CellType getType() const;
     const Cell & getValue() const;
     Cell & getValue();
     void setValue(const int & newOperator);
+    Operator * clone() const override;
+    const std::string ToString() const override;
 
 };
 

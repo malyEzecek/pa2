@@ -1,8 +1,9 @@
 //
 // Created by julinka on 2.5.18.
 //
-#include "Model.h"
 
+
+#include "Model.h"
 
 Model *Model::instance = 0;
 
@@ -15,7 +16,7 @@ unsigned Model::getWidth() const {
 }
 
 Model::Model() {
-    width = 10;
+    width = 5;
     height = 25;
     spreadSheet.resize(height);
     for (int i = 0; i < height; ++i)
@@ -58,27 +59,27 @@ void Model::setHeight(unsigned int height) {
 void Model::setValue(const int &xCoor, const int &yCoor, const Cell *cell) {
     switch (cell->getType()) {
         case CellType::BOOLEAN : {
-            spreadSheet[yCoor][xCoor] = new Bool(*cell); // todo kopirujici konstruktor
+            spreadSheet[yCoor][xCoor] = cell->clone(); // todo kopirujici konstruktor
             break;
         }
         case CellType::REFERENCE : {
-            spreadSheet[yCoor][xCoor] = new Reference(*cell);
+            spreadSheet[yCoor][xCoor] = cell->clone();
             break;
         }
         case CellType::NUMBER : {
-            spreadSheet[yCoor][xCoor] = new Number(*cell);
+            spreadSheet[yCoor][xCoor] = cell->clone();
             break;
         }
         case CellType::TEXT: {
-            spreadSheet[yCoor][xCoor] = new Text(*cell);
+            spreadSheet[yCoor][xCoor] = cell->clone();
             break;
         }
         case CellType::EXPRESSION: {
-            spreadSheet[yCoor][xCoor] = new Expression(*cell);
+            spreadSheet[yCoor][xCoor] = cell->clone();
             break;
         }
         case CellType::OPERATION: {
-            spreadSheet[yCoor][xCoor] = new Operation(*cell); // todo class Operation + kopirujici konstruktor
+            spreadSheet[yCoor][xCoor] = cell->clone(); // todo class Operation + kopirujici konstruktor
             break;
         }
     }
@@ -99,5 +100,3 @@ void Model::resizeTable(const int &xCoor, const int &yCoor) {
             spreadSheet[i][t] = nullptr;
     }
 }
-
-

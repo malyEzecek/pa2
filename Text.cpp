@@ -25,3 +25,7 @@ void Text::setValue(const std::string &newText) {
 const std::string Text::ToString() const {
     return Cell::editToWideOfCell(text);
 }
+
+Text *Text::clone() const {
+    return new Text(*this);
+}

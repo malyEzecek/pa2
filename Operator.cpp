@@ -21,3 +21,12 @@ Cell & Operator::getValue() {
 void Operator::setValue(const int & newOperator) {
     basicOperator = (OperatorType) newOperator;
 }
+
+Operator *Operator::clone() const {
+    return new Operator(*this);
+}
+
+const std::string Operator::ToString() const {
+    return std::__cxx11::string();
+}
+

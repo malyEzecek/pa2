@@ -6,7 +6,8 @@
 #define EDITOR_VIEW_H
 
 #include <math.h>
-#include <ncurses.h>
+//#include <ncurses.h>
+#include <sstream>
 #include "Command.h"
 
 class View{

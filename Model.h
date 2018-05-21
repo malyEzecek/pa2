@@ -15,15 +15,15 @@
 class Model {
 private:
 
-    static unsigned width;
-    static unsigned height;
+    unsigned width;
+    unsigned height;
 
     Model();
     ~Model();
     /**
      * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
      */
-    static std::vector<std::vector<Cell *>> spreadSheet;
+    std::vector<std::vector<Cell *>> spreadSheet;
     static Model * instance;
 
 public:

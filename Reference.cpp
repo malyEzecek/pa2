@@ -29,3 +29,7 @@ const std::string Reference::ToString() const {
     editString += std::to_string(XCoor) += std::to_string(YCoor);
     return Cell::editToWideOfCell(editString);
 }
+
+Reference *Reference::clone() const {
+    return new Reference(*this);
+}

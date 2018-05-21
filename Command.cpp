@@ -1,7 +1,8 @@
+
 //
 // Created by julinka on 19.5.18.
 //
-#include <arpa/nameser_compat.h>
+
 #include <cstdlib>
 #include "Command.h"
 
@@ -171,6 +172,3 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 Cell * Command::parseStringToCell(std::string inputString) const {
     //todo delete space
 }
-
-
-
