@@ -19,7 +19,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool * delimiters
         case CommandType::SET : {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
-            Cell *newCell = parseStringToCell(temporaryForCutting);
+            Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
             Model::getInstance()->setValue(yCoor, xCoor, newCell);
             break;
         }
@@ -168,11 +168,17 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 
 }
 
-Cell * Command::parseStringToCell(std::string inputString) const {
-    //todo delete space
+Cell * Command::parseStringToCell(std::string inputString, bool * delimiters) const {
+    std::vector<std::string> possibleCells;
+    deleteThisUgglySpaces(delimiters, inputString);
+    if(inputString[0] == '"'){
+        std::string value = parseStringToText(inputString);
+    } else {
+        if(inputString.substr(0, 4) == "true" || inputString.substr(0, 5) == "false")
+    }
 }
 
-void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString) const { // position je predem nastavena na nulu
+void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString) const {
     int position = 0;
     for(; position < inputString.size(); ++position ){
         if(inputString[position ] == ' ')
@@ -184,39 +190,39 @@ void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString)
                     break;
                 }
                 case '(': {
-                    delimiters[0] = true;
+                    delimiters[1] = true;
                     break;
                 }
                 case '\n': {
-                    delimiters[0] = true;
+                    delimiters[2] = true;
                     break;
                 }
                 case ')': {
-                    delimiters[0] = true;
+                    delimiters[3] = true;
                     break;
                 }
                 case '+': {
-                    delimiters[0] = true;
+                    delimiters[4] = true;
                     break;
                 }
                 case '-' : {
-                    delimiters[0] = true;
+                    delimiters[5] = true;
                     break;
                 }
                 case '*': {
-                    delimiters[0] = true;
+                    delimiters[6] = true;
                     break;
                 }
                 case '/': {
-                    delimiters[0] = true;
+                    delimiters[7] = true;
                     break;
                 }
                 case '$': {
-                    delimiters[0] = true;
+                    delimiters[8] = true;
                     break;
                 }
                 case ',': {
-                    delimiters[0] = true;
+                    delimiters[9] = true;
                     break;
                 }
                 default: break;

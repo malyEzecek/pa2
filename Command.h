@@ -29,7 +29,7 @@ private:
 
     void parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const;
 
-    Cell *parseStringToCell(std::string inputString) const;
+    Cell *parseStringToCell(std::string inputString, bool * delimiters) const;
 
     CommandType SwitchTypeOfCommand(const std::string &parsedCommand) const;
 
