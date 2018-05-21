@@ -5,7 +5,7 @@
 #include <string>
 #include "View.h"
 
-void View::Refresh() {}
+void View::Refresh() const{}
 
 /**
  * Get model as a parameter and transform the information from the model
@@ -13,7 +13,7 @@ void View::Refresh() {}
  * @param model
  */
 
-void View::createTable() {
+void View::createTable() const{
 
     Model * model = Model::getInstance();
     Command controller;
@@ -113,9 +113,9 @@ void View::createTable() {
 
 }
 
-void View::clearTable() {}
+void View::clearTable() const{}
 
-void View::StringToLower(std::string &stringToBeChanged) {
+void View::StringToLower(std::string &stringToBeChanged) const{
     int i = 0;
     while (stringToBeChanged[i]) {
         if (stringToBeChanged[i] < 65 || i > stringToBeChanged[i]){

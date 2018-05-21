@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include "Model.h"
 
-enum class CommandType{
+enum class CommandType {
     CLEAR,
     SET,
     EXIT,
@@ -23,19 +23,25 @@ class Command {
 private:
     CommandType typeOfCommand;
     static const int maxCharInCommand = 6;
-    static const int FirstA = 97;
+    static const int FirstA = 97; // in ASCII code
 
-    CommandType parseToCommand(std::string & inputString, bool * delimiters ) const;
-    void parseStringToCoordinates(int & xCoor, int & yCoor, std::string & inputString, bool * delimiters) const;
-    Cell * parseStringToCell(std::string inputString) const;
-    CommandType SwitchTypeOfCommand(const std::string & parsedCommand) const;
-    void ExecuteCommand(std::string & temporaryForCutting, bool * delimiters) const;
-    void CheckCoordinatesDelimiters(std::vector<char> &  delim, bool * delimiters, bool & finded, std::string & inputString, int & position) const;
+    CommandType parseToCommand(std::string &inputString, bool *delimiters) const;
 
+    void parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const;
+
+    Cell *parseStringToCell(std::string inputString) const;
+
+    CommandType SwitchTypeOfCommand(const std::string &parsedCommand) const;
+
+    void ExecuteCommand(std::string &temporaryForCutting, bool *delimiters) const;
+
+    void deleteThisUgglySpaces( bool *delimiters, std::string & inputString) const;
 
 public:
     Command();
-    void SetCommand(const std::string & inputString);
+
+    void SetCommand(const std::string &inputString);
+
     CommandType returnCommandType() const;
 
 };

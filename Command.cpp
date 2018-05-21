@@ -24,14 +24,13 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool * delimiters
             break;
         }
         case CommandType::EXIT : {
-            int xCoor, yCoor;
-            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             //todo save? -> JSON
             // no -> destruktor
             break;
         }
         case CommandType::CLEAR : {
-            //todo save? -> JSON
+            int xCoor, yCoor;
+            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             // no -> destruktor
         }
         case CommandType::RESIZE : {
@@ -112,23 +111,6 @@ CommandType Command::parseToCommand(std::string &inputString, bool * delimiters)
     return SwitchTypeOfCommand(parsedCommand);
 }
 
-void Command::CheckCoordinatesDelimiters(std::vector<char> &  delim, bool * delimiters, bool & finded, std::string & inputString, int & position) const {
-    int positionInDelimVector = 0;
-    for(; positionInDelimVector < delim.size(); ++positionInDelimVector){
-        if(inputString[position] == delim[positionInDelimVector]){
-            finded = true;
-            break;
-        }
-    }
-    if(finded){
-        if(positionInDelimVector == 2){
-            delimiters[3] = true;
-        } else if( positionInDelimVector == 1){
-            delimiters[9] = true;
-        }
-    }
-}
-
 
 void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool * delimiters) const {
     int position = 0;
@@ -188,4 +170,59 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 
 Cell * Command::parseStringToCell(std::string inputString) const {
     //todo delete space
+}
+
+void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString) const { // position je predem nastavena na nulu
+    int position = 0;
+    for(; position < inputString.size(); ++position ){
+        if(inputString[position ] == ' ')
+            continue;
+        else{
+            switch(inputString[position]){ // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
+                case ' ': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '(': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '\n': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case ')': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '+': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '-' : {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '*': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '/': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case '$': {
+                    delimiters[0] = true;
+                    break;
+                }
+                case ',': {
+                    delimiters[0] = true;
+                    break;
+                }
+                default: break;
+            }
+            break;
+        }
+    }
+    inputString.erase(0, (unsigned long)position);
 }
