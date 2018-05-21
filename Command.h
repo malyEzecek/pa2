@@ -23,6 +23,7 @@ class Command {
 private:
     CommandType typeOfCommand;
     static const int maxCharInCommand = 6;
+    static const int FirstA = 97;
 
     CommandType parseToCommand(std::string & inputString, bool * delimiters ) const;
     void parseStringToCoordinates(int & xCoor, int & yCoor, std::string & inputString, bool * delimiters) const;

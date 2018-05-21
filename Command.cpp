@@ -132,25 +132,42 @@ void Command::CheckCoordinatesDelimiters(std::vector<char> &  delim, bool * deli
 
 void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool * delimiters) const {
     int position = 0;
-    std::vector<char> delim = {' ', ',', ')'};
+    std::vector<char> delim = { ',', ')', ' '};
     for (char character : inputString) {
-        if (character == '$')
+        if (character == '$'){
+            ++position;
             break;
+        }
         else if (character != ' ')
             throw "Invalid parameter. Try 'help' for more information.\n";
         ++position;
     }
     std::string xCoorString, yCoorString;
     bool first = true, finded = false;
-    for (int amount = 0; position < inputString.size(); ++position, ++amount) {
+    bool breakMoment = false;
+    for (int amount = 0; position < inputString.size() -1; ++position, ++amount) {
         if (inputString[position] == '$') {
             first = false;
             continue;
         }
+        for(char delimiter : delim){
+            if(inputString[position] == delimiter){
+                breakMoment = true;
+                if(delimiter == ',')
+                    delimiters[9] = true;
+                else if(delimiter == ')')
+                    delimiters[2] = true;
+                break;
+
+            }
+        }
+        if (breakMoment)
+            break;
+
         if(first){
             if(inputString[position] < 97 || inputString[position] > 122)
                 throw "Invalid parameter. Try 'help' for more information.\n";
-            xCoorString += inputString[position];
+            xCoorString += std::to_string((int)inputString[position] - FirstA);
         } else {
             if(inputString[position] < 48 || inputString[position] > 57)
                 throw "Invalid parameter. Try 'help' for more information.\n";
