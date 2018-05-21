@@ -17,7 +17,7 @@ private:
 public:
     Bool() = default;
     ~Bool() = default;
-    explicit Bool(const bool & newValue);
+    explicit Bool(const bool newValue);
     CellType getType() const override;
     bool getValue() const;
     bool getValue();

@@ -21,6 +21,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool * delimiters
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
             Model::getInstance()->setValue(yCoor, xCoor, newCell);
+            delete newCell;
             break;
         }
         case CommandType::EXIT : {
@@ -169,12 +170,19 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 }
 
 Cell * Command::parseStringToCell(std::string inputString, bool * delimiters) const {
-    std::vector<std::string> possibleCells;
+    std::vector<Cell *> possibleCells;
     deleteThisUgglySpaces(delimiters, inputString);
     if(inputString[0] == '"'){
-        std::string value = parseStringToText(inputString);
+        std::string value = parseStringToText(inputString); // todo
+        return new Text(value);
     } else {
-        if(inputString.substr(0, 4) == "true" || inputString.substr(0, 5) == "false")
+        if(inputString.substr(0, 4) == "true")
+            return new Bool(true);
+        else if(inputString.substr(0, 5) == "false")
+            return new Bool(false);
+        else {
+            parseExpression(possibleCells, inputString); //todo
+        }
     }
 }
 

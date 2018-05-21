@@ -5,7 +5,7 @@
 #include "Bool.h"
 
 
-Bool::Bool(const bool &newValue) : Cell(), value(newValue) {}
+Bool::Bool(const bool newValue) : Cell(), value(newValue) {}
 
 CellType Bool::getType() const {
     return CellType::BOOLEAN;
