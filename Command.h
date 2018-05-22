@@ -39,9 +39,18 @@ private:
 
     void deleteThisUglySpaces(std::string &inputString) const;
 
+    void parseStringToNumber(std::string &inputString, std::string &number) const;
+
     void setAllDelimitersToFalse(bool *delimiters) const;
 
-    std::string parseStringToText(std::string &inputString, bool * delimiters) const;
+    std::string parseStringToText(std::string &inputString) const;
+
+    void parseStringToBool(std::string &inputString) const;
+
+    void parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const;
+
+    void ParseToXYString(std::string &inputString, std::string &xCoorString, std::string &yCoorString,
+                         std::vector<char> &delim, bool first, bool breakMoment, int &position, bool *delimiters) const;
 
 public:
     Command();
