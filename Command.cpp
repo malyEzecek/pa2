@@ -14,7 +14,7 @@ CommandType Command::returnCommandType() const {
 
 // Insert(A14, A5 + B7 + 14 + 15);
 
-void Command::ExecuteCommand(std::string &temporaryForCutting, bool * delimiters) const {
+void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters) const {
     switch (typeOfCommand) {
         case CommandType::SET : {
             int xCoor, yCoor;
@@ -82,7 +82,7 @@ CommandType Command::SwitchTypeOfCommand(const std::string &parsedCommand) const
         throw "This command doesn't exist. Try 'help' for more information.\n";
 }
 
-CommandType Command::parseToCommand(std::string &inputString, bool * delimiters) const {
+CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) const {
     std::string parsedCommand;
     if (inputString[0] != 'c' && inputString[0] != 'e' && inputString[0] != 's'
         && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'h')
@@ -103,7 +103,7 @@ CommandType Command::parseToCommand(std::string &inputString, bool * delimiters)
                 break;
             }
         }
-        if(finded)
+        if (finded)
             break;
         parsedCommand += character;
         ++CharInCommand;
@@ -113,32 +113,31 @@ CommandType Command::parseToCommand(std::string &inputString, bool * delimiters)
 }
 
 
-void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool * delimiters) const {
+void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const {
     int position = 0;
-    std::vector<char> delim = { ',', ')', ' '};
+    std::vector<char> delim = {',', ')', ' '};
     for (char character : inputString) {
-        if (character == '$'){
+        if (character == '$') {
             ++position;
             break;
-        }
-        else if (character != ' ')
+        } else if (character != ' ')
             throw "Invalid parameter. Try 'help' for more information.\n";
         ++position;
     }
     std::string xCoorString, yCoorString;
     bool first = true, finded = false;
     bool breakMoment = false;
-    for (int amount = 0; position < inputString.size() -1; ++position, ++amount) {
+    for (int amount = 0; position < inputString.size() - 1; ++position, ++amount) {
         if (inputString[position] == '$') {
             first = false;
             continue;
         }
-        for(char delimiter : delim){
-            if(inputString[position] == delimiter){
+        for (char delimiter : delim) {
+            if (inputString[position] == delimiter) {
                 breakMoment = true;
-                if(delimiter == ',')
+                if (delimiter == ',')
                     delimiters[9] = true;
-                else if(delimiter == ')')
+                else if (delimiter == ')')
                     delimiters[2] = true;
                 break;
 
@@ -147,21 +146,21 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
         if (breakMoment)
             break;
 
-        if(first){
-            if(inputString[position] < 97 || inputString[position] > 122)
+        if (first) {
+            if (inputString[position] < 97 || inputString[position] > 122)
                 throw "Invalid parameter. Try 'help' for more information.\n";
-            xCoorString += std::to_string((int)inputString[position] - FirstA);
+            xCoorString += std::to_string((int) inputString[position] - FirstA);
         } else {
-            if(inputString[position] < 48 || inputString[position] > 57)
+            if (inputString[position] < 48 || inputString[position] > 57)
                 throw "Invalid parameter. Try 'help' for more information.\n";
             yCoorString += inputString[position];
         }
 
-        if( amount >= 7)
+        if (amount >= 7)
             throw "Invalid parameter. Try 'help' for more information.\n";
     }
 //todo delete space
-    if(xCoorString.size() > 2 || yCoorString.size() > 4 || ( !delimiters[9] && !delimiters[3]))
+    if (xCoorString.size() > 2 || yCoorString.size() > 4 || (!delimiters[9] && !delimiters[3]))
         throw "Invalid parameter. Try 'help' for more information.\n";
     xCoor = std::stoi(xCoorString);
     yCoor = std::stoi(yCoorString);
@@ -169,30 +168,50 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 
 }
 
-Cell * Command::parseStringToCell(std::string inputString, bool * delimiters) const {
+Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) const {
     std::vector<Cell *> possibleCells;
-    deleteThisUgglySpaces(delimiters, inputString);
-    if(inputString[0] == '"'){
-        std::string value = parseStringToText(inputString); // todo
+    deleteThisUglySpaces(delimiters, inputString);
+    if (inputString[0] == '"') {
+        inputString.erase(0, 1);
+        std::string value = parseStringToText(inputString, delimiters); // todo
         return new Text(value);
     } else {
-        if(inputString.substr(0, 4) == "true")
+
+        if (inputString.substr(0, 4) == "true"){
+
             return new Bool(true);
-        else if(inputString.substr(0, 5) == "false")
+        }
+        else if (inputString.substr(0, 5) == "false"){
+
             return new Bool(false);
+        }
         else {
             parseExpression(possibleCells, inputString); //todo
         }
     }
 }
 
-void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString) const {
+void Command::deleteThisUglySpaces(std::string &inputString) const {
     int position = 0;
-    for(; position < inputString.size(); ++position ){
-        if(inputString[position ] == ' ')
+    for (; position < inputString.size(); ++position) {
+        if (inputString[position] == ' ')
             continue;
-        else{
-            switch(inputString[position]){ // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
+        else {
+            break;
+        }
+    }
+
+    inputString.erase(0, (unsigned long) position);
+}
+
+
+void Command::deleteThisUglySpaces(bool *delimiters, std::string &inputString) const {
+    int position = 0;
+    for (; position < inputString.size(); ++position) {
+        if (inputString[position] == ' ')
+            continue;
+        else {
+            switch (inputString[position]) { // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
                 case ' ': {
                     delimiters[0] = true;
                     break;
@@ -233,10 +252,39 @@ void Command::deleteThisUgglySpaces(bool *delimiters, std::string & inputString)
                     delimiters[9] = true;
                     break;
                 }
-                default: break;
+                default:
+                    break;
             }
             break;
         }
     }
-    inputString.erase(0, (unsigned long)position);
+    inputString.erase(0, (unsigned long) position);
 }
+
+void Command::setAllDelimitersToFalse(bool *delimiters) const {
+    for (int i = 0; i < 10; ++i){
+        delimiters[i] = false;
+    }
+}
+
+std::string Command::parseStringToText(std::string &inputString, bool * delimiters) const {
+    std::string returnText;
+    for(char inputChar : inputString){
+        if( inputChar == '"'){
+            break;
+        }
+        if( inputChar == ')' || inputChar == '\n'){
+            throw "Invalid parameter. Try 'help' for more information.\n";
+        }
+        returnText += inputChar;
+    }
+    deleteThisUglySpaces(delimiters, inputString);
+
+    if(inputString[0] != ')')
+        throw "Invalid parameter. Try 'help' for more information.\n";
+    deleteThisUglySpaces(inputString);
+
+    if(inputString[0] != '\n')
+        throw "Invalid parameter. Try 'help' for more information.\n";
+}
+

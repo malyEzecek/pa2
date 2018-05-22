@@ -29,13 +29,19 @@ private:
 
     void parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const;
 
-    Cell *parseStringToCell(std::string inputString, bool * delimiters) const;
+    Cell *parseStringToCell(std::string inputString, bool *delimiters) const;
 
     CommandType SwitchTypeOfCommand(const std::string &parsedCommand) const;
 
     void ExecuteCommand(std::string &temporaryForCutting, bool *delimiters) const;
 
-    void deleteThisUgglySpaces( bool *delimiters, std::string & inputString) const;
+    void deleteThisUglySpaces(bool *delimiters, std::string &inputString) const;
+
+    void deleteThisUglySpaces(std::string &inputString) const;
+
+    void setAllDelimitersToFalse(bool *delimiters) const;
+
+    std::string parseStringToText(std::string &inputString, bool * delimiters) const;
 
 public:
     Command();
