@@ -105,6 +105,8 @@ void View::createTable() const{
         //if (inputCharacter == '\n') {
             StringToLower(inputString);
         controller.SetCommand(inputString);
+        changed = true;
+        columnName = "         A     ";
         //}
 
     } while (changed);

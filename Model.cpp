@@ -56,7 +56,7 @@ void Model::setHeight(unsigned int height) {
     Model::height = height;
 }
 
-void Model::setValue(const int &xCoor, const int &yCoor, const Cell *cell) {
+void Model::setValue(const int &yCoor, const int &xCoor, const Cell *cell) {
     switch (cell->getType()) {
         case CellType::BOOLEAN : {
             spreadSheet[yCoor][xCoor] = cell->clone();

@@ -19,7 +19,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
-            Model::getInstance()->setValue(yCoor, xCoor, newCell);
+            Model::getInstance()->setValue(yCoor - 1, xCoor, newCell); // pocitame od 0
             delete newCell;
             break;
         }
@@ -83,6 +83,7 @@ CommandType Command::SwitchTypeOfCommand(const std::string &parsedCommand) const
 
 CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) const {
     std::string parsedCommand;
+    deleteThisUglySpaces(inputString);
     if (inputString[0] != 'c' && inputString[0] != 'e' && inputString[0] != 's'
         && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'h')
         throw "This command doesn't exist. Try 'help' for more information.\n";
@@ -198,6 +199,12 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
             return new Bool(false);
         } else {
             parseExpression(possibleCells, inputString, delimiters);
+            if (possibleCells.size() > 1) {
+                //todo return newExpression with all pointers on Cells
+            } else if (possibleCells.size() == 1) {
+                return possibleCells[0];
+            } else
+                throw "Invalid parameter. Try 'help' for more information.\n";
         }
     }
 }
@@ -280,15 +287,19 @@ void Command::setAllDelimitersToFalse(bool *delimiters) const {
 
 std::string Command::parseStringToText(std::string &inputString) const {
     std::string returnText;
+    int position = 0;
     for (char inputChar : inputString) {
         if (inputChar == '"') {
             break;
         }
-        if (inputChar == ')' || inputChar == '\n') {
+        if (inputChar == ')') {
             throw "Invalid parameter. Try 'help' for more information.\n";
         }
         returnText += inputChar;
+        ++position;
     }
+
+    inputString.erase(0, (unsigned long)position + 1);
     deleteThisUglySpaces(inputString);
 
     if (inputString[0] != ')')
@@ -296,8 +307,7 @@ std::string Command::parseStringToText(std::string &inputString) const {
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
 
-    if (inputString[0] != '\n')
-        throw "Invalid parameter. Try 'help' for more information.\n";
+    return returnText;
 }
 
 void Command::parseStringToBool(std::string &inputString) const {
@@ -306,9 +316,6 @@ void Command::parseStringToBool(std::string &inputString) const {
         throw "Invalid parameter. Try 'help' for more information.\n";
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
-
-    if (inputString[0] != '\n')
-        throw "Invalid parameter. Try 'help' for more information.\n";
 }
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
@@ -355,13 +362,12 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             break;
     }
     deleteThisUglySpaces(inputString);
-    if(inputString[0] != ')')
+    if (inputString[0] != ')')
         throw "Invalid parameter. Try 'help' for more information.\n";
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
+    //todo konec
 
-    if(inputString[0] != '\n')
-        throw "Invalid parameter. Try 'help' for more information.\n";
 }
 
 void Command::parseStringToNumber(std::string &inputString, std::string &number) const {
@@ -377,7 +383,7 @@ void Command::parseStringToNumber(std::string &inputString, std::string &number)
         }
         ++position;
     }
-    inputString.erase(0, (unsigned long)position);
+    inputString.erase(0, (unsigned long) position);
     if (dots > 1)
         throw "Invalid parameter. Try 'help' for more information.\n";
 }
