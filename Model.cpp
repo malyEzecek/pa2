@@ -17,7 +17,7 @@ unsigned Model::getWidth() const {
 
 Model::Model() {
     width = 5;
-    height = 25;
+    height = 50;
     spreadSheet.resize(height);
     for (int i = 0; i < height; ++i)
         spreadSheet[i].resize(width);
@@ -59,7 +59,7 @@ void Model::setHeight(unsigned int height) {
 void Model::setValue(const int &xCoor, const int &yCoor, const Cell *cell) {
     switch (cell->getType()) {
         case CellType::BOOLEAN : {
-            spreadSheet[yCoor][xCoor] = cell->clone(); // todo kopirujici konstruktor
+            spreadSheet[yCoor][xCoor] = cell->clone();
             break;
         }
         case CellType::REFERENCE : {
