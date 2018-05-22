@@ -8,6 +8,7 @@
 #include "Number.h"
 #include "Text.h"
 #include "Expression.h"
+#include "Operator.h"
 
 #ifndef EDITOR_MODEL_H
 #define EDITOR_MODEL_H

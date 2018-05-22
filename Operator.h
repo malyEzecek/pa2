@@ -8,10 +8,10 @@
 #include "Cell.h"
 
 enum class OperatorType {
-    PLUS = 0,
-    MINUS = 1,
-    DIVIDE = 3,
-    MULTIPLY = 4
+    PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
 };
 
 class Operator : public Cell {
@@ -20,13 +20,21 @@ private:
 
 public:
     Operator() = default;
+
     ~Operator() = default;
-    Operator(const int & newOperator);
+
+    explicit Operator(OperatorType newOperator);
+
     CellType getType() const;
-    const Cell & getValue() const;
-    Cell & getValue();
-    void setValue(const int & newOperator);
-    Operator * clone() const override;
+
+    const Cell &getValue() const;
+
+    Cell &getValue();
+
+    void setValue(const int &newOperator);
+
+    Operator *clone() const override;
+
     const std::string ToString() const override;
 
 };

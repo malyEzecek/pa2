@@ -312,24 +312,73 @@ void Command::parseStringToBool(std::string &inputString) const {
 }
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
-    deleteThisUglySpaces(inputString);
     for (char inputCharacter : inputString) {
-        if (inputCharacter == '$'){
+        deleteThisUglySpaces(inputString);
+        if (inputCharacter == '$') {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, inputString, delimiters);
             possibleCells.push_back(new Reference(xCoor, yCoor));
-        } else if( inputCharacter > 48 && inputCharacter < 57){
+
+        } else if (inputCharacter >= 48 && inputCharacter <= 57) {
             std::string number;
             parseStringToNumber(inputString, number);
             double cellNumber = std::stod(number);
+            possibleCells.push_back(new Number(cellNumber));
+
+        } else if (inputCharacter >= 42 && inputCharacter <= 47) {
+            switch (inputCharacter) {
+                case '+': {
+                    possibleCells.push_back(new Operator(OperatorType::PLUS));
+                    break;
+                }
+                case '-': {
+                    possibleCells.push_back(new Operator(OperatorType::MINUS));
+                    break;
+                }
+                case '/': {
+                    possibleCells.push_back(new Operator(OperatorType::DIVIDE));
+                    break;
+                }
+                case '*': {
+                    possibleCells.push_back(new Operator(OperatorType::MULTIPLY));
+                    break;
+                }
+                default:
+                    throw "Invalid parameter. Try 'help' for more information.\n";
+            }
+            inputString.erase(0, 1);
         }
-
-
+//        } else if(){
+//            //todo avg, sum, cos atd...
+//        }
+        else
+            break;
     }
+    deleteThisUglySpaces(inputString);
+    if(inputString[0] != ')')
+        throw "Invalid parameter. Try 'help' for more information.\n";
+    inputString.erase(0, 1);
+    deleteThisUglySpaces(inputString);
 
+    if(inputString[0] != '\n')
+        throw "Invalid parameter. Try 'help' for more information.\n";
 }
 
 void Command::parseStringToNumber(std::string &inputString, std::string &number) const {
-
+    int dots = 0, position = 0;
+    for (char input : inputString) {
+        if ((input >= 48 && input <= 57))
+            number += input;
+        else if (input == '.') {
+            number += '.';
+            ++dots;
+        } else {
+            break;
+        }
+        ++position;
+    }
+    inputString.erase(0, (unsigned long)position);
+    if (dots > 1)
+        throw "Invalid parameter. Try 'help' for more information.\n";
 }
 

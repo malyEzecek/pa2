@@ -4,7 +4,7 @@
 
 #include "Operator.h"
 
-Operator::Operator(const int & newOperator) : basicOperator((OperatorType)newOperator) {}
+Operator::Operator(OperatorType newOperator) : basicOperator(newOperator) {}
 
 CellType Operator::getType() const {
     return CellType::BASICOPERATOR;
