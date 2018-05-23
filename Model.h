@@ -45,6 +45,8 @@ public:
 
     void setValue(const int & xCoor, const int & yCoor, const Cell * cell);
 
+    void deleteValue(const int &yCoord, const int &xCoor);
+
 };
 
 #endif //EDITOR_MODEL_H

@@ -31,7 +31,8 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         case CommandType::CLEAR : {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
-            // no -> destruktor
+            Model::getInstance()->deleteValue(yCoor - 1, xCoor);
+            break;
         }
         case CommandType::RESIZE : {
             break;
@@ -164,8 +165,9 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 
     ParseToXYString(inputString, xCoorString, yCoorString, delim, first, breakMoment, position, delimiters);
 
-
+    inputString.erase(0, position);
     deleteThisUglySpaces(inputString);
+
     if (!delimiters[9] && !delimiters[3]) {
         if (inputString[0] == ',')
             delimiters[9] = true;
@@ -179,7 +181,7 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
         throw "Invalid parameter. Try 'help' for more information.\n";
     xCoor = std::stoi(xCoorString);
     yCoor = std::stoi(yCoorString);
-    inputString.erase(0, (unsigned long) position + 1);
+    inputString.erase(0, 1);
 }
 
 Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) const {

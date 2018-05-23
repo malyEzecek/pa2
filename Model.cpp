@@ -100,3 +100,13 @@ void Model::resizeTable(const int &xCoor, const int &yCoor) {
             spreadSheet[i][t] = nullptr;
     }
 }
+
+void Model::deleteValue(const int &yCoord, const int &xCoor) {
+    if (spreadSheet[yCoord][xCoor]) {
+        delete spreadSheet[yCoord][xCoor];
+        spreadSheet[yCoord][xCoor] = nullptr;
+    } else {
+        throw "This Cell is empty.\n";
+    }
+
+}
