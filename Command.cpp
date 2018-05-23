@@ -35,6 +35,9 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
             break;
         }
         case CommandType::RESIZE : {
+            int xCoor, yCoor;
+            parseToResizeParameters(xCoor, yCoor);
+            Model::getInstance()->resizeTable(yCoor, xCoor);
             break;
         }
         case CommandType::LOAD : {
@@ -113,7 +116,7 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
     return SwitchTypeOfCommand(parsedCommand);
 }
 
-void Command::ParseToXYString(std::string &inputString, std::string &xCoorString, std::string &yCoorString,
+void Command::parseToXYString(std::string &inputString, std::string &xCoorString, std::string &yCoorString,
                               std::vector<char> &delim, bool first, bool breakMoment, int &position,
                               bool *delimiters) const {
 
@@ -158,12 +161,12 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
     inputString.erase(0, 1);
 
     int position = 0;
-    std::vector<char> delim = {',', ')', ' '};
+    std::vector<char> delim = {',', ')', ' ', ':'};
     std::string xCoorString, yCoorString;
     bool first = true;
     bool breakMoment = false;
 
-    ParseToXYString(inputString, xCoorString, yCoorString, delim, first, breakMoment, position, delimiters);
+    parseToXYString(inputString, xCoorString, yCoorString, delim, first, breakMoment, position, delimiters);
 
     inputString.erase(0, position);
     deleteThisUglySpaces(inputString);
@@ -173,6 +176,8 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
             delimiters[9] = true;
         else if (inputString[0] == ')')
             delimiters[3] = true;
+        else if (inputString[0] == ':') {}
+
         else
             throw "Invalid parameter. Try 'help' for more information.\n";
     }
@@ -281,12 +286,6 @@ void Command::deleteThisUglySpaces(bool *delimiters, std::string &inputString) c
     inputString.erase(0, (unsigned long) position);
 }
 
-void Command::setAllDelimitersToFalse(bool *delimiters) const {
-    for (int i = 0; i < 10; ++i) {
-        delimiters[i] = false;
-    }
-}
-
 std::string Command::parseStringToText(std::string &inputString) const {
     std::string returnText;
     int position = 0;
@@ -321,7 +320,7 @@ void Command::parseStringToBool(std::string &inputString) const {
 }
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
-    bool operatorFirstType = false, operatorSecondType = false, text = false, boolean = false;
+    bool operatorFirstType = false, operatorSecondType = false, text = false, boolean = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
     int brackets = 0, amountOfBracketsForMathFunc = 0;
     OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
     std::string mathFunction;
@@ -402,8 +401,8 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
                 delete mathOperator;
             } else {
                 aggregationFunction = parseStringToAggregationFunction(inputString);
-                if(aggregationFunction){
-
+                if (aggregationFunction) {
+                    parseAggregationFuncValue(inputString, possibleCells, aggregationFunction, delimiters);
                 } else {
                     break;
                 }
@@ -506,11 +505,32 @@ OperatorType *Command::parseStringToAggregationFunction(std::string &inputString
         aggregationFctionOperator = new OperatorType;
         *aggregationFctionOperator = OperatorType::MAX;
     }
-    if(aggregationFctionOperator){
+    if (aggregationFctionOperator) {
         inputString.erase(0, 3);
         return aggregationFctionOperator;
     }
 
     return nullptr;
+}
+
+void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
+                                        const OperatorType &*aggregationFunction, bool *delimiters) const {
+
+    deleteThisUglySpaces(inputString);
+    if (inputString[0] != '(')
+        throw throw "Invalid expression. Try 'help' for more information.\n";
+    inputString.erase(0, 1);
+    int xCoorFirstParameter, yCoorFirstParameter, xCoorSecondParameter, yCoorSecondParameter;
+    parseStringToCoordinates(xCoorFirstParameter, yCoorFirstParameter, inputString,delimiters);
+    delimiters[3] = false;
+    parseStringToCoordinates(xCoorSecondParameter, yCoorSecondParameter, inputString, delimiters);
+
+    if(!delimiters[3])
+        throw "Invalid expression. Try 'help' for more information.\n";
+
+    deleteThisUglySpaces(inputString);
+    if(inputString.size() > 0)
+        throw "Invalid expression. Try 'help' for more information.\n";
+    possibleCells.push_back(new Operator (*aggregationFunction));
 }
 
