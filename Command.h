@@ -52,6 +52,10 @@ private:
     void ParseToXYString(std::string &inputString, std::string &xCoorString, std::string &yCoorString,
                          std::vector<char> &delim, bool first, bool breakMoment, int &position, bool *delimiters) const;
 
+    OperatorType *parseStringToMathFunction(std::string & inputString) const;
+
+    OperatorType *parseStringToAggregationFunction(std::string &inputString) const;
+
 public:
     Command();
 

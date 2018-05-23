@@ -12,6 +12,18 @@ enum class OperatorType {
     MINUS,
     MULTIPLY,
     DIVIDE,
+    BRACKET,
+    SIN,
+    SQRT,
+    ABS,
+    COS,
+    TAN,
+    ROUND,
+    AVG,
+    SUM,
+    LOG,
+    LOG2,
+    MAX
 };
 
 class Operator : public Cell {
@@ -27,9 +39,7 @@ public:
 
     CellType getType() const;
 
-    const Cell &getValue() const;
-
-    Cell &getValue();
+    const OperatorType getValue() const;
 
     void setValue(const int &newOperator);
 

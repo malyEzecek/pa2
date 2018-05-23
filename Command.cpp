@@ -301,7 +301,7 @@ std::string Command::parseStringToText(std::string &inputString) const {
         ++position;
     }
 
-    inputString.erase(0, (unsigned long)position + 1);
+    inputString.erase(0, (unsigned long) position + 1);
     deleteThisUglySpaces(inputString);
 
     if (inputString[0] != ')')
@@ -321,6 +321,10 @@ void Command::parseStringToBool(std::string &inputString) const {
 }
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
+    bool operatorFirstType = false, operatorSecondType = false, text = false, boolean = false;
+    int brackets = 0, amountOfBracketsForMathFunc = 0;
+    OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
+    std::string mathFunction;
     for (char inputCharacter : inputString) {
         deleteThisUglySpaces(inputString);
         if (inputCharacter == '$') {
@@ -328,15 +332,26 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             parseStringToCoordinates(xCoor, yCoor, inputString, delimiters);
             possibleCells.push_back(new Reference(xCoor, yCoor));
 
+            if (possibleCells.back()->getType() != CellType::NUMBER)
+                throw "Invalid expression. Try 'help' for more information.\n";
+            if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo referencee, tak by zadne problemy vyskytnout nemely
+                operatorFirstType = false;
+
         } else if (inputCharacter >= 48 && inputCharacter <= 57) {
             std::string number;
             parseStringToNumber(inputString, number);
             double cellNumber = std::stod(number);
             possibleCells.push_back(new Number(cellNumber));
+            if (operatorFirstType)
+                operatorFirstType = false;
 
         } else if (inputCharacter >= 42 && inputCharacter <= 47) {
+            if (operatorFirstType)
+                throw "Invalid expression. Try 'help' for more information.\n";
             switch (inputCharacter) {
                 case '+': {
+                    if (possibleCells.empty())
+                        throw "Invalid expression. Try 'help' for more information.\n";
                     possibleCells.push_back(new Operator(OperatorType::PLUS));
                     break;
                 }
@@ -345,30 +360,63 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
                     break;
                 }
                 case '/': {
+                    if (possibleCells.empty())
+                        throw "Invalid expression. Try 'help' for more information.\n";
                     possibleCells.push_back(new Operator(OperatorType::DIVIDE));
                     break;
                 }
                 case '*': {
+                    if (possibleCells.empty())
+                        throw "Invalid expression. Try 'help' for more information.\n";
                     possibleCells.push_back(new Operator(OperatorType::MULTIPLY));
                     break;
                 }
                 default:
                     throw "Invalid parameter. Try 'help' for more information.\n";
             }
+            operatorFirstType = true;
             inputString.erase(0, 1);
+        } else if (inputCharacter == '(' || inputCharacter == ')') {
+
+            if (inputCharacter == '(') {
+                possibleCells.push_back(new Operator(OperatorType::BRACKET));
+                ++brackets;
+            } else {
+                if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
+                    possibleCells.push_back(new Operator(*mathOperator)); // todo proc to vypada podobne???
+                } else {
+                    possibleCells.push_back(new Operator(OperatorType::BRACKET));
+                }
+                --brackets;
+            }
+            inputString.erase(0, 1);
+        } else {
+            mathOperator = parseStringToMathFunction(inputString);
+            if (mathOperator) {
+                possibleCells.push_back(new Operator(*mathOperator));
+                if (inputString[0] != '(')
+                    throw "Invalid expression. Try 'help' for more information.\n";
+                inputString.erase(0, 1);
+                operatorSecondType = true;
+                amountOfBracketsForMathFunc = brackets;
+                delete mathOperator;
+            } else {
+                aggregationFunction = parseStringToAggregationFunction(inputString);
+                if(aggregationFunction){
+
+                } else {
+                    break;
+                }
+            }
         }
-//        } else if(){
-//            //todo avg, sum, cos atd...
-//        }
-        else
-            break;
     }
     deleteThisUglySpaces(inputString);
     if (inputString[0] != ')')
         throw "Invalid parameter. Try 'help' for more information.\n";
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
-    //todo konec
+    if (inputString.size() > 0)
+        throw "Invalid parameter. Try 'help' for more information.\n";
 
 }
 
@@ -388,5 +436,81 @@ void Command::parseStringToNumber(std::string &inputString, std::string &number)
     inputString.erase(0, (unsigned long) position);
     if (dots > 1)
         throw "Invalid parameter. Try 'help' for more information.\n";
+}
+
+OperatorType *Command::parseStringToMathFunction(std::string &inputString) const {
+    OperatorType *mathOperator = nullptr;
+    if (inputString.size() < 3)
+        return nullptr;
+    std::string firstCommand = inputString.substr(0, 3);
+    if (firstCommand == "sin") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::SIN;
+    } else if (firstCommand == "cos") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::COS;
+    } else if (firstCommand == "tan") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::TAN;
+    } else if (firstCommand == "abs") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::ABS;
+    } else if (firstCommand == "log") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::LOG;
+    }
+    if (mathOperator) {
+        inputString.erase(0, 3);
+        return mathOperator;
+    }
+    firstCommand.substr(0, 4);
+
+    if (firstCommand == "sqrt") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::SQRT;
+    } else if (firstCommand == "log2") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::LOG2;
+    }
+    if (mathOperator) {
+        inputString.erase(0, 4);
+        return mathOperator;
+    }
+    firstCommand.substr(0, 5);
+    if (firstCommand == "round") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::ROUND;
+    }
+    if (mathOperator) {
+        inputString.erase(0, 3);
+        return mathOperator;
+    }
+    return nullptr;
+}
+
+OperatorType *Command::parseStringToAggregationFunction(std::string &inputString) const {
+    OperatorType *aggregationFctionOperator = nullptr;
+
+    if (inputString.size() < 3)
+        return nullptr;
+
+    std::string firstCommand = inputString.substr(0, 3);
+
+    if (firstCommand == "avg") {
+        aggregationFctionOperator = new OperatorType;
+        *aggregationFctionOperator = OperatorType::AVG;
+    } else if (firstCommand == "sum") {
+        aggregationFctionOperator = new OperatorType;
+        *aggregationFctionOperator = OperatorType::SUM;
+    } else if (firstCommand == "max") {
+        aggregationFctionOperator = new OperatorType;
+        *aggregationFctionOperator = OperatorType::MAX;
+    }
+    if(aggregationFctionOperator){
+        inputString.erase(0, 3);
+        return aggregationFctionOperator;
+    }
+
+    return nullptr;
 }
 

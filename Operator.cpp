@@ -10,12 +10,8 @@ CellType Operator::getType() const {
     return CellType::BASICOPERATOR;
 }
 
-const Cell & Operator::getValue() const {
-    return *this;
-}
-
-Cell & Operator::getValue() {
-    return *this;
+const OperatorType Operator::getValue() const {
+    return basicOperator;
 }
 
 void Operator::setValue(const int & newOperator) {

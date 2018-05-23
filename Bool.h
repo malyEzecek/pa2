@@ -16,13 +16,20 @@ private:
 
 public:
     Bool() = default;
+
     ~Bool() = default;
+
     explicit Bool(const bool newValue);
+
     CellType getType() const override;
+
     bool getValue() const;
+
     bool getValue();
-    void setValue(const bool & value);
+
+    void setValue(const bool &value);
+
     const std::string ToString() const override;
 
-    Bool * clone() const override;
+    Bool *clone() const override;
 };
