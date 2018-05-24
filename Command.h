@@ -55,7 +55,7 @@ private:
     OperatorType *parseStringToAggregationFunction(std::string &inputString) const;
 
     void parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
-                                   const OperatorType &*aggregationFunction, bool *delimiters) const;
+                                   const OperatorType *aggregationFunction, bool *delimiters) const;
 
 public:
     Command();

@@ -36,7 +36,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         }
         case CommandType::RESIZE : {
             int xCoor, yCoor;
-            parseToResizeParameters(xCoor, yCoor);
+            // parseToResizeParameters(xCoor, yCoor); todo napsat dnes vecer
             Model::getInstance()->resizeTable(yCoor, xCoor);
             break;
         }
@@ -320,23 +320,25 @@ void Command::parseStringToBool(std::string &inputString) const {
 }
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
-    bool operatorFirstType = false, operatorSecondType = false, text = false, boolean = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
-    int brackets = 0, amountOfBracketsForMathFunc = 0;
+    bool operatorFirstType = false, operatorSecondType = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
+    int brackets = 1, amountOfBracketsForMathFunc = 0;
     OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
     std::string mathFunction;
-    for (char inputCharacter : inputString) {
+    auto mainSize = (int)inputString.size();
+    for (int t = 0; t < mainSize; ++t) {
         deleteThisUglySpaces(inputString);
-        if (inputCharacter == '$') {
+        if (inputString[0] == '$') {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, inputString, delimiters);
             possibleCells.push_back(new Reference(xCoor, yCoor));
 
-            if (possibleCells.back()->getType() != CellType::NUMBER)
+            if (possibleCells.back()->getType() != CellType::NUMBER ||
+                possibleCells.back()->getType() != CellType::EXPRESSION)
                 throw "Invalid expression. Try 'help' for more information.\n";
             if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo referencee, tak by zadne problemy vyskytnout nemely
                 operatorFirstType = false;
 
-        } else if (inputCharacter >= 48 && inputCharacter <= 57) {
+        } else if (inputString[0] >= 48 && inputString[0] <= 57) {
             std::string number;
             parseStringToNumber(inputString, number);
             double cellNumber = std::stod(number);
@@ -344,10 +346,10 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             if (operatorFirstType)
                 operatorFirstType = false;
 
-        } else if (inputCharacter >= 42 && inputCharacter <= 47) {
+        } else if (inputString[0] >= 42 && inputString[0] <= 47) {
             if (operatorFirstType)
                 throw "Invalid expression. Try 'help' for more information.\n";
-            switch (inputCharacter) {
+            switch (inputString[0]) {
                 case '+': {
                     if (possibleCells.empty())
                         throw "Invalid expression. Try 'help' for more information.\n";
@@ -375,18 +377,21 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             }
             operatorFirstType = true;
             inputString.erase(0, 1);
-        } else if (inputCharacter == '(' || inputCharacter == ')') {
 
-            if (inputCharacter == '(') {
+        } else if (inputString[0] == '(' || inputString[0] == ')') {
+
+            if (inputString[0] == '(') {
                 possibleCells.push_back(new Operator(OperatorType::BRACKET));
                 ++brackets;
             } else {
                 if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
                     possibleCells.push_back(new Operator(*mathOperator)); // todo proc to vypada podobne???
+                    operatorSecondType = false;
                 } else {
                     possibleCells.push_back(new Operator(OperatorType::BRACKET));
+                    --brackets;
                 }
-                --brackets;
+
             }
             inputString.erase(0, 1);
         } else {
@@ -396,21 +401,29 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
                 if (inputString[0] != '(')
                     throw "Invalid expression. Try 'help' for more information.\n";
                 inputString.erase(0, 1);
+
                 operatorSecondType = true;
                 amountOfBracketsForMathFunc = brackets;
-                delete mathOperator;
+                if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo reference, tak by zadne problemy vyskytnout nemely
+                    operatorFirstType = false;
             } else {
                 aggregationFunction = parseStringToAggregationFunction(inputString);
                 if (aggregationFunction) {
                     parseAggregationFuncValue(inputString, possibleCells, aggregationFunction, delimiters);
+                    if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo referencee, tak by zadne problemy vyskytnout nemely
+                        operatorFirstType = false;
                 } else {
                     break;
                 }
             }
         }
+        deleteThisUglySpaces(inputString);
     }
+
+    if(mathOperator)
+        delete mathOperator;
     deleteThisUglySpaces(inputString);
-    if (inputString[0] != ')')
+    if (brackets || operatorFirstType || operatorSecondType)
         throw "Invalid parameter. Try 'help' for more information.\n";
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
@@ -514,23 +527,24 @@ OperatorType *Command::parseStringToAggregationFunction(std::string &inputString
 }
 
 void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
-                                        const OperatorType &*aggregationFunction, bool *delimiters) const {
+                                        const OperatorType *aggregationFunction, bool *delimiters) const {
 
     deleteThisUglySpaces(inputString);
     if (inputString[0] != '(')
-        throw throw "Invalid expression. Try 'help' for more information.\n";
+        throw "Invalid expression. Try 'help' for more information.\n";
     inputString.erase(0, 1);
     int xCoorFirstParameter, yCoorFirstParameter, xCoorSecondParameter, yCoorSecondParameter;
-    parseStringToCoordinates(xCoorFirstParameter, yCoorFirstParameter, inputString,delimiters);
+    parseStringToCoordinates(xCoorFirstParameter, yCoorFirstParameter, inputString, delimiters);
     delimiters[3] = false;
     parseStringToCoordinates(xCoorSecondParameter, yCoorSecondParameter, inputString, delimiters);
 
-    if(!delimiters[3])
+    if (!delimiters[3])
         throw "Invalid expression. Try 'help' for more information.\n";
 
     deleteThisUglySpaces(inputString);
-    if(inputString.size() > 0)
+    if (inputString.size() > 0)
         throw "Invalid expression. Try 'help' for more information.\n";
-    possibleCells.push_back(new Operator (*aggregationFunction));
+    possibleCells.push_back(new Operator(*aggregationFunction));
 }
+
 
