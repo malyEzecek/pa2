@@ -8,17 +8,19 @@
 
 #endif //EDITOR_REFERENCE_H
 
+#include <vector>
 #include "Cell.h"
 
 class Reference : public Cell {
 private:
     int XCoor;
     int YCoor;
+    std::vector<Cell *> valueOfReference;
 
 public:
     Reference() = default;
 
-    ~Reference() = default;
+    ~Reference() override = default;
 
     explicit Reference(const int &XPosition, const int &YPosition);
 
@@ -33,4 +35,5 @@ public:
     void setValue(const int &XPosition, const int &YPosition);
 
     Reference *clone() const override;
+
 };

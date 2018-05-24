@@ -45,7 +45,7 @@ private:
 
     void parseStringToBool(std::string &inputString) const;
 
-    void parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const;
+    void parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters, bool & reference) const;
 
     void parseToXYString(std::string &inputString, std::string &xCoorString, std::string &yCoorString,
                          std::vector<char> &delim, bool first, bool breakMoment, int &position, bool *delimiters) const;

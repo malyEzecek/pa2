@@ -17,7 +17,7 @@ private:
 public:
     Bool() = default;
 
-    ~Bool() = default;
+    ~Bool() override = default;
 
     explicit Bool(const bool newValue);
 

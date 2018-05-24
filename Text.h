@@ -16,15 +16,22 @@ private:
 
 public:
     Text() = default;
-    ~Text() = default;
-    explicit Text(const std::string & newText);
+
+    ~Text() override = default;
+
+    explicit Text(const std::string &newText);
 
 public:
 
     CellType getType() const override;
-    const std::string & getValue() const;
-    std::string & getValue();
-    void setValue(const std::string & newText);
+
+    const std::string &getValue() const;
+
+    std::string &getValue();
+
+    void setValue(const std::string &newText);
+
     const std::string ToString() const override;
-    Text * clone() const override;
+
+    Text *clone() const override;
 };

@@ -205,8 +205,10 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
             parseStringToBool(inputString.erase(0, 5));
             return new Bool(false);
         } else {
-            parseExpression(possibleCells, inputString, delimiters);
+            bool reference = false;
+            parseExpression(possibleCells, inputString, delimiters, reference);
             if (possibleCells.size() > 1) {
+                return new Expression(possibleCells, reference);
                 //todo return newExpression with all pointers on Cells
             } else if (possibleCells.size() == 1) {
                 return possibleCells[0];
@@ -319,7 +321,7 @@ void Command::parseStringToBool(std::string &inputString) const {
     deleteThisUglySpaces(inputString);
 }
 
-void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters) const {
+void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters, bool & reference) const {
     bool operatorFirstType = false, operatorSecondType = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
     int brackets = 1, amountOfBracketsForMathFunc = 0;
     OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
@@ -331,9 +333,10 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, inputString, delimiters);
             possibleCells.push_back(new Reference(xCoor, yCoor));
-
+            reference = true;
             if (possibleCells.back()->getType() != CellType::NUMBER ||
-                possibleCells.back()->getType() != CellType::EXPRESSION)
+                possibleCells.back()->getType() != CellType::EXPRESSION ||
+                possibleCells.back()->getType() != CellType::REFERENCE)
                 throw "Invalid expression. Try 'help' for more information.\n";
             if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo referencee, tak by zadne problemy vyskytnout nemely
                 operatorFirstType = false;
@@ -398,6 +401,7 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             mathOperator = parseStringToMathFunction(inputString);
             if (mathOperator) {
                 possibleCells.push_back(new Operator(*mathOperator));
+                deleteThisUglySpaces(inputString);
                 if (inputString[0] != '(')
                     throw "Invalid expression. Try 'help' for more information.\n";
                 inputString.erase(0, 1);
@@ -425,7 +429,6 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
     deleteThisUglySpaces(inputString);
     if (brackets || operatorFirstType || operatorSecondType)
         throw "Invalid parameter. Try 'help' for more information.\n";
-    inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
     if (inputString.size() > 0)
         throw "Invalid parameter. Try 'help' for more information.\n";
@@ -542,8 +545,6 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
         throw "Invalid expression. Try 'help' for more information.\n";
 
     deleteThisUglySpaces(inputString);
-    if (inputString.size() > 0)
-        throw "Invalid expression. Try 'help' for more information.\n";
     possibleCells.push_back(new Operator(*aggregationFunction));
 }
 

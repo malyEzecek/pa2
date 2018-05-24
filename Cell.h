@@ -20,21 +20,26 @@ enum class CellType {
     BASICOPERATOR
 };
 
-class Cell{
+class Cell {
 private:
     int sizeOfCell;
 
 protected:
     static const int defaultWidthOfCell = 11; // defaultni nastaveni pro promennou mode;
     int mode;
-    std::string editToWideOfCell(const std::string & editString) const;
+
+    std::string editToWideOfCell(const std::string &editString) const;
 
 public:
     Cell();
+
     virtual ~Cell() {}
+
     int getCellSize() const;
 
     virtual CellType getType() const = 0;
+
     virtual const std::string ToString() const = 0;
-    virtual Cell * clone() const = 0;
+
+    virtual Cell *clone() const = 0;
 };

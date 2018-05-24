@@ -88,7 +88,13 @@ void View::createTable() const{
                     if (!model->getElement(i, j))
                         std::cout << "           "; //todo
                     else {
-                        std::cout << model->getElement(i, j)->ToString();//todo (const_cast<char *>(model->getElement(i, j)->ToString().c_str()));
+                        //std::cout <<
+                        if (model->getElement(i, j)->getType() == CellType ::EXPRESSION){
+//                            evaluateExpressiaon(model->getElement(i, j));
+                        }
+
+
+                        //todo (const_cast<char *>(model->getElement(i, j)->ToString().c_str()));
                     }
                 }
                 std::cout << std::endl; // todo
