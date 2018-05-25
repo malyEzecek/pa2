@@ -3,6 +3,7 @@
 //
 
 #include <cstdlib>
+#include <fstream>
 #include "Command.h"
 
 Command::Command() {}
@@ -36,16 +37,37 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         }
         case CommandType::RESIZE : {
             int xCoor, yCoor;
-            getResizeParameters(temporaryForCutting, yCoor ,xCoor);
+            getResizeParameters(temporaryForCutting, yCoor, xCoor);
             Model::getInstance()->resizeTable(yCoor, xCoor);
             break;
         }
         case CommandType::LOAD : {
+            std::string loadingPath;
+            getLoadSaveParameter(temporaryForCutting, loadingPath);
+            std::ifstream myFileLoad(loadingPath);
+            std::string line;
+            Command controller;
+            if (myFileLoad.is_open()) {
+                while (getline(myFileLoad, line).good()) {
+                    controller.SetCommand(line);
+                }
+                myFileLoad.close();
+            } else {
+                std::cout << "Unable to open file." << std::endl;
+            }
 
             break;
         }
         case CommandType::SAVE : {
-            break;
+            deleteThisUglySpaces(temporaryForCutting);
+            std::string savingPath;
+            getLoadSaveParameter(temporaryForCutting, savingPath);
+            std::ofstream myFileSave(savingPath);
+            if (myFileSave.is_open()) {
+                writeToFile(myFileSave);
+                myFileSave.close();
+            } else
+                std::cout << "Unable to open file." << std::endl;
         }
     }
 }
@@ -575,7 +597,7 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
 
 }
 
-void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus,
+void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> &detectorOfCyclus,
                                   std::vector<const Cell *> &expressionWithoutReferences) const { //zaroven najdeme cyklickou zavislost
     for (auto dependence : detectorOfCyclus) {
         if (dependence == actualCell)
@@ -625,12 +647,13 @@ void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferen
 
 void Command::getCoord(std::string &temporaryForCutting, std::string &cord) const {
     int position = 0;
-    for( ; position < temporaryForCutting.size(); ++position) {
-        if (temporaryForCutting[position] == ' ' || temporaryForCutting[position] == ',' || temporaryForCutting[position] == ')'){
+    for (; position < temporaryForCutting.size(); ++position) {
+        if (temporaryForCutting[position] == ' ' || temporaryForCutting[position] == ',' ||
+            temporaryForCutting[position] == ')') {
             break;
         }
 
-        if( temporaryForCutting[position] >= 48 && temporaryForCutting[position] <= 57){
+        if (temporaryForCutting[position] >= 48 && temporaryForCutting[position] <= 57) {
             cord += temporaryForCutting[position];
         } else
             throw "Invalid parameters! Try 'help' for help!\n";
@@ -647,18 +670,18 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
 
     getCoord(temporaryForCutting, firstXCoor);
 
-    if(temporaryForCutting[0] == ' '){
+    if (temporaryForCutting[0] == ' ') {
         deleteThisUglySpaces(temporaryForCutting);
     }
 
-    if(temporaryForCutting[0] != ',')
+    if (temporaryForCutting[0] != ',')
         throw "Invalid parameters! Try 'help' for help!\n";
     temporaryForCutting.erase(0, 1);
 
     deleteThisUglySpaces(temporaryForCutting);
     getCoord(temporaryForCutting, secondYCoor);
 
-    if(temporaryForCutting[0] == ' '){
+    if (temporaryForCutting[0] == ' ') {
         deleteThisUglySpaces(temporaryForCutting);
     }
 
@@ -673,5 +696,45 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
 
     xCoor = std::stoi(firstXCoor);
     yCoor = std::stoi(secondYCoor);
+}
+
+void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath) const {
+    deleteThisUglySpaces(temporaryForCutting);
+
+    if (temporaryForCutting[0] != '"')
+        throw "Invalid parameters! Try 'help' for help!\n";
+    temporaryForCutting.erase(0, 1);
+    int position = 0;
+    for (; position < temporaryForCutting.size(); ++position) {
+        if (temporaryForCutting[position] == '"') {
+            loadingPath += temporaryForCutting[position];
+            ++position;
+            break;
+        }
+        loadingPath += temporaryForCutting[position];
+    }
+
+    temporaryForCutting.erase(0, position);
+    deleteThisUglySpaces(temporaryForCutting);
+    if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')
+        throw "Invalid parameters! Try 'help' for help!\n";
+
+    temporaryForCutting.erase(0, 1);
+    deleteThisUglySpaces(temporaryForCutting);
+
+    if (!temporaryForCutting.empty())
+        throw "Invalid parameters! Try 'help' for help!\n";
+}
+
+void Command::writeToFile(std::ofstream &myFileSave) const {
+    if (Model::getInstance()->wasResized())
+        myFileSave << "resize( " << Model::getInstance()->getWidth() << ", " << Model::getInstance()->getHeight() << ")\n";
+    for (int i = 0; i < Model::getInstance()->getHeight(); ++i){
+        for (int j = 0; j < Model::getInstance()->getWidth(); ++j){
+            if (Model::getInstance()->getElement(i, j)){
+                myFileSave << "set( " << Model::getInstance()->getElement(i, j)->ToString() << ")\n";
+            }
+        }
+    }
 }
 

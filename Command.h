@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdlib>
 #include <stack>
+#include <iostream>
 #include "Model.h"
 
 enum class CommandType {
@@ -58,13 +59,17 @@ private:
     void parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
                                    const OperatorType *aggregationFunction, bool *delimiters) const;
 
-    void referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell * > &expressionWithoutReferences) const;
+    void referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> &detectorOfCyclus, std::vector<const Cell * > &expressionWithoutReferences) const;
 
     void InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences, std::vector<const Cell *> &insideOfExpression) const;
 
     void getResizeParameters(std::string & temporaryForCutting, int &yCoor, int & xCoor) const;
 
     void getCoord(std::string &temporaryForCutting, std::string &cord) const;
+
+    void getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath) const;
+
+    void writeToFile(std::ofstream & myFileSave) const;
 
 public:
 

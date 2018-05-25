@@ -2,6 +2,7 @@
 // Created by julinka on 2.5.18.
 //
 #pragma once
+
 #include <vector>
 #include "Bool.h"
 #include "Reference.h"
@@ -19,13 +20,19 @@ private:
     unsigned width;
     unsigned height;
 
+    bool resized;
+    const int WIDTH = 10;
+    const int HIGHT = 20;
+
     Model();
+
     ~Model();
+
     /**
      * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
      */
     std::vector<std::vector<Cell *>> spreadSheet;
-    static Model * instance;
+    static Model *instance;
 
 public:
 
@@ -33,15 +40,17 @@ public:
 
     unsigned getWidth() const;
 
-    static Model * getInstance();
+    static Model *getInstance();
 
-    const Cell * getElement(const int &height, const int &width) const;
+    const Cell *getElement(const int &height, const int &width) const;
 
-    void resizeTable(const int & xCoor, const int & yCoor);
+    void resizeTable(const int &xCoor, const int &yCoor);
 
-    void setValue(const int & xCoor, const int & yCoor, const Cell * cell);
+    void setValue(const int &xCoor, const int &yCoor, const Cell *cell);
 
     void deleteValue(const int &yCoord, const int &xCoor);
+
+    bool wasResized() const;
 
 };
 

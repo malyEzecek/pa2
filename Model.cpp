@@ -24,6 +24,8 @@ Model::Model() {
     for (int i = 0; i < height; ++i)
         for (int j = 0; j < width; ++j)
             spreadSheet[i][j] = nullptr;
+
+    resized = false;
 }
 
 Model::~Model() {
@@ -115,6 +117,7 @@ void Model::resizeTable(const int &yCoor, const int &xCoor) {
             spreadSheet[i][j] = nullptr;
         }
     }
+    resized = true;
 }
 
 void Model::deleteValue(const int &yCoord, const int &xCoor) {
@@ -125,5 +128,11 @@ void Model::deleteValue(const int &yCoord, const int &xCoor) {
         throw "This Cell is empty.\n";
     }
 
+}
+
+bool Model::wasResized() const {
+    if(resized)
+        return true;
+    return false;
 }
 
