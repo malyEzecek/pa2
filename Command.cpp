@@ -17,7 +17,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
     switch (typeOfCommand) {
         case CommandType::SET : {
             int xCoor, yCoor;
-            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
+                parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
             Model::getInstance()->setValue(yCoor - 1, xCoor, newCell); // pocitame od 0
             delete newCell;
@@ -209,7 +209,6 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
             parseExpression(possibleCells, inputString, delimiters, reference);
             if (possibleCells.size() > 1) {
                 return new Expression(possibleCells, reference);
-                //todo return newExpression with all pointers on Cells
             } else if (possibleCells.size() == 1) {
                 return possibleCells[0];
             } else
@@ -321,12 +320,13 @@ void Command::parseStringToBool(std::string &inputString) const {
     deleteThisUglySpaces(inputString);
 }
 
-void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters, bool & reference) const {
+void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters,
+                              bool &reference) const {
     bool operatorFirstType = false, operatorSecondType = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
     int brackets = 1, amountOfBracketsForMathFunc = 0;
     OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
     std::string mathFunction;
-    auto mainSize = (int)inputString.size();
+    auto mainSize = (int) inputString.size();
     for (int t = 0; t < mainSize; ++t) {
         deleteThisUglySpaces(inputString);
         if (inputString[0] == '$') {
@@ -422,9 +422,10 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             }
         }
         deleteThisUglySpaces(inputString);
+
     }
 
-    if(mathOperator)
+    if (mathOperator)
         delete mathOperator;
     deleteThisUglySpaces(inputString);
     if (brackets || operatorFirstType || operatorSecondType)
@@ -432,6 +433,9 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
     deleteThisUglySpaces(inputString);
     if (inputString.size() > 0)
         throw "Invalid parameter. Try 'help' for more information.\n";
+
+    delete possibleCells.back();
+    possibleCells.pop_back();
 
 }
 
@@ -460,19 +464,19 @@ OperatorType *Command::parseStringToMathFunction(std::string &inputString) const
     std::string firstCommand = inputString.substr(0, 3);
     if (firstCommand == "sin") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::SIN;
+        *mathOperator = OperatorType::SINOPEN;
     } else if (firstCommand == "cos") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::COS;
+        *mathOperator = OperatorType::COSOPEN;
     } else if (firstCommand == "tan") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::TAN;
+        *mathOperator = OperatorType::TANOPEN;
     } else if (firstCommand == "abs") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::ABS;
+        *mathOperator = OperatorType::ABSOPEN;
     } else if (firstCommand == "log") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::LOG;
+        *mathOperator = OperatorType::LOGOPEN;
     }
     if (mathOperator) {
         inputString.erase(0, 3);
@@ -482,10 +486,10 @@ OperatorType *Command::parseStringToMathFunction(std::string &inputString) const
 
     if (firstCommand == "sqrt") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::SQRT;
+        *mathOperator = OperatorType::SQRTCLOSE;
     } else if (firstCommand == "log2") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::LOG2;
+        *mathOperator = OperatorType::LOG2CLOSE;
     }
     if (mathOperator) {
         inputString.erase(0, 4);
@@ -494,7 +498,7 @@ OperatorType *Command::parseStringToMathFunction(std::string &inputString) const
     firstCommand.substr(0, 5);
     if (firstCommand == "round") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::ROUND;
+        *mathOperator = OperatorType::ROUNDCLOSE;
     }
     if (mathOperator) {
         inputString.erase(0, 3);
@@ -553,45 +557,68 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
     std::vector<const Cell *> expressionWithoutReferences;
 
     Model::getInstance()->getElement(yCoor, xCoor)->evaluate(insideOfExpression);
-    for (auto cell : insideOfExpression){
-        if(cell->getType() == CellType::REFERENCE){
+    for (auto cell : insideOfExpression) {
+        if (cell->getType() == CellType::REFERENCE) {
             std::vector<const Cell *> detectorOfCyclus;
             expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
             detectorOfCyclus.push_back(Model::getInstance()->getElement(yCoor, xCoor));
-            referenceEvaluation(cell, detectorOfCyclus, insideOfExpression);
+            referenceEvaluation(cell, detectorOfCyclus, expressionWithoutReferences);
             expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETCLOSE));
         } else {
             expressionWithoutReferences.push_back(cell);
         }
     }
+    insideOfExpression.clear();
+    InfixToPostfix(expressionWithoutReferences, insideOfExpression);
+
 
 }
 
-void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell *> &insideOfExpression) const { //zaroven najdeme cyklickou zavislost
-    for(auto dependence : detectorOfCyclus){
-        if(dependence == actualCell)
+void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus,
+                                  std::vector<const Cell *> &expressionWithoutReferences) const { //zaroven najdeme cyklickou zavislost
+    for (auto dependence : detectorOfCyclus) {
+        if (dependence == actualCell)
             throw "Cyclic dependency.\n";
     }
 
-    int xCoord = ((const Reference *)actualCell->getValue())->getXCoor();
-    int yCoord = ((const Reference *)actualCell->getValue())->getYCoor();
+    int xCoord = ((const Reference *) actualCell->getValue())->getXCoor();
+    int yCoord = ((const Reference *) actualCell->getValue())->getYCoor();
 
-    if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::NUMBER || Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::OPERATION){
-        insideOfExpression.push_back(Model::getInstance()->getElement(yCoord, xCoord));
-    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::REFERENCE){
-        detectorOfCyclus.push_back(Model::getInstance()->getElement(yCoord, xCoord));
-        insideOfExpression.push_back(new Operator(OperatorType::BRACKETOPEN)); // jestli je to reference, pridej na zasobnik
-        referenceEvaluation(Model::getInstance()->getElement(yCoord, xCoord), detectorOfCyclus, insideOfExpression);
-        insideOfExpression.push_back(new Operator(OperatorType::BRACKETCLOSE));
-        insideOfExpression.pop_back(); // a pak odeber po vraceni ze zanoreni
-    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::EXPRESSION){
+    if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::NUMBER ||
+        Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::OPERATION) {
+        expressionWithoutReferences.push_back(Model::getInstance()->getElement(yCoord, xCoord));
+    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::REFERENCE) {
+        detectorOfCyclus.push_back(
+                Model::getInstance()->getElement(yCoord, xCoord));// jestli je to reference, pridej na zasobnik
+        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
+        referenceEvaluation(Model::getInstance()->getElement(yCoord, xCoord), detectorOfCyclus,
+                            expressionWithoutReferences);
+        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETCLOSE));
+        detectorOfCyclus.pop_back(); // a pak odeber po vraceni ze zanoreni
+    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::EXPRESSION) {
         std::vector<const Cell *> partsOfCell;
         Model::getInstance()->getElement(yCoord, xCoord)->evaluate(partsOfCell);
-        insideOfExpression.push_back(new Operator(OperatorType::BRACKETOPEN));
-        for(auto partOfCell : partsOfCell){
-            referenceEvaluation(partOfCell, detectorOfCyclus, insideOfExpression);
+        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
+        for (auto partOfCell : partsOfCell) {
+            referenceEvaluation(partOfCell, detectorOfCyclus, expressionWithoutReferences);
         }
-        insideOfExpression.push_back(new Operator(OperatorType::BRACKETCLOSE));
+        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETCLOSE));
     }
+}
+
+void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences,
+                             std::vector<const Cell *> &insideOfExpression) const {
+    std::stack<OperatorType> stack;
+    for (const Cell *cell : expressionWithoutReferences) {
+        if (cell->getType() == CellType::NUMBER) {
+            insideOfExpression.push_back(cell);
+        }
+        if (cell->getType() == CellType::OPERATION) {
+            OperatorType basicOperator = ((const Operator *) cell->getValue())->returnOperatorType();
+//            while(!stack.empty() &&  ((const Operator *) cell->getValue())->IsOpeningOperator())
+        }
+    }
+
+
 }
 

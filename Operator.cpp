@@ -10,11 +10,11 @@ CellType Operator::getType() const {
     return CellType::BASICOPERATOR;
 }
 
-const Operator * Operator::getValue() const {
+const Operator *Operator::getValue() const {
     return this;
 }
 
-void Operator::setValue(const int & newOperator) {
+void Operator::setValue(const int &newOperator) {
     basicOperator = (OperatorType) newOperator;
 }
 
@@ -28,6 +28,17 @@ const std::string Operator::ToString() const {
 
 void Operator::evaluate(std::vector<const Cell *> &inputVector) const {
     inputVector.push_back(this);
+}
+
+OperatorType Operator::returnOperatorType() const {
+    return basicOperator;
+}
+
+
+bool Operator::IsOpeningOperator() const {
+    if ((int)basicOperator >= 7 && (int)basicOperator < 14)
+        return true;
+    else return false;
 }
 
 

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <cstdlib>
+#include <stack>
 #include "Model.h"
 
 enum class CommandType {
@@ -57,7 +58,10 @@ private:
     void parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
                                    const OperatorType *aggregationFunction, bool *delimiters) const;
 
-    void referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell * > &insideOfExpression) const;
+    void referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell * > &expressionWithoutReferences) const;
+
+    void InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences, std::vector<const Cell *> &insideOfExpression) const;
+
 
 public:
 
