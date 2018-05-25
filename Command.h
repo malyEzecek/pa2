@@ -57,7 +57,7 @@ private:
     void parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
                                    const OperatorType *aggregationFunction, bool *delimiters) const;
 
-    void referenceEvaluation(const Cell *actualCell, const Cell *reference, std::vector<const Cell * > &insideOfExpression) const;
+    void referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell * > &insideOfExpression) const;
 
 public:
 

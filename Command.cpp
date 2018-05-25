@@ -384,14 +384,14 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
         } else if (inputString[0] == '(' || inputString[0] == ')') {
 
             if (inputString[0] == '(') {
-                possibleCells.push_back(new Operator(OperatorType::BRACKET));
+                possibleCells.push_back(new Operator(OperatorType::BRACKETOPEN));
                 ++brackets;
             } else {
                 if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
                     possibleCells.push_back(new Operator(*mathOperator)); // todo proc to vypada podobne???
                     operatorSecondType = false;
                 } else {
-                    possibleCells.push_back(new Operator(OperatorType::BRACKET));
+                    possibleCells.push_back(new Operator(OperatorType::BRACKETCLOSE));
                     --brackets;
                 }
 
@@ -555,9 +555,11 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
     Model::getInstance()->getElement(yCoor, xCoor)->evaluate(insideOfExpression);
     for (auto cell : insideOfExpression){
         if(cell->getType() == CellType::REFERENCE){
-            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKET));
-            referenceEvaluation(cell, Model::getInstance()->getElement(yCoor, xCoor), insideOfExpression);
-            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKET));
+            std::vector<const Cell *> detectorOfCyclus;
+            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
+            detectorOfCyclus.push_back(Model::getInstance()->getElement(yCoor, xCoor));
+            referenceEvaluation(cell, detectorOfCyclus, insideOfExpression);
+            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETCLOSE));
         } else {
             expressionWithoutReferences.push_back(cell);
         }
@@ -565,17 +567,31 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
 
 }
 
-void Command::referenceEvaluation(const Cell *actualCell, const Cell *reference, std::vector<const Cell *> &insideOfExpression) const {
-    if(reference == actualCell)
-        throw "Cyclic dependency.\n";
+void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> detectorOfCyclus, std::vector<const Cell *> &insideOfExpression) const { //zaroven najdeme cyklickou zavislost
+    for(auto dependence : detectorOfCyclus){
+        if(dependence == actualCell)
+            throw "Cyclic dependency.\n";
+    }
 
-    int xCoord = ((const Reference *)reference->getValue())->getXCoor();
-    int yCoord = ((const Reference *)reference->getValue())->getYCoor();
+    int xCoord = ((const Reference *)actualCell->getValue())->getXCoor();
+    int yCoord = ((const Reference *)actualCell->getValue())->getYCoor();
 
-    if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::NUMBER){
+    if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::NUMBER || Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::OPERATION){
         insideOfExpression.push_back(Model::getInstance()->getElement(yCoord, xCoord));
     } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::REFERENCE){
-        insideOfExpression.push_back(new )
+        detectorOfCyclus.push_back(Model::getInstance()->getElement(yCoord, xCoord));
+        insideOfExpression.push_back(new Operator(OperatorType::BRACKETOPEN)); // jestli je to reference, pridej na zasobnik
+        referenceEvaluation(Model::getInstance()->getElement(yCoord, xCoord), detectorOfCyclus, insideOfExpression);
+        insideOfExpression.push_back(new Operator(OperatorType::BRACKETCLOSE));
+        insideOfExpression.pop_back(); // a pak odeber po vraceni ze zanoreni
+    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::EXPRESSION){
+        std::vector<const Cell *> partsOfCell;
+        Model::getInstance()->getElement(yCoord, xCoord)->evaluate(partsOfCell);
+        insideOfExpression.push_back(new Operator(OperatorType::BRACKETOPEN));
+        for(auto partOfCell : partsOfCell){
+            referenceEvaluation(partOfCell, detectorOfCyclus, insideOfExpression);
+        }
+        insideOfExpression.push_back(new Operator(OperatorType::BRACKETCLOSE));
     }
 }
 
