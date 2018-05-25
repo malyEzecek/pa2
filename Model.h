@@ -35,7 +35,7 @@ public:
 
     static Model * getInstance();
 
-    const Cell * getElement(const int & width, const int & height) const;
+    const Cell * getElement(const int &height, const int &width) const;
 
     void setWidth(unsigned int width);
 

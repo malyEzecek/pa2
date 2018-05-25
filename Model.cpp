@@ -5,7 +5,7 @@
 
 #include "Model.h"
 
-Model *Model::instance = 0;
+Model *Model::instance = nullptr;
 
 unsigned Model::getHeight() const {
     return height;
@@ -16,8 +16,8 @@ unsigned Model::getWidth() const {
 }
 
 Model::Model() {
-    width = 5;
-    height = 50;
+    width = 10;
+    height = 25;
     spreadSheet.resize(height);
     for (int i = 0; i < height; ++i)
         spreadSheet[i].resize(width);
@@ -110,3 +110,4 @@ void Model::deleteValue(const int &yCoord, const int &xCoor) {
     }
 
 }
+

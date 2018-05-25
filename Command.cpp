@@ -548,4 +548,34 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
     possibleCells.push_back(new Operator(*aggregationFunction));
 }
 
+std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) const {
+    std::vector<const Cell *> insideOfExpression;
+    std::vector<const Cell *> expressionWithoutReferences;
+
+    Model::getInstance()->getElement(yCoor, xCoor)->evaluate(insideOfExpression);
+    for (auto cell : insideOfExpression){
+        if(cell->getType() == CellType::REFERENCE){
+            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKET));
+            referenceEvaluation(cell, Model::getInstance()->getElement(yCoor, xCoor), insideOfExpression);
+            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKET));
+        } else {
+            expressionWithoutReferences.push_back(cell);
+        }
+    }
+
+}
+
+void Command::referenceEvaluation(const Cell *actualCell, const Cell *reference, std::vector<const Cell *> &insideOfExpression) const {
+    if(reference == actualCell)
+        throw "Cyclic dependency.\n";
+
+    int xCoord = ((const Reference *)reference->getValue())->getXCoor();
+    int yCoord = ((const Reference *)reference->getValue())->getYCoor();
+
+    if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::NUMBER){
+        insideOfExpression.push_back(Model::getInstance()->getElement(yCoord, xCoord));
+    } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::REFERENCE){
+        insideOfExpression.push_back(new )
+    }
+}
 

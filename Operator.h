@@ -39,13 +39,15 @@ public:
 
     CellType getType() const;
 
-    const OperatorType getValue() const;
+    const Operator *getValue() const override;
 
     void setValue(const int &newOperator);
 
     Operator *clone() const override;
 
     const std::string ToString() const override;
+
+    void evaluate(std::vector<const Cell *> & inputVector) const override;
 
 };
 

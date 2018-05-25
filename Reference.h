@@ -36,4 +36,7 @@ public:
 
     Reference *clone() const override;
 
+    void evaluate(std::vector<const Cell *> & inputVector) const override;
+
+    const Reference * getValue() const override;
 };

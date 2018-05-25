@@ -33,3 +33,11 @@ const std::string Reference::ToString() const {
 Reference *Reference::clone() const {
     return new Reference(*this);
 }
+
+void Reference::evaluate(std::vector<const Cell *> &inputVector) const {
+    inputVector.push_back(this);
+}
+
+const Reference *Reference::getValue() const {
+    return this;
+}

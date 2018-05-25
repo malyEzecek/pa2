@@ -5,7 +5,7 @@
 #include <string>
 #include "View.h"
 
-void View::Refresh() const{}
+void View::Refresh() const {}
 
 /**
  * Get model as a parameter and transform the information from the model
@@ -13,9 +13,9 @@ void View::Refresh() const{}
  * @param model
  */
 
-void View::createTable() const{
+void View::createTable() const {
 
-    Model * model = Model::getInstance();
+    Model *model = Model::getInstance();
     Command controller;
 
     std::string columnName = "         A     ";
@@ -33,7 +33,7 @@ void View::createTable() const{
     int inputCharacter;
     std::string inputString;
     bool changed = true;
-   // move(3, 0); // posun vystupu o 3 radky dolu
+    // move(3, 0); // posun vystupu o 3 radky dolu
     do {
         if (changed) {
             for (int i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
@@ -88,13 +88,12 @@ void View::createTable() const{
                     if (!model->getElement(i, j))
                         std::cout << "           "; //todo
                     else {
-                        //std::cout <<
-                        if (model->getElement(i, j)->getType() == CellType ::EXPRESSION){
-//                            evaluateExpressiaon(model->getElement(i, j));
+                        std::cout << (model->getElement(i, j)->ToString().c_str());
+                        if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
+                                controller.evaluateExpression(i, j);
                         }
 
-
-                        //todo (const_cast<char *>(model->getElement(i, j)->ToString().c_str()));
+                        //todo (const_cast<char *>)
                     }
                 }
                 std::cout << std::endl; // todo
@@ -103,13 +102,13 @@ void View::createTable() const{
         }
         changed = false;
         std::cout << "Please, enter a command : "; //todo in the beginning
-       // move(0, 26);
+        // move(0, 26);
 //        inputCharacter = getch();
 //        inputString += (char) inputCharacter;
 
         getline(std::cin, inputString);
         //if (inputCharacter == '\n') {
-            StringToLower(inputString);
+        StringToLower(inputString);
         controller.SetCommand(inputString);
         changed = true;
         columnName = "         A     ";
@@ -121,12 +120,12 @@ void View::createTable() const{
 
 }
 
-void View::clearTable() const{}
+void View::clearTable() const {}
 
-void View::StringToLower(std::string &stringToBeChanged) const{
+void View::StringToLower(std::string &stringToBeChanged) const {
     int i = 0;
     while (stringToBeChanged[i]) {
-        if (stringToBeChanged[i] < 65 || i > stringToBeChanged[i]){
+        if (stringToBeChanged[i] < 65 || i > stringToBeChanged[i]) {
             ++i;
             continue;
         }

@@ -10,8 +10,8 @@ CellType Number::getType() const {
     return CellType::NUMBER;
 }
 
-const double & Number::getValue() const {
-    return number;
+const Number *Number::getValue() const {
+    return this;
 }
 
 double & Number::getValue() {
@@ -29,4 +29,8 @@ const std::string Number::ToString() const {
 
 Number *Number::clone() const {
     return new Number(*this);
+}
+
+void Number::evaluate(std::vector<const Cell *> &inputVector) const {
+    inputVector.push_back(this);
 }

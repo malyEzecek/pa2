@@ -10,8 +10,8 @@ CellType Operator::getType() const {
     return CellType::BASICOPERATOR;
 }
 
-const OperatorType Operator::getValue() const {
-    return basicOperator;
+const Operator * Operator::getValue() const {
+    return this;
 }
 
 void Operator::setValue(const int & newOperator) {
@@ -25,4 +25,9 @@ Operator *Operator::clone() const {
 const std::string Operator::ToString() const {
     return std::__cxx11::string();
 }
+
+void Operator::evaluate(std::vector<const Cell *> &inputVector) const {
+    inputVector.push_back(this);
+}
+
 

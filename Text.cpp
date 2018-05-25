@@ -10,8 +10,8 @@ CellType Text::getType() const {
     return CellType::TEXT;
 }
 
-const std::string & Text::getValue() const {
-    return text;
+const Text * Text::getValue() const {
+    return this;
 }
 
 std::string & Text::getValue() {
@@ -29,3 +29,8 @@ const std::string Text::ToString() const {
 Text *Text::clone() const {
     return new Text(*this);
 }
+
+void Text::evaluate(std::vector<const Cell *> &inputVector) const {
+    inputVector.push_back(this);
+}
+

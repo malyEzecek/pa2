@@ -27,6 +27,9 @@ public:
 
     Expression *clone() const override;
 
+    void evaluate(std::vector<const Cell *> & inputVector) const override;
+
+    const Expression * getValue() const override;
 };
 
 

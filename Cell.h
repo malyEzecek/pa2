@@ -9,6 +9,7 @@
 #endif //EDITOR_CELL_H
 
 #include <string>
+#include <vector>
 
 enum class CellType {
     BOOLEAN,
@@ -42,4 +43,8 @@ public:
     virtual const std::string ToString() const = 0;
 
     virtual Cell *clone() const = 0;
+
+    virtual void evaluate(std::vector<const Cell *> & inputVector) const = 0;
+
+    virtual const Cell * getValue() const = 0;
 };

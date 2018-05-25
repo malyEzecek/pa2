@@ -22,3 +22,4 @@ std::string Cell::editToWideOfCell(const std::string &editString) const {
         returnString = editString;
     return returnString;
 }
+

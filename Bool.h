@@ -23,13 +23,13 @@ public:
 
     CellType getType() const override;
 
-    bool getValue() const;
-
-    bool getValue();
-
     void setValue(const bool &value);
 
     const std::string ToString() const override;
 
     Bool *clone() const override;
+
+    void evaluate(std::vector<const Cell *> & inputVector) const override;
+
+    const Bool * getValue() const override;
 };

@@ -21,7 +21,7 @@ public:
 
     CellType getType() const override;
 
-    const double &getValue() const;
+    const Number * getValue() const override;
 
     double &getValue();
 
@@ -30,6 +30,9 @@ public:
     const std::string ToString() const override;
 
     Number *clone() const override;
+
+    void evaluate(std::vector<const Cell *> & inputVector) const override;
+
 };
 
 

@@ -57,12 +57,16 @@ private:
     void parseAggregationFuncValue(std::string &inputString, std::vector<Cell *> &possibleCells,
                                    const OperatorType *aggregationFunction, bool *delimiters) const;
 
-public:
-    Command();
+    void referenceEvaluation(const Cell *actualCell, const Cell *reference, std::vector<const Cell * > &insideOfExpression) const;
 
+public:
+
+    Command();
     void SetCommand(const std::string &inputString);
 
     CommandType returnCommandType() const;
+
+    std::string evaluateExpression(const int & yCoor, const int & xCoor) const;
 
 };
 

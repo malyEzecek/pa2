@@ -11,13 +11,10 @@ CellType Bool::getType() const {
     return CellType::BOOLEAN;
 }
 
-bool Bool::getValue() const {
-    return value;
+const Bool * Bool::getValue() const {
+    return this;
 }
 
-bool Bool::getValue() {
-    return value;
-}
 
 void Bool::setValue(const bool &value) {
     this->value = value;
@@ -36,3 +33,7 @@ const std::string Bool::ToString() const {
 Bool *Bool::clone() const {
     return new Bool(*this);
 }
+
+void Bool::evaluate(std::vector<const Cell *> &inputVector) const {
+    inputVector.push_back(this);
+;}
