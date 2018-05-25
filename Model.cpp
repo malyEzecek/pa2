@@ -48,15 +48,9 @@ Model *Model::getInstance() {
     return instance;
 }
 
-void Model::setWidth(unsigned int width) {
-    Model::width = width;
-}
-
-void Model::setHeight(unsigned int height) {
-    Model::height = height;
-}
-
 void Model::setValue(const int &yCoor, const int &xCoor, const Cell *cell) {
+    if(spreadSheet[yCoor][xCoor])
+        delete spreadSheet[yCoor][xCoor];
     switch (cell->getType()) {
         case CellType::BOOLEAN : {
             spreadSheet[yCoor][xCoor] = cell->clone();
@@ -85,7 +79,23 @@ void Model::setValue(const int &yCoor, const int &xCoor, const Cell *cell) {
     }
 }
 
-void Model::resizeTable(const int &xCoor, const int &yCoor) {
+void Model::resizeTable(const int &yCoor, const int &xCoor) {
+
+
+    for(int i = 0; i < height; ++i ){
+        for(int j = xCoor; j < width; ++j){
+            if(spreadSheet[i][j])
+                delete spreadSheet[i][j];
+        }
+    }
+
+    for(int i = yCoor; i < height; ++i){
+        for(int j = 0; j < width; ++j){
+            if(spreadSheet[i][j])
+                delete spreadSheet[i][j];
+        }
+    }
+
     int previousWidth = width;
     int previousHeight = height;
     height = (unsigned) yCoor;
@@ -95,9 +105,15 @@ void Model::resizeTable(const int &xCoor, const int &yCoor) {
     for (int i = 0; i < height; ++i)
         spreadSheet[i].resize((unsigned long) xCoor);
 
-    for (int i = 0; i < height; ++i) {
+    for (int i = 0; i < previousHeight; ++i) {
         for (int t = previousWidth; t < width; ++t)
             spreadSheet[i][t] = nullptr;
+    }
+
+    for (int i = previousHeight; i < height; ++i){
+        for(int j = 0; j < width; ++j){
+            spreadSheet[i][j] = nullptr;
+        }
     }
 }
 

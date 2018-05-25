@@ -37,10 +37,6 @@ public:
 
     const Cell * getElement(const int &height, const int &width) const;
 
-    void setWidth(unsigned int width);
-
-    void setHeight(unsigned int height);
-
     void resizeTable(const int & xCoor, const int & yCoor);
 
     void setValue(const int & xCoor, const int & yCoor, const Cell * cell);

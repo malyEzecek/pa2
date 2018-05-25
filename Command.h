@@ -62,6 +62,9 @@ private:
 
     void InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences, std::vector<const Cell *> &insideOfExpression) const;
 
+    void getResizeParameters(std::string & temporaryForCutting, int &yCoor, int & xCoor) const;
+
+    void getCoord(std::string &temporaryForCutting, std::string &cord) const;
 
 public:
 

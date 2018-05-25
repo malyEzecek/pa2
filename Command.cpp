@@ -17,7 +17,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
     switch (typeOfCommand) {
         case CommandType::SET : {
             int xCoor, yCoor;
-                parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
+            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
             Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
             Model::getInstance()->setValue(yCoor - 1, xCoor, newCell); // pocitame od 0
             delete newCell;
@@ -36,11 +36,12 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         }
         case CommandType::RESIZE : {
             int xCoor, yCoor;
-            // parseToResizeParameters(xCoor, yCoor); todo napsat dnes vecer
+            getResizeParameters(temporaryForCutting, yCoor ,xCoor);
             Model::getInstance()->resizeTable(yCoor, xCoor);
             break;
         }
         case CommandType::LOAD : {
+
             break;
         }
         case CommandType::SAVE : {
@@ -620,5 +621,54 @@ void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferen
     }
 
 
+}
+
+void Command::getCoord(std::string &temporaryForCutting, std::string &cord) const {
+    int position = 0;
+    for( ; position < temporaryForCutting.size(); ++position) {
+        if (temporaryForCutting[position] == ' ' || temporaryForCutting[position] == ',' || temporaryForCutting[position] == ')'){
+            break;
+        }
+
+        if( temporaryForCutting[position] >= 48 && temporaryForCutting[position] <= 57){
+            cord += temporaryForCutting[position];
+        } else
+            throw "Invalid parameters! Try 'help' for help!\n";
+    }
+    temporaryForCutting.erase(0, position);
+}
+
+void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, int &xCoor) const {
+
+    deleteThisUglySpaces(temporaryForCutting);
+    std::string firstXCoor, secondYCoor;
+    std::vector<char> delim = {',', ' '};
+    int position = 0;
+
+    getCoord(temporaryForCutting, firstXCoor);
+
+    if(temporaryForCutting[0] == ' '){
+        deleteThisUglySpaces(temporaryForCutting);
+    }
+
+    if(temporaryForCutting[0] != ',')
+        throw "Invalid parameters! Try 'help' for help!\n";
+    temporaryForCutting.erase(0, 1);
+
+    deleteThisUglySpaces(temporaryForCutting);
+    getCoord(temporaryForCutting, secondYCoor);
+
+    if(temporaryForCutting[0] == ' '){
+        deleteThisUglySpaces(temporaryForCutting);
+    }
+
+    if (temporaryForCutting[0] != ')')
+        throw "Invalid parameters! Try 'help' for help!\n";
+
+    temporaryForCutting.erase(0, 1);
+    deleteThisUglySpaces(temporaryForCutting);
+
+    if (temporaryForCutting.size() > 0)
+        throw "Invalid parameters! Try 'help' for help!\n";
 }
 
