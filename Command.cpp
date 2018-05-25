@@ -670,5 +670,8 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
 
     if (temporaryForCutting.size() > 0)
         throw "Invalid parameters! Try 'help' for help!\n";
+
+    xCoor = std::stoi(firstXCoor);
+    yCoor = std::stoi(secondYCoor);
 }
 
