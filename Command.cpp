@@ -707,7 +707,6 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
     int position = 0;
     for (; position < temporaryForCutting.size(); ++position) {
         if (temporaryForCutting[position] == '"') {
-            loadingPath += temporaryForCutting[position];
             ++position;
             break;
         }
@@ -729,10 +728,13 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
 void Command::writeToFile(std::ofstream &myFileSave) const {
     if (Model::getInstance()->wasResized())
         myFileSave << "resize( " << Model::getInstance()->getWidth() << ", " << Model::getInstance()->getHeight() << ")\n";
-    for (int i = 0; i < Model::getInstance()->getHeight(); ++i){
+    for (int i = 1; i <= Model::getInstance()->getHeight(); ++i){
         for (int j = 0; j < Model::getInstance()->getWidth(); ++j){
-            if (Model::getInstance()->getElement(i, j)){
-                myFileSave << "set( " << Model::getInstance()->getElement(i, j)->ToString() << ")\n";
+            if (Model::getInstance()->getElement(i, j) != nullptr){
+                if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT )
+                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \"" <<  Model::getInstance()->getElement(i, j)->ToString() << "\")\n";
+                else
+                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", " <<  Model::getInstance()->getElement(i, j)->ToString() << ")\n";
             }
         }
     }
