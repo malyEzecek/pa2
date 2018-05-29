@@ -30,9 +30,12 @@ enum class OperatorType { // skupiny <1,2>, <3,4>, <5,6>, <7,14>, <15, 17>
     ROUNDCLOSE,
     LOGCLOSE,
     LOG2CLOSE = 22,
-    AVG = 23,
-    SUM,
-    MAX = 25
+    AVGOPEN = 23,
+    SUMOPEN,
+    MAXOPEN = 25,
+    AVGCLOSE = 26,
+    SUMCLOSE,
+    MAXCLOSE
 };
 
 class Operator : public Cell {

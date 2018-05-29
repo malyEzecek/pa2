@@ -14,7 +14,7 @@ CommandType Command::returnCommandType() const {
 
 // Insert(A14, A5 + B7 + 14 + 15);
 
-void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters) const {
+void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool & exit) {
     switch (typeOfCommand) {
         case CommandType::SET : {
             int xCoor, yCoor;
@@ -25,9 +25,20 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
             break;
         }
         case CommandType::EXIT : {
-            //todo save? -> JSON
-            // no -> destruktor
-            break;
+            exitOrHelpCorrectCommand(temporaryForCutting);
+            std::cout << "Do you want to save table?" << std::endl;
+            std::string input, decision;
+            getline(std::cin, input);
+            std::stringstream ss(input);
+            ss >> decision;
+            if(SaveTableBeforeExit(decision)){
+                std::cout << "Please, write path and name of the document to save." << std::endl;
+                std::string inputString;
+                getline(std::cin, inputString);
+                typeOfCommand = CommandType::SAVE;
+                ExecuteCommand(inputString, delimiters, exit);
+            }
+            return;
         }
         case CommandType::CLEAR : {
             int xCoor, yCoor;
@@ -43,13 +54,12 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         }
         case CommandType::LOAD : {
             std::string loadingPath;
-            getLoadSaveParameter(temporaryForCutting, loadingPath);
+            getLoadSaveParameter(temporaryForCutting, loadingPath, exit);
             std::ifstream myFileLoad(loadingPath);
             std::string line;
-            Command controller;
             if (myFileLoad.is_open()) {
                 while (getline(myFileLoad, line).good()) {
-                    controller.SetCommand(line);
+                    SetCommand(line, exit);
                 }
                 myFileLoad.close();
             } else {
@@ -61,7 +71,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
         case CommandType::SAVE : {
             deleteThisUglySpaces(temporaryForCutting);
             std::string savingPath;
-            getLoadSaveParameter(temporaryForCutting, savingPath);
+            getLoadSaveParameter(temporaryForCutting, savingPath, exit);
             std::ofstream myFileSave(savingPath);
             if (myFileSave.is_open()) {
                 writeToFile(myFileSave);
@@ -72,22 +82,20 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters)
     }
 }
 
-void Command::SetCommand(const std::string &inputString) {
+void Command::SetCommand(const std::string &inputString, bool & exit) {
     std::string temporaryForCutting = inputString;
     bool delimiters[] = {false, false, false, false, false, false, false,
                          false, false, false}; // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
     Command::typeOfCommand = parseToCommand(temporaryForCutting, delimiters);
 
     if (typeOfCommand == CommandType::EXIT) {
-        if (!delimiters[2]) {
-            throw "This command doesn't exist. Try 'help' for more information.\n";
-        }
+        exit = true;
     } else {
         if (!delimiters[1]) {
             throw "This command doesn't exist. Try 'help' for more information.\n";
         }
     }
-    ExecuteCommand(temporaryForCutting, delimiters);
+    ExecuteCommand(temporaryForCutting, delimiters, exit);
 
 }
 
@@ -540,13 +548,13 @@ OperatorType *Command::parseStringToAggregationFunction(std::string &inputString
 
     if (firstCommand == "avg") {
         aggregationFctionOperator = new OperatorType;
-        *aggregationFctionOperator = OperatorType::AVG;
+        *aggregationFctionOperator = OperatorType::AVGOPEN;
     } else if (firstCommand == "sum") {
         aggregationFctionOperator = new OperatorType;
-        *aggregationFctionOperator = OperatorType::SUM;
+        *aggregationFctionOperator = OperatorType::SUMOPEN;
     } else if (firstCommand == "max") {
         aggregationFctionOperator = new OperatorType;
-        *aggregationFctionOperator = OperatorType::MAX;
+        *aggregationFctionOperator = OperatorType::MAXOPEN;
     }
     if (aggregationFctionOperator) {
         inputString.erase(0, 3);
@@ -658,7 +666,7 @@ void Command::getCoord(std::string &temporaryForCutting, std::string &cord) cons
         } else
             throw "Invalid parameters! Try 'help' for help!\n";
     }
-    temporaryForCutting.erase(0, position);
+    temporaryForCutting.erase(0, (unsigned long)position);
 }
 
 void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, int &xCoor) const {
@@ -698,7 +706,7 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
     yCoor = std::stoi(secondYCoor);
 }
 
-void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath) const {
+void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath, bool & exit) const {
     deleteThisUglySpaces(temporaryForCutting);
 
     if (temporaryForCutting[0] != '"')
@@ -715,14 +723,16 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
 
     temporaryForCutting.erase(0, position);
     deleteThisUglySpaces(temporaryForCutting);
-    if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')
-        throw "Invalid parameters! Try 'help' for help!\n";
+    if(!exit){
+        if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')
+            throw "Invalid parameters! Try 'help' for help!\n";
 
-    temporaryForCutting.erase(0, 1);
-    deleteThisUglySpaces(temporaryForCutting);
+        temporaryForCutting.erase(0, 1);
+        deleteThisUglySpaces(temporaryForCutting);
 
-    if (!temporaryForCutting.empty())
-        throw "Invalid parameters! Try 'help' for help!\n";
+        if (!temporaryForCutting.empty())
+            throw "Invalid parameters! Try 'help' for help!\n";
+    }
 }
 
 void Command::writeToFile(std::ofstream &myFileSave) const {
@@ -738,5 +748,20 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
             }
         }
     }
+}
+
+void Command::exitOrHelpCorrectCommand(std::string &temporaryForCutting) const {
+    deleteThisUglySpaces(temporaryForCutting);
+    if(!temporaryForCutting.empty())
+        throw "Invalid parameters! Try 'help' for help!\n";
+}
+
+bool Command::SaveTableBeforeExit(const std::string &decision) const {
+    if(decision == "yes")
+        return true;
+    else if(decision == "no")
+        return false;
+    else
+        throw "Wrong answer. You can write only \"yes\"\\\"no\".\n";
 }
 

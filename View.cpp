@@ -2,7 +2,6 @@
 // Created by julinka on 2.5.18.
 //
 #include <iostream>
-#include <string>
 #include "View.h"
 
 void View::Refresh() const {}
@@ -33,8 +32,12 @@ void View::createTable() const {
     int inputCharacter;
     std::string inputString;
     bool changed = true;
+    bool exit = false, help = false;
     // move(3, 0); // posun vystupu o 3 radky dolu
     do {
+        if(exit)
+            return;
+
         if (changed) {
             for (int i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
 
@@ -109,7 +112,7 @@ void View::createTable() const {
         getline(std::cin, inputString);
         //if (inputCharacter == '\n') {
         StringToLower(inputString);
-        controller.SetCommand(inputString);
+        controller.SetCommand(inputString, exit);
         changed = true;
         columnName = "         A     ";
         //}

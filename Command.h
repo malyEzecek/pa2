@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <stack>
 #include <iostream>
+#include <sstream>
 #include "Model.h"
 
 enum class CommandType {
@@ -35,7 +36,7 @@ private:
 
     CommandType SwitchTypeOfCommand(const std::string &parsedCommand) const;
 
-    void ExecuteCommand(std::string &temporaryForCutting, bool *delimiters) const;
+    void ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool & exit);
 
     void deleteThisUglySpaces(bool *delimiters, std::string &inputString) const;
 
@@ -67,14 +68,18 @@ private:
 
     void getCoord(std::string &temporaryForCutting, std::string &cord) const;
 
-    void getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath) const;
+    void getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath, bool & exit) const;
 
     void writeToFile(std::ofstream & myFileSave) const;
+
+    void exitOrHelpCorrectCommand(std::string & temporaryForCutting) const;
+
+    bool SaveTableBeforeExit(const std::string & decision) const;
 
 public:
 
     Command();
-    void SetCommand(const std::string &inputString);
+    void SetCommand(const std::string &inputString, bool & exit);
 
     CommandType returnCommandType() const;
 
