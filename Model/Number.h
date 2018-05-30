@@ -6,6 +6,7 @@
 #ifndef EDITOR_NUMBER_H
 #define EDITOR_NUMBER_H
 
+#include <math.h>
 #include "Cell.h"
 
 class Number : public Cell {

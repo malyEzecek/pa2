@@ -28,7 +28,11 @@ Expression::~Expression() {
 Expression::Expression() : reference(false) {}
 
 const std::string Expression::ToString() const { // todo neco s tim udelej
-    return std::__cxx11::string();
+    std::string returnString;
+    for(auto i: parsedStringToCells){
+        returnString += i->ToString();
+    }
+    return returnString;
 }
 
 void Expression::evaluate(std::vector<const Cell *> &inputVector) const {

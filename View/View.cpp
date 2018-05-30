@@ -46,6 +46,11 @@ void View::createTable() const {
                 std::cout << columnName; // todo const_cast<char *>(columnName.c_str()));
 //                attroff(A_BOLD);
 //                attroff(COLOR_PAIR(1));
+                if(!i){
+                    columnName = "     B     ";
+                    actualPositionLastLetter = 5;
+                    continue;
+                }
 
                 if (i < 25) {
                     ++columnName[actualPositionLastLetter];
@@ -91,7 +96,7 @@ void View::createTable() const {
                     if (!model->getElement(i, j))
                         std::cout << "           "; //todo
                     else {
-                        std::cout << (model->getElement(i, j)->ToString().c_str());
+                        std::cout << model->getElement(i, j)->ToString();
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
                                 controller.evaluateExpression(i, j);
                         }

@@ -23,7 +23,8 @@ void Number::setValue(const double & newNumber) {
 }
 
 const std::string Number::ToString() const {
-    std::string editString = std::to_string(number);
+
+    std::string editString = std::to_string(round(number * 1000)/ 1000);
     return Cell::editToWideOfCell(editString);
 }
 
