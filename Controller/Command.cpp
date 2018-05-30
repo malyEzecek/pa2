@@ -261,63 +261,6 @@ void Command::deleteThisUglySpaces(std::string &inputString) const {
     inputString.erase(0, (unsigned long) position);
 }
 
-
-void Command::deleteThisUglySpaces(bool *delimiters, std::string &inputString) const {
-    int position = 0;
-    for (; position < inputString.size(); ++position) {
-        if (inputString[position] == ' ')
-            continue;
-        else {
-            switch (inputString[position]) { // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
-                case ' ': {
-                    delimiters[0] = true;
-                    break;
-                }
-                case '(': {
-                    delimiters[1] = true;
-                    break;
-                }
-                case '\n': {
-                    delimiters[2] = true;
-                    break;
-                }
-                case ')': {
-                    delimiters[3] = true;
-                    break;
-                }
-                case '+': {
-                    delimiters[4] = true;
-                    break;
-                }
-                case '-' : {
-                    delimiters[5] = true;
-                    break;
-                }
-                case '*': {
-                    delimiters[6] = true;
-                    break;
-                }
-                case '/': {
-                    delimiters[7] = true;
-                    break;
-                }
-                case '$': {
-                    delimiters[8] = true;
-                    break;
-                }
-                case ',': {
-                    delimiters[9] = true;
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-    }
-    inputString.erase(0, (unsigned long) position);
-}
-
 std::string Command::parseStringToText(std::string &inputString) const {
     std::string returnText;
     int position = 0;
@@ -721,7 +664,7 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
         loadingPath += temporaryForCutting[position];
     }
 
-    temporaryForCutting.erase(0, position);
+    temporaryForCutting.erase(0, (unsigned long)position);
     deleteThisUglySpaces(temporaryForCutting);
     if(!exit){
         if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')

@@ -10,7 +10,7 @@
 #include <stack>
 #include <iostream>
 #include <sstream>
-#include "Model.h"
+#include "../Model/Model.h"
 
 enum class CommandType {
     CLEAR,
@@ -37,8 +37,6 @@ private:
     CommandType SwitchTypeOfCommand(const std::string &parsedCommand) const;
 
     void ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool & exit);
-
-    void deleteThisUglySpaces(bool *delimiters, std::string &inputString) const;
 
     void deleteThisUglySpaces(std::string &inputString) const;
 

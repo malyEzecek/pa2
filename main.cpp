@@ -1,6 +1,6 @@
 #include <iostream>
-#include "View.h"
-#include "Model.h"
+#include "View/View.h"
+
 
 int main() {
     View newView;

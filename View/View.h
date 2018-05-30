@@ -8,7 +8,7 @@
 #include <math.h>
 //#include <ncurses.h>
 #include <sstream>
-#include "Command.h"
+#include "../Controller/Command.h"
 
 class View {
 private:

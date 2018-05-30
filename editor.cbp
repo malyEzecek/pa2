@@ -126,81 +126,81 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/julinka/C++Tests/editor/Bool.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Controller/Command.cpp">
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/Controller/Command.h">
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Bool.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Bool.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Bool.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Cell.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Cell.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Cell.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Cell.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Command.cpp">
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Command.h">
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Expression.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Expression.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Expression.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Expression.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Model.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Model.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Number.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Number.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Number.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Number.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Operator.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Operator.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Operator.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Operator.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Reference.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Reference.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Reference.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Reference.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Text.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Text.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Text.h">
+		<Unit filename="/home/julinka/C++Tests/editor/Model/Text.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/View.cpp">
+		<Unit filename="/home/julinka/C++Tests/editor/View/View.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/View.h">
+		<Unit filename="/home/julinka/C++Tests/editor/View/View.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
