@@ -8,6 +8,9 @@
 
 #include <vector>
 #include "Cell.h"
+#include "Number.h"
+#include "Reference.h"
+#include "Operator.h"
 
 class Expression : public Cell {
 private:

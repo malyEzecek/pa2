@@ -8,11 +8,11 @@
 #include "Cell.h"
 
 enum class OperatorType { // skupiny <1,2>, <3,4>, <5,6>, <7,14>, <15, 17>
-    PLUS = 1,
-    MINUS = 2,
-    MULTIPLY = 3,
-    DIVIDE = 4,
-    BRACKETOPEN = 5,
+    PLUS = 1, // first type
+    MINUS = 2, // first type
+    MULTIPLY = 3, // second type
+    DIVIDE = 4, // second type
+    BRACKETOPEN = 5, // third type begin
     BRACKETCLOSE = 6,
     SINOPEN = 7,
     SQRTOPEN,
@@ -21,26 +21,28 @@ enum class OperatorType { // skupiny <1,2>, <3,4>, <5,6>, <7,14>, <15, 17>
     TANOPEN,
     ROUNDOPEN,
     LOGOPEN,
-    LOG2OPEN = 14,
-    SINCLOSE = 15,
+    LOG2OPEN = 14, // third type end
+    SINCLOSE = 15, // forth type begin
     SQRTCLOSE,
     ABSCLOSE,
     COSCLOSE,
     TANCLOSE,
     ROUNDCLOSE,
     LOGCLOSE,
-    LOG2CLOSE = 22,
-    AVGOPEN = 23,
+    LOG2CLOSE = 22, // forth type end
+    AVGOPEN = 23, // third type
     SUMOPEN,
-    MAXOPEN = 25,
-    AVGCLOSE = 26,
+    MAXOPEN = 25, // third type
+    AVGCLOSE = 26, // forth type
     SUMCLOSE,
-    MAXCLOSE
+    MAXCLOSE = 28 // forth type
 };
 
 class Operator : public Cell {
 private:
     OperatorType basicOperator;
+
+    int getWeightOfOperator(const OperatorType & value) const;
 
 public:
     Operator() = default;
@@ -49,7 +51,7 @@ public:
 
     explicit Operator(OperatorType newOperator);
 
-    CellType getType() const;
+    CellType getType() const override;
 
     const Operator *getValue() const override;
 
@@ -63,8 +65,13 @@ public:
 
     OperatorType returnOperatorType() const;
 
-    bool IsOpeningOperator() const;
+    static bool IsClosedOperator(const OperatorType & operators);
 
+    static bool IsOpenedOperator(const OperatorType & operators);
+
+    bool HasHigherPrecedence(const OperatorType & topOfStack) const;
+
+    OperatorType returnOpenedBracket() const;
 };
 
 

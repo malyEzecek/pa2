@@ -26,7 +26,7 @@ const std::string Number::ToString() const {
 
     std::string editString = std::to_string(number);
     editString = cutStringWithDouble(editString);
-    return Cell::editToWideOfCell(editString);
+    return "\033[0;33m" + Cell::editToWideOfCell(editString) + "\033[0m";
 }
 
 Number *Number::clone() const {

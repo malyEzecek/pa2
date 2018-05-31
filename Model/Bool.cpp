@@ -26,8 +26,7 @@ const std::string Bool::ToString() const {
         editString = "true";
     else
         editString = "false";
-    return Cell::editToWideOfCell(editString);
-
+    return "\033[0;36m" + Cell::editToWideOfCell(editString) + "\033[0m";
 }
 
 Bool *Bool::clone() const {

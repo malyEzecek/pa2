@@ -17,8 +17,7 @@ enum class CellType {
     REFERENCE,
     EXPRESSION,
     NUMBER,
-    OPERATION,
-    BASICOPERATOR
+    OPERATION
 };
 
 class Cell {

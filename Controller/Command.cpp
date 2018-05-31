@@ -14,7 +14,7 @@ CommandType Command::returnCommandType() const {
 
 // Insert(A14, A5 + B7 + 14 + 15);
 
-void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool & exit) {
+void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool &exit) {
     switch (typeOfCommand) {
         case CommandType::SET : {
             int xCoor, yCoor;
@@ -31,7 +31,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             getline(std::cin, input);
             std::stringstream ss(input);
             ss >> decision;
-            if(SaveTableBeforeExit(decision)){
+            if (SaveTableBeforeExit(decision)) {
                 std::cout << "Please, write path and name of the document to save." << std::endl;
                 std::string inputString;
                 getline(std::cin, inputString);
@@ -82,7 +82,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
     }
 }
 
-void Command::SetCommand(const std::string &inputString, bool & exit) {
+void Command::SetCommand(const std::string &inputString, bool &exit) {
     std::string temporaryForCutting = inputString;
     bool delimiters[] = {false, false, false, false, false, false, false,
                          false, false, false}; // { ' ', '(', '\n', ')', '+', '-', '*', '\', '$', ',' }
@@ -374,7 +374,7 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             }
             inputString.erase(0, 1);
         } else {
-            if(mathOperator)
+            if (mathOperator)
                 delete mathOperator;
             mathOperator = parseStringToMathFunction(inputString);
             if (mathOperator) {
@@ -535,10 +535,10 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
     std::vector<const Cell *> expressionWithoutReferences;
 
     Model::getInstance()->getElement(yCoor, xCoor)->evaluate(insideOfExpression);
-    for (auto cell : insideOfExpression) {
+    for (const Cell *cell : insideOfExpression) {
         if (cell->getType() == CellType::REFERENCE) {
             std::vector<const Cell *> detectorOfCyclus;
-            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
+            expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN)); // todo pamet!!!!!!!!!!!!!
             detectorOfCyclus.push_back(Model::getInstance()->getElement(yCoor, xCoor));
             referenceEvaluation(cell, detectorOfCyclus, expressionWithoutReferences);
             expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETCLOSE));
@@ -548,6 +548,9 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
     }
     insideOfExpression.clear();
     InfixToPostfix(expressionWithoutReferences, insideOfExpression);
+    for(auto & i : insideOfExpression){
+        std::cout << i->ToString();
+    }
 
 
 }
@@ -586,18 +589,43 @@ void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell
 
 void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences,
                              std::vector<const Cell *> &insideOfExpression) const {
-    std::stack<OperatorType> stack;
+    std::stack<const Operator *> stack;
     for (const Cell *cell : expressionWithoutReferences) {
-        if (cell->getType() == CellType::NUMBER) {
+        if (cell->getType() == CellType::NUMBER) { //todo pridat REFERENCE
             insideOfExpression.push_back(cell);
         }
         if (cell->getType() == CellType::OPERATION) {
             OperatorType basicOperator = ((const Operator *) cell->getValue())->returnOperatorType();
-//            while(!stack.empty() &&  ((const Operator *) cell->getValue())->IsOpeningOperator())
+
+            if (!((const Operator *) cell->getValue())->IsClosedOperator(basicOperator) &&
+                // jestli neni otviraci/zavirajici operator
+                !((const Operator *) cell->getValue())->IsOpenedOperator(basicOperator)) {
+                while (!stack.empty() &&
+                       !((const Operator *) cell->getValue())->IsOpenedOperator(stack.top()->returnOperatorType()) &&
+                       ((const Operator *) cell->getValue())->HasHigherPrecedence(stack.top()->returnOperatorType())) {
+                    insideOfExpression.push_back(stack.top());
+                    stack.pop();
+                }
+                stack.push(((const Operator *) cell->getValue()));
+            } else if (((const Operator *) cell->getValue())->IsOpenedOperator(basicOperator)) {
+                stack.push((const Operator *) cell->getValue());
+            } else if (((const Operator *) cell->getValue())->IsClosedOperator(basicOperator)) {
+                OperatorType openedBracket = ((const Operator *) cell->getValue())->returnOpenedBracket();
+
+                while (!stack.empty() && stack.top()->returnOperatorType() != openedBracket) {
+                    insideOfExpression.push_back(stack.top());
+                    stack.pop();
+                }
+                insideOfExpression.push_back(stack.top());
+                stack.pop(); //todo vypsat funkci do vstupnihoo parametru vector
+            }
         }
     }
 
-
+        while(!stack.empty()){
+            insideOfExpression.push_back(stack.top());
+            stack.pop();
+        }
 }
 
 void Command::getCoord(std::string &temporaryForCutting, std::string &cord) const {
@@ -613,7 +641,7 @@ void Command::getCoord(std::string &temporaryForCutting, std::string &cord) cons
         } else
             throw "Invalid parameters! Try 'help' for help!\n";
     }
-    temporaryForCutting.erase(0, (unsigned long)position);
+    temporaryForCutting.erase(0, (unsigned long) position);
 }
 
 void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, int &xCoor) const {
@@ -653,7 +681,7 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
     yCoor = std::stoi(secondYCoor);
 }
 
-void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath, bool & exit) const {
+void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string &loadingPath, bool &exit) const {
     deleteThisUglySpaces(temporaryForCutting);
 
     if (temporaryForCutting[0] != '"')
@@ -668,9 +696,9 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
         loadingPath += temporaryForCutting[position];
     }
 
-    temporaryForCutting.erase(0, (unsigned long)position);
+    temporaryForCutting.erase(0, (unsigned long) position);
     deleteThisUglySpaces(temporaryForCutting);
-    if(!exit){
+    if (!exit) {
         if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')
             throw "Invalid parameters! Try 'help' for help!\n";
 
@@ -684,14 +712,17 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
 
 void Command::writeToFile(std::ofstream &myFileSave) const {
     if (Model::getInstance()->wasResized())
-        myFileSave << "resize( " << Model::getInstance()->getWidth() << ", " << Model::getInstance()->getHeight() << ")\n";
-    for (int i = 1; i <= Model::getInstance()->getHeight(); ++i){
-        for (int j = 0; j < Model::getInstance()->getWidth(); ++j){
-            if (Model::getInstance()->getElement(i, j) != nullptr){
-                if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT )
-                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \"" <<  Model::getInstance()->getElement(i, j)->ToString() << "\")\n";
+        myFileSave << "resize( " << Model::getInstance()->getWidth() << ", " << Model::getInstance()->getHeight()
+                   << ")\n";
+    for (int i = 1; i <= Model::getInstance()->getHeight(); ++i) {
+        for (int j = 0; j < Model::getInstance()->getWidth(); ++j) {
+            if (Model::getInstance()->getElement(i, j) != nullptr) {
+                if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT)
+                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \""
+                               << Model::getInstance()->getElement(i, j)->ToString() << "\")\n";
                 else
-                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", " <<  Model::getInstance()->getElement(i, j)->ToString() << ")\n";
+                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", "
+                               << Model::getInstance()->getElement(i, j)->ToString() << ")\n";
             }
         }
     }
@@ -699,21 +730,21 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
 
 void Command::exitOrHelpCorrectCommand(std::string &temporaryForCutting) const {
     deleteThisUglySpaces(temporaryForCutting);
-    if(!temporaryForCutting.empty())
+    if (!temporaryForCutting.empty())
         throw "Invalid parameters! Try 'help' for help!\n";
 }
 
 bool Command::SaveTableBeforeExit(const std::string &decision) const {
-    if(decision == "yes")
+    if (decision == "yes")
         return true;
-    else if(decision == "no")
+    else if (decision == "no")
         return false;
     else
         throw "Wrong answer. You can write only \"yes\"\\\"no\".\n";
 }
 
-void Command::getInverseOperator( OperatorType * & mathOperator, OperatorType &reversedOperator) const {
-    switch (*mathOperator){
+void Command::getInverseOperator(OperatorType *&mathOperator, OperatorType &reversedOperator) const {
+    switch (*mathOperator) {
         case OperatorType::SINOPEN : {
             reversedOperator = OperatorType::SINCLOSE;
             break;

@@ -7,7 +7,7 @@
 Operator::Operator(OperatorType newOperator) : basicOperator(newOperator) {}
 
 CellType Operator::getType() const {
-    return CellType::BASICOPERATOR;
+    return CellType::OPERATION;
 }
 
 const Operator *Operator::getValue() const {
@@ -24,54 +24,54 @@ Operator *Operator::clone() const {
 
 const std::string Operator::ToString() const {
     std::string returnString;
-    switch (basicOperator){
-        case OperatorType::PLUS:{
-            return returnString+= " + ";
+    switch (basicOperator) {
+        case OperatorType::PLUS: {
+            return returnString += " + ";
         }
-        case OperatorType::MINUS:{
-            return returnString+= " - ";
+        case OperatorType::MINUS: {
+            return returnString += " - ";
         }
-        case OperatorType::MULTIPLY:{
-            return returnString+= " * ";
+        case OperatorType::MULTIPLY: {
+            return returnString += " * ";
         }
-        case OperatorType::DIVIDE:{
-            return returnString+= " / ";
+        case OperatorType::DIVIDE: {
+            return returnString += " / ";
         }
-        case OperatorType::BRACKETOPEN:{
-            return returnString+= " ( ";
+        case OperatorType::BRACKETOPEN: {
+            return returnString += " ( ";
         }
-        case OperatorType::SINOPEN:{
-            return returnString+= " sin( ";
+        case OperatorType::SINOPEN: {
+            return returnString += " sin( ";
         }
-        case OperatorType::ABSOPEN:{
-            return returnString+= " abs( ";
+        case OperatorType::ABSOPEN: {
+            return returnString += " abs( ";
         }
-        case OperatorType::COSOPEN:{
-            return returnString+= " cos( ";
+        case OperatorType::COSOPEN: {
+            return returnString += " cos( ";
         }
-        case OperatorType::TANOPEN:{
-            return returnString+= " tan( ";
+        case OperatorType::TANOPEN: {
+            return returnString += " tan( ";
         }
-        case OperatorType::ROUNDOPEN:{
-            return returnString+= " round( ";
+        case OperatorType::ROUNDOPEN: {
+            return returnString += " round( ";
         }
-        case OperatorType::LOGOPEN:{
-            return returnString+= " log( ";
+        case OperatorType::LOGOPEN: {
+            return returnString += " log( ";
         }
-        case OperatorType::LOG2OPEN:{
-            return returnString+= " log2( ";
+        case OperatorType::LOG2OPEN: {
+            return returnString += " log2( ";
         }
-        case OperatorType::AVGOPEN:{
-            return returnString+= " avg( ";
+        case OperatorType::AVGOPEN: {
+            return returnString += " avg( ";
         }
-        case OperatorType::SUMOPEN:{
-            return returnString+= " sum( ";
+        case OperatorType::SUMOPEN: {
+            return returnString += " sum( ";
         }
-        case OperatorType::MAXOPEN:{
-            return returnString+= " max( ";
+        case OperatorType::MAXOPEN: {
+            return returnString += " max( ";
         }
         default:
-            return returnString+= " ) ";
+            return returnString += " ) ";
     }
 }
 
@@ -83,11 +83,47 @@ OperatorType Operator::returnOperatorType() const {
     return basicOperator;
 }
 
-
-bool Operator::IsOpeningOperator() const {
-    if ((int)basicOperator >= 7 && (int)basicOperator < 14)
+bool Operator::IsClosedOperator(const OperatorType &operators) {
+    if ((operators >= OperatorType::SINCLOSE && operators <= OperatorType::LOG2CLOSE) ||
+        operators >= OperatorType::AVGCLOSE || operators == OperatorType::BRACKETCLOSE)
         return true;
-    else return false;
+    return false;
 }
+
+bool Operator::HasHigherPrecedence(const OperatorType &topOfStack) const {
+    int topWeight = getWeightOfOperator(topOfStack);
+    int valueWeight = getWeightOfOperator(basicOperator);
+    return topWeight >= valueWeight ? true : false;
+}
+
+int Operator::getWeightOfOperator(const OperatorType & value) const {
+    switch (value) {
+        case OperatorType::PLUS:
+        case OperatorType::MINUS:
+            return 1;
+        case OperatorType::MULTIPLY:
+        case OperatorType::DIVIDE:
+            return 2;
+    }
+}
+
+bool Operator::IsOpenedOperator(const OperatorType &operators) {
+    if ((operators == OperatorType::BRACKETOPEN ||
+         (operators >= OperatorType::SINOPEN && operators <= OperatorType::LOG2OPEN) ||
+         (operators >= OperatorType::AVGOPEN && operators <= OperatorType::MAXOPEN))){
+        return true;
+    }
+    return false;
+}
+
+OperatorType Operator::returnOpenedBracket() const {
+    if (basicOperator == OperatorType::BRACKETCLOSE)
+        return OperatorType::BRACKETCLOSE;
+    else if (basicOperator >= OperatorType::SINCLOSE && basicOperator <= OperatorType::LOG2CLOSE)
+        return (OperatorType)(((int) basicOperator )- 8);
+    else if (basicOperator >= OperatorType::AVGCLOSE)
+        return (OperatorType)(((int) basicOperator )- 4);
+}
+
 
 
