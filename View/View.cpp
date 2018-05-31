@@ -35,7 +35,7 @@ void View::createTable() const {
     bool exit = false, help = false;
     // move(3, 0); // posun vystupu o 3 radky dolu
     do {
-        if(exit)
+        if (exit)
             return;
 
         if (changed) {
@@ -46,7 +46,7 @@ void View::createTable() const {
                 std::cout << columnName; // todo const_cast<char *>(columnName.c_str()));
 //                attroff(A_BOLD);
 //                attroff(COLOR_PAIR(1));
-                if(!i){
+                if (!i) {
                     columnName = "     B      ";
                     actualPositionLastLetter = 5;
                     continue;
@@ -95,10 +95,10 @@ void View::createTable() const {
                     if (!model->getElement(i, j))
                         std::cout << "            "; //todo
                     else {
-                        std::cout << model->getElement(i, j)->ToString() << " ";
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
-                                controller.evaluateExpression(i, j);
-                        }
+                            controller.evaluateExpression(i, j);
+                        } else
+                            std::cout << model->getElement(i, j)->ToString() << " ";
 
                         //todo (const_cast<char *>)
                     }

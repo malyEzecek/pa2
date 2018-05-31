@@ -74,6 +74,8 @@ private:
 
     bool SaveTableBeforeExit(const std::string & decision) const;
 
+    void getInverseOperator(OperatorType * & mathOperator, OperatorType & reversedOperator) const;
+
 public:
 
     Command();

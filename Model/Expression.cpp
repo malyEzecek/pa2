@@ -29,9 +29,7 @@ Expression::Expression() : reference(false) {}
 
 const std::string Expression::ToString() const { // todo neco s tim udelej
     std::string returnString;
-    for(auto i: parsedStringToCells){
-        returnString += i->ToString();
-    }
+
     return returnString;
 }
 

@@ -62,13 +62,13 @@ const std::string Operator::ToString() const {
             return returnString+= " log2( ";
         }
         case OperatorType::AVGOPEN:{
-            return returnString+= " + ";
+            return returnString+= " avg( ";
         }
         case OperatorType::SUMOPEN:{
-            return returnString+= " + ";
+            return returnString+= " sum( ";
         }
         case OperatorType::MAXOPEN:{
-            return returnString+= " + ";
+            return returnString+= " max( ";
         }
         default:
             return returnString+= " ) ";

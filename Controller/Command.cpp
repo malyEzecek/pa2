@@ -297,7 +297,7 @@ void Command::parseStringToBool(std::string &inputString) const {
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters,
                               bool &reference) const {
     bool operatorFirstType = false, operatorSecondType = false; // firstType - tradicni operatory +, -, *, /, secondType - sin, cos atd...
-    int brackets = 1, amountOfBracketsForMathFunc = 0;
+    int brackets = 1, amountOfBracketsForMathFunc = 0; // zapamatuje si cislo zavorek pred tim
     OperatorType *mathOperator = nullptr, *aggregationFunction = nullptr;
     std::string mathFunction;
     auto mainSize = (int) inputString.size();
@@ -362,7 +362,9 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
                 ++brackets;
             } else {
                 if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
-                    possibleCells.push_back(new Operator(*mathOperator)); // todo proc to vypada podobne???
+                    OperatorType reversedOperator;
+                    getInverseOperator(mathOperator, reversedOperator);
+                    possibleCells.push_back(new Operator(reversedOperator)); // todo proc to vypada podobne???
                     operatorSecondType = false;
                 } else {
                     possibleCells.push_back(new Operator(OperatorType::BRACKETCLOSE));
@@ -372,6 +374,8 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             }
             inputString.erase(0, 1);
         } else {
+            if(mathOperator)
+                delete mathOperator;
             mathOperator = parseStringToMathFunction(inputString);
             if (mathOperator) {
                 possibleCells.push_back(new Operator(*mathOperator));
@@ -706,5 +710,54 @@ bool Command::SaveTableBeforeExit(const std::string &decision) const {
         return false;
     else
         throw "Wrong answer. You can write only \"yes\"\\\"no\".\n";
+}
+
+void Command::getInverseOperator( OperatorType * & mathOperator, OperatorType &reversedOperator) const {
+    switch (*mathOperator){
+        case OperatorType::SINOPEN : {
+            reversedOperator = OperatorType::SINCLOSE;
+            break;
+        }
+        case OperatorType::SQRTOPEN: {
+            reversedOperator = OperatorType::SQRTCLOSE;
+            break;
+        }
+        case OperatorType::ABSOPEN : {
+            reversedOperator = OperatorType::ABSCLOSE;
+            break;
+        }
+        case OperatorType::COSOPEN : {
+            reversedOperator = OperatorType::COSCLOSE;
+            break;
+        }
+        case OperatorType::TANOPEN : {
+            reversedOperator = OperatorType::TANCLOSE;
+            break;
+        }
+        case OperatorType::ROUNDOPEN: {
+            reversedOperator = OperatorType::ROUNDCLOSE;
+            break;
+        }
+        case OperatorType::LOGOPEN : {
+            reversedOperator = OperatorType::LOGCLOSE;
+            break;
+        }
+        case OperatorType::LOG2OPEN : {
+            reversedOperator = OperatorType::LOG2CLOSE;
+            break;
+        }
+        case OperatorType::AVGOPEN : {
+            reversedOperator = OperatorType::AVGCLOSE;
+            break;
+        }
+        case OperatorType::SUMOPEN : {
+            reversedOperator = OperatorType::SUMCLOSE;
+            break;
+        }
+        case OperatorType::MAXOPEN: {
+            reversedOperator = OperatorType::MAXCLOSE;
+            break;
+        }
+    }
 }
 
