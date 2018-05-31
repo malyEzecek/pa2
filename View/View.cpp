@@ -17,7 +17,7 @@ void View::createTable() const {
     Model *model = Model::getInstance();
     Command controller;
 
-    std::string columnName = "         A     ";
+    std::string columnName = "         A      ";
 
 //    if (model->getWidth() > WIDTHMAX)
 //        throw "The table can not be wider!\n";
@@ -47,7 +47,7 @@ void View::createTable() const {
 //                attroff(A_BOLD);
 //                attroff(COLOR_PAIR(1));
                 if(!i){
-                    columnName = "     B     ";
+                    columnName = "     B      ";
                     actualPositionLastLetter = 5;
                     continue;
                 }
@@ -62,7 +62,7 @@ void View::createTable() const {
                         ++columnName[actualPositionLastLetter];
                     }
                 } else {
-                    columnName = "     A     ";
+                    columnName = "     A      ";
                     actualPositionLastLetter = 6;
                     columnName[actualPositionLastLetter] = 'A';
                 }
@@ -94,9 +94,9 @@ void View::createTable() const {
 
                 for (int j = 0; j < model->getWidth(); ++j) {
                     if (!model->getElement(i, j))
-                        std::cout << "           "; //todo
+                        std::cout << "            "; //todo
                     else {
-                        std::cout << model->getElement(i, j)->ToString();
+                        std::cout << model->getElement(i, j)->ToString() << " ";
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
                                 controller.evaluateExpression(i, j);
                         }
@@ -119,7 +119,7 @@ void View::createTable() const {
         StringToLower(inputString);
         controller.SetCommand(inputString, exit);
         changed = true;
-        columnName = "         A     ";
+        columnName = "         A      ";
         //}
 
     } while (changed);

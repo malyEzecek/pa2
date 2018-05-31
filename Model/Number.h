@@ -13,6 +13,8 @@ class Number : public Cell {
 private:
     double number;
 
+    std::string cutStringWithDouble(const std::string &editString) const;
+
 public:
     explicit Number(const double &newNumber);
 
@@ -22,7 +24,7 @@ public:
 
     CellType getType() const override;
 
-    const Number * getValue() const override;
+    const Number *getValue() const override;
 
     double &getValue();
 
@@ -32,7 +34,7 @@ public:
 
     Number *clone() const override;
 
-    void evaluate(std::vector<const Cell *> & inputVector) const override;
+    void evaluate(std::vector<const Cell *> &inputVector) const override;
 
 };
 
