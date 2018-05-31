@@ -74,14 +74,13 @@ void View::createTable() const {
                 amountOfNumber = (int) log10(i) + 1;
                 std::string numberColumn;
                 if (amountOfNumber == 1) {
-                    numberColumn = "   ";
-                    numberColumn += std::to_string(i);
-                } else if (amountOfNumber == 2) {
                     numberColumn = "  ";
-                    numberColumn += std::to_string(i);
-                } else if (amountOfNumber == 3) {
+                    numberColumn += std::to_string(i) += " ";
+                } else if (amountOfNumber == 2) {
                     numberColumn = " ";
-                    numberColumn += std::to_string(i);
+                    numberColumn += std::to_string(i) += "  ";
+                } else if (amountOfNumber == 3) {
+                    numberColumn += std::to_string(i) += " ";
                 } else {
                     numberColumn += std::to_string(i);
                 }

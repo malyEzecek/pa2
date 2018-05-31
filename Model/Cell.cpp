@@ -12,7 +12,7 @@ int Cell::getCellSize() const {
 std::string Cell::editToWideOfCell(const std::string &editString) const {
     std::string returnString;
     if (editString.size() > Cell::mode) {
-        returnString = editString.substr(0, (unsigned long) (Cell::mode - 1));
+        returnString += editString.substr(0, (unsigned long) (Cell::mode - 3)) += "..";
     } else if (editString.size() < Cell::mode) {
         returnString = editString;
         for (int i = 0; i < Cell::mode - editString.size(); ++i) {
