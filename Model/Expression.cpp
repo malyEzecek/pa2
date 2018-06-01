@@ -47,7 +47,6 @@ const std::string Expression::ToString() const { // todo neco s tim udelej
 
 void Expression::evaluate(std::vector< const Cell *> &inputVector) const {
     for(const Cell *  cell : parsedStringToCells){
-        CellType type = cell->getType();
         inputVector.push_back(cell);
     }
 }

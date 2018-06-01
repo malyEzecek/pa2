@@ -28,9 +28,9 @@ public:
 
     virtual const std::string ToString() const override;
 
-    const int getXCoor() const;
+    int getXCoor() const;
 
-    const int getYCoor() const;
+    int getYCoor() const;
 
     void setValue(const int &XPosition, const int &YPosition);
 

@@ -19,18 +19,18 @@ Model::Model() {
     width = 10;
     height = 25;
     spreadSheet.resize(height);
-    for (int i = 0; i < height; ++i)
+    for (unsigned i = 0; i < height; ++i)
         spreadSheet[i].resize(width);
-    for (int i = 0; i < height; ++i)
-        for (int j = 0; j < width; ++j)
+    for (unsigned i = 0; i < height; ++i)
+        for (unsigned j = 0; j < width; ++j)
             spreadSheet[i][j] = nullptr;
 
     resized = false;
 }
 
 Model::~Model() {
-    for (int i = 0; i < getHeight(); ++i) {
-        for (int t = 0; t < width; ++t)
+    for (unsigned i = 0; i < getHeight(); ++i) {
+        for (unsigned t = 0; t < width; ++t)
             if (spreadSheet[i][t])
                 delete spreadSheet[i][t];
     }
@@ -84,36 +84,36 @@ void Model::setValue(const int &yCoor, const int &xCoor, const Cell *cell) {
 void Model::resizeTable(const int &yCoor, const int &xCoor) {
 
 
-    for(int i = 0; i < height; ++i ){
-        for(int j = xCoor; j < width; ++j){
+    for(unsigned i = 0; i < height; ++i ){
+        for(int j = xCoor; (unsigned)j < width; ++j){
             if(spreadSheet[i][j])
                 delete spreadSheet[i][j];
         }
     }
 
-    for(int i = yCoor; i < height; ++i){
-        for(int j = 0; j < width; ++j){
+    for(int i = yCoor; (unsigned)i < height; ++i){
+        for(unsigned j = 0; j < width; ++j){
             if(spreadSheet[i][j])
                 delete spreadSheet[i][j];
         }
     }
 
-    int previousWidth = width;
-    int previousHeight = height;
+    unsigned previousWidth = width;
+    unsigned previousHeight = height;
     height = (unsigned) yCoor;
     width = (unsigned) xCoor;
 
     spreadSheet.resize((unsigned long) yCoor);
-    for (int i = 0; i < height; ++i)
+    for (unsigned i = 0; i < height; ++i)
         spreadSheet[i].resize((unsigned long) xCoor);
 
-    for (int i = 0; i < previousHeight; ++i) {
-        for (int t = previousWidth; t < width; ++t)
+    for (unsigned i = 0; i < previousHeight; ++i) {
+        for (unsigned t = previousWidth; t < width; ++t)
             spreadSheet[i][t] = nullptr;
     }
 
-    for (int i = previousHeight; i < height; ++i){
-        for(int j = 0; j < width; ++j){
+    for (unsigned i = previousHeight; i < height; ++i){
+        for(unsigned j = 0; j < width; ++j){
             spreadSheet[i][j] = nullptr;
         }
     }

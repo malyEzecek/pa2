@@ -36,6 +36,8 @@ public:
 
     void evaluate(std::vector<const Cell *> &inputVector) const override;
 
+    double getNumber() const;
+
 };
 
 

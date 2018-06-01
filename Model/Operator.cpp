@@ -96,21 +96,27 @@ bool Operator::HasHigherPrecedence(const OperatorType &topOfStack) const {
     return topWeight >= valueWeight ? true : false;
 }
 
-int Operator::getWeightOfOperator(const OperatorType & value) const {
+int Operator::getWeightOfOperator(const OperatorType &value) const {
     switch (value) {
-        case OperatorType::PLUS:
+        case OperatorType::PLUS: // 1 skupina
         case OperatorType::MINUS:
             return 1;
-        case OperatorType::MULTIPLY:
+        case OperatorType::MULTIPLY: // 2 skuupina
         case OperatorType::DIVIDE:
             return 2;
+        case OperatorType::AVGOPEN: // 3 skupina
+        case OperatorType::SUMOPEN:
+        case OperatorType::MAXOPEN:
+            return 3;
+        default:
+            return 4;
     }
 }
 
 bool Operator::IsOpenedOperator(const OperatorType &operators) {
     if ((operators == OperatorType::BRACKETOPEN ||
          (operators >= OperatorType::SINOPEN && operators <= OperatorType::LOG2OPEN) ||
-         (operators >= OperatorType::AVGOPEN && operators <= OperatorType::MAXOPEN))){
+         (operators >= OperatorType::AVGOPEN && operators <= OperatorType::MAXOPEN))) {
         return true;
     }
     return false;
@@ -118,12 +124,50 @@ bool Operator::IsOpenedOperator(const OperatorType &operators) {
 
 OperatorType Operator::returnOpenedBracket() const {
     if (basicOperator == OperatorType::BRACKETCLOSE)
-        return OperatorType::BRACKETCLOSE;
+        return OperatorType::BRACKETOPEN;
     else if (basicOperator >= OperatorType::SINCLOSE && basicOperator <= OperatorType::LOG2CLOSE)
-        return (OperatorType)(((int) basicOperator )- 8);
+        return (OperatorType) (((int) basicOperator) - 8);
     else if (basicOperator >= OperatorType::AVGCLOSE)
-        return (OperatorType)(((int) basicOperator )- 4);
+        return (OperatorType) (((int) basicOperator) - 4);
+    return OperatorType::BRACKETOPEN;
 }
 
+int Operator::getWeighOfOperator() const {
+    return getWeightOfOperator(basicOperator);
+}
 
+double Operator::evaluateNumbers(const double &first, const double &second) const {
+
+    if (basicOperator == OperatorType::PLUS)
+        return first + second;
+    else if (basicOperator == OperatorType::MINUS)
+        return first - second;
+    else if (basicOperator == OperatorType::MULTIPLY)
+        return first * second;
+    else {
+        if (!second)
+            throw "Divide by zero? Are you normal, man?\n";
+        return first / second;
+    }
+
+}
+
+double Operator::evaluateNumbers(const double &first) const {
+    if (basicOperator == OperatorType::SINOPEN)
+        return sin(first);
+    else if (basicOperator == OperatorType::ABSOPEN)
+        return abs(first);
+    else if (basicOperator == OperatorType::COSOPEN)
+        return cos(first);
+    else if (basicOperator == OperatorType::SQRTOPEN)
+        return sqrt(first);
+    else if (basicOperator == OperatorType::TANOPEN)
+        return tan(first);
+    else if (basicOperator == OperatorType::ROUNDOPEN)
+        return round(first);
+    else if (basicOperator == OperatorType::LOGOPEN)
+        return log(first);
+    else
+        return log2(first);
+}
 

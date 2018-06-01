@@ -131,7 +131,7 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
             break;
         }
 
-        for (int i = 0; i < delim.size(); ++i) {
+        for (unsigned i = 0; i < delim.size(); ++i) {
             if (character == delim[i]) {
                 delimiters[i] = true;
                 finded = true;
@@ -151,7 +151,7 @@ void Command::parseToXYString(std::string &inputString, std::string &xCoorString
                               std::vector<char> &delim, bool first, bool breakMoment, int &position,
                               bool *delimiters) const {
 
-    for (int amount = 0; position < inputString.size() - 1; ++position, ++amount) {
+    for (unsigned amount = 0; position < (int)inputString.size() - 1; ++position, ++amount) {
         if (inputString[position] == '$') {
             first = false;
             continue;
@@ -249,7 +249,7 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
 }
 
 void Command::deleteThisUglySpaces(std::string &inputString) const {
-    int position = 0;
+    unsigned position = 0;
     for (; position < inputString.size(); ++position) {
         if (inputString[position] == ' ')
             continue;
@@ -460,26 +460,27 @@ OperatorType *Command::parseStringToMathFunction(std::string &inputString) const
         inputString.erase(0, 3);
         return mathOperator;
     }
-    firstCommand.substr(0, 4);
+    firstCommand = inputString.substr(0, 4);
 
     if (firstCommand == "sqrt") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::SQRTCLOSE;
+        *mathOperator = OperatorType::SQRTOPEN;
     } else if (firstCommand == "log2") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::LOG2CLOSE;
+        *mathOperator = OperatorType::LOG2OPEN;
     }
     if (mathOperator) {
         inputString.erase(0, 4);
         return mathOperator;
     }
-    firstCommand.substr(0, 5);
+
+    firstCommand = inputString.substr(0, 5);
     if (firstCommand == "round") {
         mathOperator = new OperatorType;
-        *mathOperator = OperatorType::ROUNDCLOSE;
+        *mathOperator = OperatorType::ROUNDOPEN;
     }
     if (mathOperator) {
-        inputString.erase(0, 3);
+        inputString.erase(0, 5);
         return mathOperator;
     }
     return nullptr;
@@ -530,7 +531,7 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
     possibleCells.push_back(new Operator(*aggregationFunction));
 }
 
-std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) const {
+void Command::evaluateExpression(const int &yCoor, const int &xCoor) const {
     std::vector<const Cell *> insideOfExpression;
     std::vector<const Cell *> expressionWithoutReferences;
 
@@ -548,10 +549,8 @@ std::string Command::evaluateExpression(const int &yCoor, const int &xCoor) cons
     }
     insideOfExpression.clear();
     InfixToPostfix(expressionWithoutReferences, insideOfExpression);
-    for(auto & i : insideOfExpression){
-        std::cout << i->ToString();
-    }
-
+    const Number *result = evaluatePostfixExpression(insideOfExpression);
+    std::cout << result->ToString() << " ";
 
 }
 
@@ -589,47 +588,47 @@ void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell
 
 void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferences,
                              std::vector<const Cell *> &insideOfExpression) const {
-    std::stack<const Operator *> stack;
+    std::stack<const Operator *> ss;
     for (const Cell *cell : expressionWithoutReferences) {
         if (cell->getType() == CellType::NUMBER) { //todo pridat REFERENCE
             insideOfExpression.push_back(cell);
         }
         if (cell->getType() == CellType::OPERATION) {
-            OperatorType basicOperator = ((const Operator *) cell->getValue())->returnOperatorType();
+            OperatorType basicOperator = ((const Operator *) cell)->returnOperatorType();
 
-            if (!((const Operator *) cell->getValue())->IsClosedOperator(basicOperator) &&
+            if (!((const Operator *) cell)->IsClosedOperator(basicOperator) &&
                 // jestli neni otviraci/zavirajici operator
                 !((const Operator *) cell->getValue())->IsOpenedOperator(basicOperator)) {
-                while (!stack.empty() &&
-                       !((const Operator *) cell->getValue())->IsOpenedOperator(stack.top()->returnOperatorType()) &&
-                       ((const Operator *) cell->getValue())->HasHigherPrecedence(stack.top()->returnOperatorType())) {
-                    insideOfExpression.push_back(stack.top());
-                    stack.pop();
+                while (!ss.empty() &&
+                       !((const Operator *) cell)->IsOpenedOperator(ss.top()->returnOperatorType()) &&
+                       ((const Operator *) cell)->HasHigherPrecedence(ss.top()->returnOperatorType())) {
+                    insideOfExpression.push_back(ss.top());
+                    ss.pop();
                 }
-                stack.push(((const Operator *) cell->getValue()));
-            } else if (((const Operator *) cell->getValue())->IsOpenedOperator(basicOperator)) {
-                stack.push((const Operator *) cell->getValue());
-            } else if (((const Operator *) cell->getValue())->IsClosedOperator(basicOperator)) {
+                ss.push(((const Operator *) cell));
+            } else if (((const Operator *) cell)->IsOpenedOperator(basicOperator)) {
+                ss.push((const Operator *) cell);
+            } else if (((const Operator *) cell)->IsClosedOperator(basicOperator)) {
                 OperatorType openedBracket = ((const Operator *) cell->getValue())->returnOpenedBracket();
 
-                while (!stack.empty() && stack.top()->returnOperatorType() != openedBracket) {
-                    insideOfExpression.push_back(stack.top());
-                    stack.pop();
+                while (!ss.empty() && ss.top()->returnOperatorType() != openedBracket) {
+                    insideOfExpression.push_back(ss.top());
+                    ss.pop();
                 }
-                insideOfExpression.push_back(stack.top());
-                stack.pop(); //todo vypsat funkci do vstupnihoo parametru vector
+                insideOfExpression.push_back(ss.top());
+                ss.pop();
             }
         }
     }
 
-        while(!stack.empty()){
-            insideOfExpression.push_back(stack.top());
-            stack.pop();
-        }
+    while (!ss.empty()) {
+        insideOfExpression.push_back(ss.top());
+        ss.pop();
+    }
 }
 
 void Command::getCoord(std::string &temporaryForCutting, std::string &cord) const {
-    int position = 0;
+    unsigned position = 0;
     for (; position < temporaryForCutting.size(); ++position) {
         if (temporaryForCutting[position] == ' ' || temporaryForCutting[position] == ',' ||
             temporaryForCutting[position] == ')') {
@@ -649,7 +648,6 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
     deleteThisUglySpaces(temporaryForCutting);
     std::string firstXCoor, secondYCoor;
     std::vector<char> delim = {',', ' '};
-    int position = 0;
 
     getCoord(temporaryForCutting, firstXCoor);
 
@@ -687,7 +685,7 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
     if (temporaryForCutting[0] != '"')
         throw "Invalid parameters! Try 'help' for help!\n";
     temporaryForCutting.erase(0, 1);
-    int position = 0;
+    unsigned position = 0;
     for (; position < temporaryForCutting.size(); ++position) {
         if (temporaryForCutting[position] == '"') {
             ++position;
@@ -714,8 +712,8 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
     if (Model::getInstance()->wasResized())
         myFileSave << "resize( " << Model::getInstance()->getWidth() << ", " << Model::getInstance()->getHeight()
                    << ")\n";
-    for (int i = 1; i <= Model::getInstance()->getHeight(); ++i) {
-        for (int j = 0; j < Model::getInstance()->getWidth(); ++j) {
+    for (unsigned i = 1; i <= Model::getInstance()->getHeight(); ++i) {
+        for (unsigned j = 0; j < Model::getInstance()->getWidth(); ++j) {
             if (Model::getInstance()->getElement(i, j) != nullptr) {
                 if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT)
                     myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \""
@@ -744,51 +742,77 @@ bool Command::SaveTableBeforeExit(const std::string &decision) const {
 }
 
 void Command::getInverseOperator(OperatorType *&mathOperator, OperatorType &reversedOperator) const {
-    switch (*mathOperator) {
-        case OperatorType::SINOPEN : {
-            reversedOperator = OperatorType::SINCLOSE;
-            break;
-        }
-        case OperatorType::SQRTOPEN: {
-            reversedOperator = OperatorType::SQRTCLOSE;
-            break;
-        }
-        case OperatorType::ABSOPEN : {
-            reversedOperator = OperatorType::ABSCLOSE;
-            break;
-        }
-        case OperatorType::COSOPEN : {
-            reversedOperator = OperatorType::COSCLOSE;
-            break;
-        }
-        case OperatorType::TANOPEN : {
-            reversedOperator = OperatorType::TANCLOSE;
-            break;
-        }
-        case OperatorType::ROUNDOPEN: {
-            reversedOperator = OperatorType::ROUNDCLOSE;
-            break;
-        }
-        case OperatorType::LOGOPEN : {
-            reversedOperator = OperatorType::LOGCLOSE;
-            break;
-        }
-        case OperatorType::LOG2OPEN : {
-            reversedOperator = OperatorType::LOG2CLOSE;
-            break;
-        }
-        case OperatorType::AVGOPEN : {
-            reversedOperator = OperatorType::AVGCLOSE;
-            break;
-        }
-        case OperatorType::SUMOPEN : {
-            reversedOperator = OperatorType::SUMCLOSE;
-            break;
-        }
-        case OperatorType::MAXOPEN: {
-            reversedOperator = OperatorType::MAXCLOSE;
-            break;
+
+    if (*mathOperator == OperatorType::SINOPEN)
+        reversedOperator = OperatorType::SINCLOSE;
+
+    else if (*mathOperator == OperatorType::SQRTOPEN)
+        reversedOperator = OperatorType::SQRTCLOSE;
+
+    else if (*mathOperator == OperatorType::ABSOPEN)
+        reversedOperator = OperatorType::ABSCLOSE;
+
+    else if (*mathOperator == OperatorType::COSOPEN)
+        reversedOperator = OperatorType::COSCLOSE;
+
+    else if (*mathOperator == OperatorType::TANOPEN)
+        reversedOperator = OperatorType::TANCLOSE;
+
+    else if (*mathOperator == OperatorType::ROUNDOPEN)
+        reversedOperator = OperatorType::ROUNDCLOSE;
+
+    else if (*mathOperator == OperatorType::LOGOPEN)
+        reversedOperator = OperatorType::LOGCLOSE;
+
+    else if (*mathOperator == OperatorType::LOG2OPEN)
+        reversedOperator = OperatorType::LOG2CLOSE;
+
+    else if (*mathOperator == OperatorType::AVGOPEN)
+        reversedOperator = OperatorType::AVGCLOSE;
+
+    else if (*mathOperator == OperatorType::SUMOPEN)
+        reversedOperator = OperatorType::SUMCLOSE;
+
+    else if (*mathOperator == OperatorType::MAXOPEN)
+        reversedOperator = OperatorType::MAXCLOSE;
+
+}
+
+const Number *Command::evaluatePostfixExpression(
+        std::vector<const Cell *> &postfixExpression) const { // todo opravit problem s pameti!!!!
+    std::stack<const Number *> ss;
+    for (auto &cellPointer : postfixExpression) {
+        if (cellPointer->getType() == CellType::NUMBER) {
+            ss.push((const Number *) cellPointer);
+        } else if (cellPointer->getType() == CellType::OPERATION) {
+            int weight = ((const Operator *) cellPointer)->getWeighOfOperator();
+            if (weight <= 2) {
+                if (ss.size() < 2)
+                    throw "Invalid expression. Try 'help' for more information.\n";
+                auto second = ss.top()->getNumber();
+                ss.pop();
+                auto first = ss.top()->getNumber();
+                ss.pop();
+                double result = ((const Operator *) cellPointer)->evaluateNumbers(first, second);
+                ss.push(new Number(result));
+            } else if (weight == 3) {
+
+            } else {
+                if (ss.empty())
+                    throw "Invalid expression. Try 'help' for more information.\n";
+                auto first = ss.top()->getNumber();
+                ss.pop();
+                double result = (((const Operator *) cellPointer)->evaluateNumbers(first));
+                ss.push(new Number(result));
+            }
         }
     }
+    const Number *finalResults = ss.top();
+    ss.pop();
+
+    if (!ss.empty())
+        throw "Invalid expression. Try 'help' for more information.\n";
+    return finalResults;
+
 }
 

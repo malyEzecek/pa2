@@ -63,3 +63,7 @@ std::string Number::cutStringWithDouble(const std::string &editString) const {
 
     return returnString;
 }
+
+double Number::getNumber() const {
+    return number;
+}

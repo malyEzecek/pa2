@@ -5,6 +5,7 @@
 #ifndef EDITOR_OPERATOR_H
 #define EDITOR_OPERATOR_H
 
+#include <math.h>
 #include "Cell.h"
 
 enum class OperatorType { // skupiny <1,2>, <3,4>, <5,6>, <7,14>, <15, 17>
@@ -72,6 +73,12 @@ public:
     bool HasHigherPrecedence(const OperatorType & topOfStack) const;
 
     OperatorType returnOpenedBracket() const;
+
+    int getWeighOfOperator() const;
+
+    double evaluateNumbers(const double &first, const double &second) const;
+
+    double evaluateNumbers(const double &first) const;
 };
 
 

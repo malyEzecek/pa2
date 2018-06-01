@@ -29,17 +29,16 @@ void View::createTable() const {
 //    init_pair(1, COLOR_BLACK, COLOR_WHITE);
 //    nocbreak(); // let the terminal do the line editing
 
-    int inputCharacter;
     std::string inputString;
     bool changed = true;
-    bool exit = false, help = false;
+    bool exit = false;
     // move(3, 0); // posun vystupu o 3 radky dolu
     do {
         if (exit)
             return;
 
         if (changed) {
-            for (int i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
+            for (unsigned i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
 
 //                attron(COLOR_PAIR(1));
 //                attron(A_BOLD);
@@ -70,7 +69,7 @@ void View::createTable() const {
             std::cout << std::endl;// todo printw("\n");
 
             int amountOfNumber;
-            for (int i = 1; i <= model->getHeight(); ++i) {
+            for (unsigned i = 1; i <= model->getHeight(); ++i) {
                 amountOfNumber = (int) log10(i) + 1;
                 std::string numberColumn;
                 if (amountOfNumber == 1) {
@@ -91,7 +90,7 @@ void View::createTable() const {
 //                attroff(A_BOLD);
 //                attroff(COLOR_PAIR(1));
 
-                for (int j = 0; j < model->getWidth(); ++j) {
+                for (unsigned j = 0; j < model->getWidth(); ++j) {
                     if (!model->getElement(i, j))
                         std::cout << "            "; //todo
                     else {

@@ -10,6 +10,7 @@
 #include <stack>
 #include <iostream>
 #include <sstream>
+#include <math.h>
 #include "../Model/Model.h"
 
 enum class CommandType {
@@ -76,6 +77,8 @@ private:
 
     void getInverseOperator(OperatorType * & mathOperator, OperatorType & reversedOperator) const;
 
+    const Number * evaluatePostfixExpression(std::vector<const Cell *> &postfixExpression) const;
+
 public:
 
     Command();
@@ -83,7 +86,7 @@ public:
 
     CommandType returnCommandType() const;
 
-    std::string evaluateExpression(const int & yCoor, const int & xCoor) const;
+    void evaluateExpression(const int & yCoor, const int & xCoor) const;
 
 };
 

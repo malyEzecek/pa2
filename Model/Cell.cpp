@@ -11,11 +11,11 @@ int Cell::getCellSize() const {
 
 std::string Cell::editToWideOfCell(const std::string &editString) const {
     std::string returnString;
-    if (editString.size() > Cell::mode) {
+    if (editString.size() > (unsigned)Cell::mode) {
         returnString += editString.substr(0, (unsigned long) (Cell::mode - 3)) += "..";
-    } else if (editString.size() < Cell::mode) {
+    } else if (editString.size() < (unsigned) Cell::mode) {
         returnString = editString;
-        for (int i = 0; i < Cell::mode - editString.size(); ++i) {
+        for (int i = 0; (unsigned) i < (unsigned)Cell::mode - editString.size(); ++i) {
             returnString.insert(returnString.begin(), ' ');
         }
     } else

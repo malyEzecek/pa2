@@ -16,11 +16,11 @@ void Reference::setValue(const int & XPosition, const int & YPosition) {
     YCoor = YPosition;
 }
 
-const int Reference::getXCoor() const {
+int Reference::getXCoor() const {
     return XCoor;
 }
 
-const int Reference::getYCoor() const {
+int Reference::getYCoor() const {
     return YCoor;
 }
 
