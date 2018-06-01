@@ -19,6 +19,11 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
         case CommandType::SET : {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
+            if(xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight() ){
+                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+                return;
+            }
+
             Cell *newCell = parseStringToCell(temporaryForCutting, delimiters);
             Model::getInstance()->setValue(yCoor - 1, xCoor, newCell); // pocitame od 0
             delete newCell;
