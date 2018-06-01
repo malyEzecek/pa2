@@ -19,14 +19,15 @@ enum class CommandType {
     EXIT,
     SAVE,
     LOAD,
-    RESIZE
+    RESIZE,
+    GETVALUE
 };
 
 
 class Command {
 private:
     CommandType typeOfCommand;
-    static const int maxCharInCommand = 7;
+    static const int maxCharInCommand = 9;
     static const int FirstA = 97; // in ASCII code
 
     CommandType parseToCommand(std::string &inputString, bool *delimiters) const;

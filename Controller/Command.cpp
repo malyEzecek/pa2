@@ -19,7 +19,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
         case CommandType::SET : {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
-            if(xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight() ){
+            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
                 std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
                 return;
             }
@@ -84,6 +84,21 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             } else
                 std::cout << "Unable to open file." << std::endl;
         }
+        case CommandType::GETVALUE : {
+            deleteThisUglySpaces(temporaryForCutting);
+            int xCoor, yCoor;
+            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
+
+            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
+                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+                return;
+            }
+
+            if (!Model::getInstance()->getElement(yCoor, xCoor))
+                std::cout << "null" << std::endl;
+            else
+                std::cout << Model::getInstance()->getElement(yCoor, xCoor)->ToString(true) << std::endl;
+        }
     }
 }
 
@@ -117,6 +132,8 @@ CommandType Command::SwitchTypeOfCommand(const std::string &parsedCommand) const
         return CommandType::LOAD;
     } else if (parsedCommand == "resize") {
         return CommandType::RESIZE;
+    } else if (parsedCommand == "getvalue") {
+        return CommandType::GETVALUE;
     } else
         throw "This command doesn't exist. Try 'help' for more information.\n";
 }
@@ -125,7 +142,8 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
     std::string parsedCommand;
     deleteThisUglySpaces(inputString);
     if (inputString[0] != 'c' && inputString[0] != 'e' && inputString[0] != 's'
-        && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'h')
+        && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'h'
+        && inputString[0] != 'g')
         throw "This command doesn't exist. Try 'help' for more information.\n";
     std::vector<char> delim = {' ', '(', '\n'};
 
@@ -148,7 +166,15 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
         parsedCommand += character;
         ++CharInCommand;
     }
-    inputString.erase(0, parsedCommand.size() + 1);
+    inputString.erase(0, parsedCommand.size());
+
+    if (delimiters[0] && !delimiters[1]) {
+        deleteThisUglySpaces(inputString);
+        if (inputString[0] != '(')
+            throw "Invalid command.Try 'help' for more information.\n";
+        delimiters[1] = true;
+    }
+    inputString.erase(0, 1);
     return SwitchTypeOfCommand(parsedCommand);
 }
 
@@ -156,7 +182,7 @@ void Command::parseToXYString(std::string &inputString, std::string &xCoorString
                               std::vector<char> &delim, bool first, bool breakMoment, int &position,
                               bool *delimiters) const {
 
-    for (unsigned amount = 0; position < (int)inputString.size() - 1; ++position, ++amount) {
+    for (unsigned amount = 0; position < (int) inputString.size() - 1; ++position, ++amount) {
         if (inputString[position] == '$') {
             first = false;
             continue;
@@ -218,7 +244,7 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
             throw "Invalid parameter. Try 'help' for more information.\n";
     }
 
-    if (xCoorString.size() > 2 || yCoorString.size() > 4)
+    if (xCoorString.size() > 2 || yCoorString.size() > 3)
         throw "Invalid parameter. Try 'help' for more information.\n";
     xCoor = std::stoi(xCoorString);
     yCoor = std::stoi(yCoorString);
