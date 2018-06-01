@@ -30,7 +30,7 @@ public:
 
     void setValue(const double &newNumber);
 
-    const std::string ToString() const override;
+    const std::string ToString(bool load) const override;
 
     Number *clone() const override;
 

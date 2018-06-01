@@ -24,10 +24,13 @@ int Reference::getYCoor() const {
     return YCoor;
 }
 
-const std::string Reference::ToString() const {
+const std::string Reference::ToString(bool load) const {
     std::string editString = "$";
-    editString += std::to_string(XCoor) += std::to_string(YCoor);
-    return Cell::editToWideOfCell(editString);
+    editString += std::to_string(XCoor) + '$' + std::to_string(YCoor);
+
+    if (!load)
+        return Cell::editToWideOfCell(editString);
+    return " " + editString + " ";
 }
 
 Reference *Reference::clone() const {

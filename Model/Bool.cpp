@@ -20,13 +20,17 @@ void Bool::setValue(const bool &value) {
     this->value = value;
 }
 
-const std::string Bool::ToString() const {
+const std::string Bool::ToString(bool load) const {
     std::string editString;
     if (value)
         editString = "true";
     else
         editString = "false";
-    return "\033[0;36m" + Cell::editToWideOfCell(editString) + "\033[0m";
+
+    if(!load)
+        return "\033[0;36m" + Cell::editToWideOfCell(editString) + "\033[0m";
+    else
+        return editString;
 }
 
 Bool *Bool::clone() const {

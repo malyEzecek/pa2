@@ -437,9 +437,26 @@ void Command::parseStringToNumber(std::string &inputString, std::string &number)
 
 OperatorType *Command::parseStringToMathFunction(std::string &inputString) const {
     OperatorType *mathOperator = nullptr;
+
     if (inputString.size() < 3)
         return nullptr;
-    std::string firstCommand = inputString.substr(0, 3);
+
+    std::string firstCommand = inputString.substr(0, 4);
+
+    if (firstCommand == "sqrt") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::SQRTOPEN;
+    } else if (firstCommand == "log2") {
+        mathOperator = new OperatorType;
+        *mathOperator = OperatorType::LOG2OPEN;
+    }
+    if (mathOperator) {
+        inputString.erase(0, 4);
+        return mathOperator;
+    }
+
+    firstCommand = inputString.substr(0, 3);
+
     if (firstCommand == "sin") {
         mathOperator = new OperatorType;
         *mathOperator = OperatorType::SINOPEN;
@@ -460,19 +477,7 @@ OperatorType *Command::parseStringToMathFunction(std::string &inputString) const
         inputString.erase(0, 3);
         return mathOperator;
     }
-    firstCommand = inputString.substr(0, 4);
 
-    if (firstCommand == "sqrt") {
-        mathOperator = new OperatorType;
-        *mathOperator = OperatorType::SQRTOPEN;
-    } else if (firstCommand == "log2") {
-        mathOperator = new OperatorType;
-        *mathOperator = OperatorType::LOG2OPEN;
-    }
-    if (mathOperator) {
-        inputString.erase(0, 4);
-        return mathOperator;
-    }
 
     firstCommand = inputString.substr(0, 5);
     if (firstCommand == "round") {
@@ -550,7 +555,7 @@ void Command::evaluateExpression(const int &yCoor, const int &xCoor) const {
     insideOfExpression.clear();
     InfixToPostfix(expressionWithoutReferences, insideOfExpression);
     const Number *result = evaluatePostfixExpression(insideOfExpression);
-    std::cout << result->ToString() << " ";
+    std::cout << result->ToString(false) << " ";
 
 }
 
@@ -717,10 +722,10 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
             if (Model::getInstance()->getElement(i, j) != nullptr) {
                 if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT)
                     myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \""
-                               << Model::getInstance()->getElement(i, j)->ToString() << "\")\n";
+                               << Model::getInstance()->getElement(i, j)->ToString(true) << "\")\n";
                 else
                     myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", "
-                               << Model::getInstance()->getElement(i, j)->ToString() << ")\n";
+                               << Model::getInstance()->getElement(i, j)->ToString(true) << ")\n";
             }
         }
     }

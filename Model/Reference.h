@@ -26,7 +26,7 @@ public:
 
     CellType getType() const override;
 
-    virtual const std::string ToString() const override;
+    virtual const std::string ToString(bool load) const override;
 
     int getXCoor() const;
 

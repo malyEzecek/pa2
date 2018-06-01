@@ -22,11 +22,13 @@ void Number::setValue(const double & newNumber) {
     number = newNumber;
 }
 
-const std::string Number::ToString() const {
+const std::string Number::ToString(bool load) const {
 
     std::string editString = std::to_string(number);
     editString = cutStringWithDouble(editString);
-    return "\033[0;33m" + Cell::editToWideOfCell(editString) + "\033[0m";
+    if(!load)
+        return "\033[0;33m" + Cell::editToWideOfCell(editString) + "\033[0m";
+    return " " + std::to_string(number) + " ";
 }
 
 Number *Number::clone() const {

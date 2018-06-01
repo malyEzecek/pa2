@@ -22,57 +22,64 @@ Operator *Operator::clone() const {
     return new Operator(*this);
 }
 
-const std::string Operator::ToString() const {
+const std::string Operator::ToString(bool load) const {
     std::string returnString;
-    switch (basicOperator) {
-        case OperatorType::PLUS: {
-            return returnString += " + ";
+    if(load){
+        switch (basicOperator) {
+            case OperatorType::PLUS: {
+                return returnString += " + ";
+            }
+            case OperatorType::MINUS: {
+                return returnString += " - ";
+            }
+            case OperatorType::MULTIPLY: {
+                return returnString += " * ";
+            }
+            case OperatorType::DIVIDE: {
+                return returnString += " / ";
+            }
+            case OperatorType::BRACKETOPEN: {
+                return returnString += " ( ";
+            }
+            case OperatorType::SINOPEN: {
+                return returnString += " sin( ";
+            }
+            case OperatorType::ABSOPEN: {
+                return returnString += " abs( ";
+            }
+            case OperatorType::COSOPEN: {
+                return returnString += " cos( ";
+            }
+            case OperatorType::TANOPEN: {
+                return returnString += " tan( ";
+            }
+            case OperatorType::ROUNDOPEN: {
+                return returnString += " round( ";
+            }
+            case OperatorType::LOGOPEN: {
+                return returnString += " log( ";
+            }
+            case OperatorType::LOG2OPEN: {
+                return returnString += " log2( ";
+            }
+            case OperatorType::AVGOPEN: {
+                return returnString += " avg( ";
+            }
+            case OperatorType::SUMOPEN: {
+                return returnString += " sum( ";
+            }
+            case OperatorType::MAXOPEN: {
+                return returnString += " max( ";
+            }
+            case OperatorType::SQRTOPEN: {
+                return returnString += " sqrt( ";
+            }
+            default:
+                return returnString += " ) ";
         }
-        case OperatorType::MINUS: {
-            return returnString += " - ";
-        }
-        case OperatorType::MULTIPLY: {
-            return returnString += " * ";
-        }
-        case OperatorType::DIVIDE: {
-            return returnString += " / ";
-        }
-        case OperatorType::BRACKETOPEN: {
-            return returnString += " ( ";
-        }
-        case OperatorType::SINOPEN: {
-            return returnString += " sin( ";
-        }
-        case OperatorType::ABSOPEN: {
-            return returnString += " abs( ";
-        }
-        case OperatorType::COSOPEN: {
-            return returnString += " cos( ";
-        }
-        case OperatorType::TANOPEN: {
-            return returnString += " tan( ";
-        }
-        case OperatorType::ROUNDOPEN: {
-            return returnString += " round( ";
-        }
-        case OperatorType::LOGOPEN: {
-            return returnString += " log( ";
-        }
-        case OperatorType::LOG2OPEN: {
-            return returnString += " log2( ";
-        }
-        case OperatorType::AVGOPEN: {
-            return returnString += " avg( ";
-        }
-        case OperatorType::SUMOPEN: {
-            return returnString += " sum( ";
-        }
-        case OperatorType::MAXOPEN: {
-            return returnString += " max( ";
-        }
-        default:
-            return returnString += " ) ";
-    }
+    } else
+        throw "Operator can't be in the cell without any operands.\n";
+
 }
 
 void Operator::evaluate(std::vector<const Cell *> &inputVector) const {

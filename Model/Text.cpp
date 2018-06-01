@@ -22,11 +22,11 @@ void Text::setValue(const std::string &newText) {
     text = newText;
 }
 
-const std::string Text::ToString() const {
+const std::string Text::ToString(bool load) const {
 
-    std::string returnString = "\033[0;31m" + Cell::editToWideOfCell(text)+ " \033[0m";
-
-    return returnString;
+    if(!load)
+        return "\033[0;31m" + Cell::editToWideOfCell(text) + " \033[0m";
+    return  " " + text + " ";
 }
 
 Text *Text::clone() const {

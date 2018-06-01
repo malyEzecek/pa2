@@ -25,7 +25,7 @@ public:
 
     void setValue(const bool &value);
 
-    const std::string ToString() const override;
+    const std::string ToString(bool load) const override;
 
     Bool *clone() const override;
 

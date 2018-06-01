@@ -97,7 +97,7 @@ void View::createTable() const {
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
                             controller.evaluateExpression(i, j);
                         } else
-                            std::cout << model->getElement(i, j)->ToString() << " ";
+                            std::cout << model->getElement(i, j)->ToString(false) << " ";
 
                         //todo (const_cast<char *>)
                     }

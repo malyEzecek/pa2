@@ -31,7 +31,7 @@ public:
 
     void setValue(const std::string &newText);
 
-    const std::string ToString() const override;
+    const std::string ToString(bool load) const override;
 
     Text *clone() const override;
 

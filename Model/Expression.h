@@ -26,7 +26,7 @@ public:
 
     CellType getType() const override;
 
-    const std::string ToString() const override;
+    const std::string ToString(bool load) const override;
 
     Expression *clone() const override;
 

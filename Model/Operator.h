@@ -60,7 +60,7 @@ public:
 
     Operator *clone() const override;
 
-    const std::string ToString() const override;
+    const std::string ToString(bool load) const override;
 
     void evaluate(std::vector<const Cell *> & inputVector) const override;
 

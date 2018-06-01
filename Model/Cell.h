@@ -39,7 +39,7 @@ public:
 
     virtual CellType getType() const = 0;
 
-    virtual const std::string ToString() const = 0;
+    virtual const std::string ToString(bool load) const = 0;
 
     virtual Cell *clone() const = 0;
 
