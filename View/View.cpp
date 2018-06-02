@@ -94,12 +94,13 @@ void View::createTable() const {
                     if (!model->getElement(i, j))
                         std::cout << "            "; //todo
                     else {
+                        std::vector<const Cell *> checkCyclesInReferences;
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
-                            const Number * number = controller.evaluateExpression(model->getElement(i, j));
+                            const Number * number = controller.evaluateExpression(model->getElement(i, j), checkCyclesInReferences);
                             std::cout << number->ToString(false) << " ";
                             delete number;
                         } else if (model->getElement(i, j)->getType() == CellType::REFERENCE){
-                            std::vector<const Cell *> checkCyclesInReferences;
+
                             controller.evaluateReference(i, j, checkCyclesInReferences);
                         }
 

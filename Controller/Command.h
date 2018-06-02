@@ -87,7 +87,7 @@ public:
 
     CommandType returnCommandType() const;
 
-    const Number * evaluateExpression(const Cell * expression) const;
+    const Number * evaluateExpression(const Cell * expression, std::vector<const Cell *> &checkReferences) const;
 
     void evaluateReference(const unsigned & height, const unsigned & width, std::vector<const Cell *> &checkCycles) const ;
 

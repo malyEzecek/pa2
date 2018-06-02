@@ -569,14 +569,21 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
     possibleCells.push_back(new Operator(*aggregationFunction));
 }
 
-const Number * Command::evaluateExpression(const Cell * expression) const {
+const Number *Command::evaluateExpression(const Cell *expression, std::vector<const Cell *> &checkReferences) const {
     std::vector<const Cell *> insideOfExpression;
     std::vector<const Cell *> expressionWithoutReferences;
+    const Number *result = nullptr;
 
     expression->evaluate(insideOfExpression);
     for (const Cell *cell : insideOfExpression) {
         if (cell->getType() == CellType::REFERENCE) {
-            std::vector<const Cell *> detectorOfCyclus;
+
+            for (auto &reference : checkReferences){
+                if(cell == reference){
+                    return result;
+                }
+            }
+            std::vector<const Cell *> detectorOfCyclus = checkReferences;
             detectorOfCyclus.push_back(expression);
             referenceEvaluation(cell, detectorOfCyclus, expressionWithoutReferences);
         } else {
@@ -585,16 +592,17 @@ const Number * Command::evaluateExpression(const Cell * expression) const {
     }
     insideOfExpression.clear();
     InfixToPostfix(expressionWithoutReferences, insideOfExpression);
-    const Number *result = evaluatePostfixExpression(insideOfExpression);
+    result = evaluatePostfixExpression(insideOfExpression);
     return result;
 
 }
 
 void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> &detectorOfCyclus,
                                   std::vector<const Cell *> &expressionWithoutReferences) const { //zaroven najdeme cyklickou zavislost
-    if(!actualCell)
+    if (!actualCell)
         throw "Null reference.\n"; // todo VYJIMKA
-    if(actualCell->getType() != CellType::NUMBER && actualCell->getType() != CellType::REFERENCE && actualCell->getType() != CellType::OPERATION)
+    if (actualCell->getType() != CellType::NUMBER && actualCell->getType() != CellType::REFERENCE &&
+        actualCell->getType() != CellType::OPERATION)
         throw "Invalid reference inside expression.\n"; // todo STEJNA VYJIMKA JAKO O 2 RADKY VEJS
 
     for (auto dependence : detectorOfCyclus) {
@@ -608,14 +616,14 @@ void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell
         expressionWithoutReferences.push_back(actualCell);
     } else if (actualCell->getType() == CellType::REFERENCE) {
         detectorOfCyclus.push_back(actualCell);// jestli je to reference, pridej na zasobnik
-        int newXCoor = ((Reference *)actualCell)->getXCoor();
-        int newYCoor = ((Reference *)actualCell)->getYCoor();
+        int newXCoor = ((Reference *) actualCell)->getXCoor();
+        int newYCoor = ((Reference *) actualCell)->getYCoor();
         referenceEvaluation(Model::getInstance()->getElement(newYCoor, newXCoor), detectorOfCyclus,
                             expressionWithoutReferences);
         detectorOfCyclus.pop_back(); // a pak odeber po vraceni ze zanoreni
     } else if (actualCell->getType() == CellType::EXPRESSION) {
-        const Number * number = evaluateExpression(actualCell);
-        expressionWithoutReferences.push_back((const Cell *)number);
+        const Number *number = evaluateExpression(actualCell, detectorOfCyclus);
+        expressionWithoutReferences.push_back((const Cell *) number);
     }
 }
 
@@ -851,11 +859,18 @@ const Number *Command::evaluatePostfixExpression(
 
 }
 
-void Command::evaluateReference(const unsigned &height, const unsigned &width, std::vector<const Cell *>& checkCycles) const {
+void Command::evaluateReference(const unsigned &height, const unsigned &width,
+                                std::vector<const Cell *> &checkCycles) const {
     if (width >= Model::getInstance()->getWidth() || height > Model::getInstance()->getHeight()) {
         std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
         return;
     }
+    for (auto reference : checkCycles) { // kontrola na mozne cyklicke zavislosti
+        if (Model::getInstance()->getElement(height, width) == reference)
+            std::cout << "       null ";
+        return;
+    }
+
     unsigned newYCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getYCoor();
     unsigned newXCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getXCoor();
 
@@ -863,9 +878,11 @@ void Command::evaluateReference(const unsigned &height, const unsigned &width, s
         std::cout << "       null " << std::endl;
         return;
     } else {
-        if(Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::EXPRESSION){
-            evaluateExpression(Model::getInstance()->getElement(newYCoor, newXCoor));
-        } else if (Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::REFERENCE){
+        if (Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::EXPRESSION) {
+            const Number *number = evaluateExpression(Model::getInstance()->getElement(newYCoor, newXCoor),
+                                                      checkCycles);
+            std::cout << number->ToString(false) << " ";
+        } else if (Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::REFERENCE) {
             checkCycles.push_back(Model::getInstance()->getElement(height, width));
             evaluateReference(newYCoor, newXCoor, checkCycles);
         } else {
