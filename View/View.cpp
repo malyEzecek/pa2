@@ -96,7 +96,11 @@ void View::createTable() const {
                     else {
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
                             controller.evaluateExpression(i, j);
-                        } else
+                        } else if (model->getElement(i, j)->getType() == CellType::REFERENCE){
+                            controller.evaluateReference(i, j);
+                        }
+
+                        else
                             std::cout << model->getElement(i, j)->ToString(false) << " ";
 
                         //todo (const_cast<char *>)

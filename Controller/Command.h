@@ -32,7 +32,7 @@ private:
 
     CommandType parseToCommand(std::string &inputString, bool *delimiters) const;
 
-    void parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const;
+    void parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters, bool firstParameter = true) const;
 
     Cell *parseStringToCell(std::string inputString, bool *delimiters) const;
 
@@ -88,6 +88,8 @@ public:
     CommandType returnCommandType() const;
 
     void evaluateExpression(const int & yCoor, const int & xCoor) const;
+
+    void evaluateReference(const unsigned & height, const unsigned & width) const ;
 
 };
 

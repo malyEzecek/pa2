@@ -215,7 +215,8 @@ void Command::parseToXYString(std::string &inputString, std::string &xCoorString
     }
 }
 
-void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters) const {
+void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters,
+                                       bool firstParameter) const {
 
     deleteThisUglySpaces(inputString);
     if (inputString[0] != '$')
@@ -248,7 +249,8 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
         throw "Invalid parameter. Try 'help' for more information.\n";
     xCoor = std::stoi(xCoorString);
     yCoor = std::stoi(yCoorString);
-    inputString.erase(0, 1);
+    if (firstParameter)
+        inputString.erase(0, 1);
 }
 
 Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) const {
@@ -336,13 +338,13 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
         deleteThisUglySpaces(inputString);
         if (inputString[0] == '$') {
             int xCoor, yCoor;
-            parseStringToCoordinates(xCoor, yCoor, inputString, delimiters);
+            parseStringToCoordinates(xCoor, yCoor, inputString, delimiters, false);
+            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
+                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+                return;
+            }
             possibleCells.push_back(new Reference(xCoor, yCoor));
             reference = true;
-            if (possibleCells.back()->getType() != CellType::NUMBER ||
-                possibleCells.back()->getType() != CellType::EXPRESSION ||
-                possibleCells.back()->getType() != CellType::REFERENCE)
-                throw "Invalid expression. Try 'help' for more information.\n";
             if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo referencee, tak by zadne problemy vyskytnout nemely
                 operatorFirstType = false;
 
@@ -592,6 +594,11 @@ void Command::evaluateExpression(const int &yCoor, const int &xCoor) const {
 
 void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> &detectorOfCyclus,
                                   std::vector<const Cell *> &expressionWithoutReferences) const { //zaroven najdeme cyklickou zavislost
+    if(!actualCell)
+        throw "Null reference.\n"; // todo VYJIMKA
+    if(actualCell->getType() != CellType::NUMBER && actualCell->getType() != CellType::REFERENCE && actualCell->getType() != CellType::OPERATION && !expressionWithoutReferences.empty())
+        throw "Invalid reference inside expression.\n"; // todo STEJNA VYJIMKA JAKO O 2 RADKY VEJS
+
     for (auto dependence : detectorOfCyclus) {
         if (dependence == actualCell)
             throw "Cyclic dependency.\n";
@@ -614,7 +621,7 @@ void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell
     } else if (Model::getInstance()->getElement(yCoord, xCoord)->getType() == CellType::EXPRESSION) {
         std::vector<const Cell *> partsOfCell;
         Model::getInstance()->getElement(yCoord, xCoord)->evaluate(partsOfCell);
-        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN));
+        expressionWithoutReferences.push_back(new Operator(OperatorType::BRACKETOPEN)); //todo pamet
         for (auto partOfCell : partsOfCell) {
             referenceEvaluation(partOfCell, detectorOfCyclus, expressionWithoutReferences);
         }
@@ -832,6 +839,8 @@ const Number *Command::evaluatePostfixExpression(
                 double result = ((const Operator *) cellPointer)->evaluateNumbers(first, second);
                 ss.push(new Number(result));
             } else if (weight == 3) {
+                if (ss.size() < 2)
+                    throw "Invalid expression. Try 'help' for more information.\n";
 
             } else {
                 if (ss.empty())
@@ -852,3 +861,26 @@ const Number *Command::evaluatePostfixExpression(
 
 }
 
+void Command::evaluateReference(const unsigned &height, const unsigned &width) const {
+    if (width >= Model::getInstance()->getWidth() || height > Model::getInstance()->getHeight()) {
+        std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+        return;
+    }
+    unsigned newYCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getYCoor();
+    unsigned newXCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getXCoor();
+
+    if (!Model::getInstance()->getElement(newYCoor, newXCoor)) {
+        std::cout << "       null " << std::endl;
+        return;
+    } else {
+        if(Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::EXPRESSION){
+            evaluateExpression(height, width);
+        } else if (Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::REFERENCE){
+
+        } else {
+            std::cout << Model::getInstance()->getElement(newYCoor, newXCoor)->ToString(false) << " ";
+        }
+    }
+
+
+}
