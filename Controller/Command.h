@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
+#include <stdexcept>
 #include "../Model/Model.h"
 
 enum class CommandType {

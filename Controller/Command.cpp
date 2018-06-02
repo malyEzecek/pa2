@@ -112,7 +112,8 @@ void Command::SetCommand(const std::string &inputString, bool &exit) {
         exit = true;
     } else {
         if (!delimiters[1]) {
-            throw "This command doesn't exist. Try 'help' for more information.\n";
+            std::stringstream ss("This command doesn't exist. Try 'help' for more information.\n");
+            throw ss.str();
         }
     }
     ExecuteCommand(temporaryForCutting, delimiters, exit);
@@ -866,19 +867,21 @@ void Command::evaluateReference(const unsigned &height, const unsigned &width,
         return;
     }
     for (auto reference : checkCycles) { // kontrola na mozne cyklicke zavislosti
-        if (Model::getInstance()->getElement(height, width) == reference)
+        if (Model::getInstance()->getElement(height, width) == reference){
             std::cout << "       null ";
-        return;
+            return;
+        }
     }
 
     unsigned newYCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getYCoor();
     unsigned newXCoor = ((Reference *) Model::getInstance()->getElement(height, width))->getXCoor();
 
     if (!Model::getInstance()->getElement(newYCoor, newXCoor)) {
-        std::cout << "       null " << std::endl;
+        std::cout << "       null ";
         return;
     } else {
         if (Model::getInstance()->getElement(newYCoor, newXCoor)->getType() == CellType::EXPRESSION) {
+            checkCycles.push_back(Model::getInstance()->getElement(height, width));
             const Number *number = evaluateExpression(Model::getInstance()->getElement(newYCoor, newXCoor),
                                                       checkCycles);
             std::cout << number->ToString(false) << " ";
