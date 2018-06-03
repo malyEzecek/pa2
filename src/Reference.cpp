@@ -4,14 +4,14 @@
 
 #include "Reference.h"
 
-Reference::Reference(const int & XPosition, const int & YPosition) : Cell(), XCoor(XPosition), YCoor(YPosition) {}
+Reference::Reference(const int &XPosition, const int &YPosition) : Cell(), XCoor(XPosition), YCoor(YPosition) {}
 
 CellType Reference::getType() const {
     return CellType::REFERENCE;
 }
 
 
-void Reference::setValue(const int & XPosition, const int & YPosition) {
+void Reference::setValue(const int &XPosition, const int &YPosition) {
     XCoor = XPosition;
     YCoor = YPosition;
 }
@@ -26,7 +26,9 @@ int Reference::getYCoor() const {
 
 const std::string Reference::ToString(bool load) const {
     std::string editString = "$";
-    editString += std::to_string(XCoor) + '$' + std::to_string(YCoor);
+    auto column = char (XCoor + 'a');
+    editString +=  column;
+    editString += '$' + std::to_string(YCoor);
 
     if (!load)
         return Cell::editToWideOfCell(editString);

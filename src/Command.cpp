@@ -204,7 +204,7 @@ void Command::parseToXYString(std::string &inputString, std::string &xCoorString
         if (first) {
             if (inputString[position] < 97 || inputString[position] > 122)
                 throw "Invalid parameter. Try 'help' for more information.\n";
-            xCoorString += std::to_string((int) inputString[position] - FirstA);
+            xCoorString += std::to_string((int) inputString[position] - Reference::FirstA);
         } else {
             if (inputString[position] < 48 || inputString[position] > 57)
                 throw "Invalid parameter. Try 'help' for more information.\n";
@@ -758,10 +758,10 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
         for (unsigned j = 0; j < Model::getInstance()->getWidth(); ++j) {
             if (Model::getInstance()->getElement(i, j) != nullptr) {
                 if (Model::getInstance()->getElement(i, j)->getType() == CellType::TEXT)
-                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", \""
+                    myFileSave << "set( $" << (char) (j + Reference::FirstA) << "$" << i << ", \""
                                << Model::getInstance()->getElement(i, j)->ToString(true) << "\")\n";
                 else
-                    myFileSave << "set( $" << (char) (j + FirstA) << "$" << i << ", "
+                    myFileSave << "set( $" << (char) (j + Reference::FirstA) << "$" << i << ", "
                                << Model::getInstance()->getElement(i, j)->ToString(true) << ")\n";
             }
         }

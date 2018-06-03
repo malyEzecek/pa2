@@ -9,6 +9,8 @@
 #endif //EDITOR_REFERENCE_H
 
 #include <vector>
+#include <cstdio>
+#include <cstdlib>
 #include "Cell.h"
 
 class Reference : public Cell {
@@ -18,6 +20,9 @@ private:
     std::vector<Cell *> valueOfReference;
 
 public:
+
+    static const int FirstA = 97; // in ASCII code
+
     Reference() = default;
 
     ~Reference() override = default;

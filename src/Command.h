@@ -28,8 +28,8 @@ enum class CommandType {
 class Command {
 private:
     CommandType typeOfCommand;
+
     static const int maxCharInCommand = 9;
-    static const int FirstA = 97; // in ASCII code
 
     CommandType parseToCommand(std::string &inputString, bool *delimiters) const;
 
