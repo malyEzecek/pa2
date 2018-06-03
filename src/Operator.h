@@ -46,6 +46,10 @@ private:
     int getWeightOfOperator(const OperatorType & value) const;
 
 public:
+    static const double PI = 3.14159265;
+
+    static const double PIDEGREE = 180;
+
     Operator() = default;
 
     ~Operator() = default;

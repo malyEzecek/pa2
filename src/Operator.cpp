@@ -161,15 +161,15 @@ double Operator::evaluateNumbers(const double &first, const double &second) cons
 
 double Operator::evaluateNumbers(const double &first) const {
     if (basicOperator == OperatorType::SINOPEN)
-        return sin(first);
+        return sin(first * PI / PIDEGREE);
     else if (basicOperator == OperatorType::ABSOPEN)
         return abs(first);
     else if (basicOperator == OperatorType::COSOPEN)
-        return cos(first);
+        return cos(first* PI / PIDEGREE);
     else if (basicOperator == OperatorType::SQRTOPEN)
         return sqrt(first);
     else if (basicOperator == OperatorType::TANOPEN)
-        return tan(first);
+        return tan(first* PI / PIDEGREE);
     else if (basicOperator == OperatorType::ROUNDOPEN)
         return round(first);
     else if (basicOperator == OperatorType::LOGOPEN)
