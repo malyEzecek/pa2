@@ -86,15 +86,21 @@ void Model::resizeTable(const int &yCoor, const int &xCoor) {
 
     for(unsigned i = 0; i < height; ++i ){
         for(int j = xCoor; (unsigned)j < width; ++j){
-            if(spreadSheet[i][j])
+            if(spreadSheet[i][j]){
                 delete spreadSheet[i][j];
+                spreadSheet[i][j] = nullptr;
+            }
+
         }
     }
 
     for(int i = yCoor; (unsigned)i < height; ++i){
-        for(unsigned j = 0; j < width; ++j){
-            if(spreadSheet[i][j])
+        for(unsigned j = 0; j < xCoor; ++j){
+            if(spreadSheet[i][j]){
                 delete spreadSheet[i][j];
+                spreadSheet[i][j] = nullptr;
+            }
+
         }
     }
 
