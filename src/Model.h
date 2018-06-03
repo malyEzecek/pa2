@@ -21,8 +21,6 @@ private:
     unsigned height;
 
     bool resized;
-    const int WIDTH = 10;
-    const int HIGHT = 20;
 
     Model();
 
@@ -35,6 +33,10 @@ private:
     static Model *instance;
 
 public:
+
+    static const unsigned WIDTH = 10;
+
+    static const unsigned HIGHT = 25;
 
     unsigned getHeight() const;
 

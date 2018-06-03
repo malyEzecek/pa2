@@ -139,8 +139,10 @@ bool Model::wasResized() const {
 void Model::clearTable() {
     for (unsigned i = 0; i < getHeight(); ++i) {
         for (unsigned t = 0; t < width; ++t)
-            if (spreadSheet[i][t])
+            if (spreadSheet[i][t]){
                 delete spreadSheet[i][t];
+                spreadSheet[i][t] = nullptr;
+            }
     }
 }
 

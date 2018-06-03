@@ -62,6 +62,11 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             std::string line;
             if (myFileLoad.is_open()) {
                 Model::getInstance()->clearTable();
+
+                if (Model::getInstance()->getWidth() != Model::WIDTH ||
+                    Model::getInstance()->getHeight() != Model::HIGHT)
+                    Model::getInstance()->resizeTable(Model::HIGHT, Model::WIDTH);
+
                 while (getline(myFileLoad, line).good()) {
                     SetCommand(line, exit);
                 }
