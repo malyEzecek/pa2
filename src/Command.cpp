@@ -12,8 +12,6 @@ CommandType Command::returnCommandType() const {
     return typeOfCommand;
 }
 
-// Insert(A14, A5 + B7 + 14 + 15);
-
 void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool &exit) {
     switch (typeOfCommand) {
         case CommandType::SET : {
@@ -63,6 +61,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             std::ifstream myFileLoad(loadingPath);
             std::string line;
             if (myFileLoad.is_open()) {
+                Model::getInstance()->clearTable();
                 while (getline(myFileLoad, line).good()) {
                     SetCommand(line, exit);
                 }
@@ -83,6 +82,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
                 myFileSave.close();
             } else
                 std::cout << "Unable to open file." << std::endl;
+            return;
         }
         case CommandType::GETVALUE : {
             deleteThisUglySpaces(temporaryForCutting);
@@ -171,7 +171,7 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
 
     if (delimiters[0] && !delimiters[1]) {
         deleteThisUglySpaces(inputString);
-        if (inputString[0] != '(')
+        if (inputString[0] != '(' && parsedCommand != "exit" || (parsedCommand == "exit" && !inputString.empty()))
             throw "Invalid command.Try 'help' for more information.\n";
         delimiters[1] = true;
     }
@@ -579,8 +579,8 @@ const Number *Command::evaluateExpression(const Cell *expression, std::vector<co
     for (const Cell *cell : insideOfExpression) {
         if (cell->getType() == CellType::REFERENCE) {
 
-            for (auto &reference : checkReferences){
-                if(cell == reference){
+            for (auto &reference : checkReferences) {
+                if (cell == reference) {
                     return result;
                 }
             }
@@ -657,7 +657,8 @@ void Command::InfixToPostfix(std::vector<const Cell *> &expressionWithoutReferen
                     insideOfExpression.push_back(ss.top());
                     ss.pop();
                 }
-                insideOfExpression.push_back(ss.top());
+                if (openedBracket != OperatorType::BRACKETOPEN)
+                    insideOfExpression.push_back(ss.top());
                 ss.pop();
             }
         }
@@ -821,7 +822,7 @@ void Command::getInverseOperator(OperatorType *&mathOperator, OperatorType &reve
 }
 
 const Number *Command::evaluatePostfixExpression(
-        std::vector<const Cell *> &postfixExpression) const { // todo opravit problem s pameti!!!!
+        std::vector<const Cell *> &postfixExpression) const {
     std::stack<const Number *> ss;
     for (auto &cellPointer : postfixExpression) {
         if (cellPointer->getType() == CellType::NUMBER) {
@@ -867,7 +868,7 @@ void Command::evaluateReference(const unsigned &height, const unsigned &width,
         return;
     }
     for (auto reference : checkCycles) { // kontrola na mozne cyklicke zavislosti
-        if (Model::getInstance()->getElement(height, width) == reference){
+        if (Model::getInstance()->getElement(height, width) == reference) {
             std::cout << "       null ";
             return;
         }

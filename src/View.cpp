@@ -1,10 +1,7 @@
 //
 // Created by julinka on 2.5.18.
 //
-#include <iostream>
 #include "View.h"
-
-void View::Refresh() const {}
 
 /**
  * Get model as a parameter and transform the information from the model
@@ -133,10 +130,6 @@ void View::createTable() const {
     } while (changed);
 
     Model::releaseInstance();
-}
-
-void View::clearTable() const {
-    Model::getInstance()->clearTable();
 }
 
 void View::StringToLower(std::string &stringToBeChanged) const {

@@ -136,36 +136,6 @@ editor/fast:
 	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/build
 .PHONY : editor/fast
 
-main.o: main.cpp.o
-
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/main.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/main.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/main.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/main.cpp.s
-.PHONY : main.cpp.s
-
 src/Bool.o: src/Bool.cpp.o
 
 .PHONY : src/Bool.o
@@ -463,6 +433,36 @@ src/View.cpp.s:
 	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/View.cpp.s
 .PHONY : src/View.cpp.s
 
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -473,9 +473,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... ncurses"
 	@echo "... editor"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
 	@echo "... src/Bool.o"
 	@echo "... src/Bool.i"
 	@echo "... src/Bool.s"
@@ -506,6 +503,9 @@ help:
 	@echo "... src/View.o"
 	@echo "... src/View.i"
 	@echo "... src/View.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 

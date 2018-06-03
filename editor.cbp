@@ -126,10 +126,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/julinka/C++Tests/editor/main.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
 		<Unit filename="/home/julinka/C++Tests/editor/src/Bool.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
@@ -205,6 +201,10 @@
 			<Option target="editor"/>
 		</Unit>
 		<Unit filename="/home/julinka/C++Tests/editor/src/View.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/main.cpp">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>
