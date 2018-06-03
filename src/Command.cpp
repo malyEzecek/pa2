@@ -826,8 +826,7 @@ void Command::getInverseOperator(OperatorType *&mathOperator, OperatorType &reve
 
 }
 
-const Number *Command::evaluatePostfixExpression(
-        std::vector<const Cell *> &postfixExpression) const {
+const Number *Command::evaluatePostfixExpression(std::vector<const Cell *> &postfixExpression) const {
     std::stack<const Number *> ss;
     for (auto &cellPointer : postfixExpression) {
         if (cellPointer->getType() == CellType::NUMBER) {
@@ -838,11 +837,18 @@ const Number *Command::evaluatePostfixExpression(
                 if (ss.size() < 2)
                     throw "Invalid expression. Try 'help' for more information.\n";
                 auto second = ss.top()->getNumber();
+
+                if (ss.top()->addedInPostfixFunction())
+                    delete ss.top();
                 ss.pop();
+
                 auto first = ss.top()->getNumber();
+
+                if (ss.top()->addedInPostfixFunction())
+                    delete ss.top();
                 ss.pop();
                 double result = ((const Operator *) cellPointer)->evaluateNumbers(first, second);
-                ss.push(new Number(result));
+                ss.push(new Number(result, true));
             } else if (weight == 3) {
                 if (ss.size() < 2)
                     throw "Invalid expression. Try 'help' for more information.\n";
@@ -851,9 +857,12 @@ const Number *Command::evaluatePostfixExpression(
                 if (ss.empty())
                     throw "Invalid expression. Try 'help' for more information.\n";
                 auto first = ss.top()->getNumber();
+
+                if (ss.top()->addedInPostfixFunction())
+                    delete ss.top();
                 ss.pop();
                 double result = (((const Operator *) cellPointer)->evaluateNumbers(first));
-                ss.push(new Number(result));
+                ss.push(new Number(result, true));
             }
         }
     }

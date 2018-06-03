@@ -12,11 +12,12 @@
 class Number : public Cell {
 private:
     double number;
+    bool postfix;
 
     std::string cutStringWithDouble(const std::string &editString) const;
 
 public:
-    explicit Number(const double &newNumber);
+    explicit Number(const double &newNumber, bool postfix = false);
 
     Number() = default;
 
@@ -37,6 +38,8 @@ public:
     void evaluate(std::vector<const Cell *> &inputVector) const override;
 
     double getNumber() const;
+
+    bool addedInPostfixFunction() const;
 
 };
 

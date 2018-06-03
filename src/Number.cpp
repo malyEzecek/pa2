@@ -4,7 +4,7 @@
 
 #include "Number.h"
 
-Number::Number(const double & newNumber): Cell(), number(newNumber) {}
+Number::Number(const double & newNumber, bool postfix): Cell(), number(newNumber), postfix(postfix) {}
 
 CellType Number::getType() const {
     return CellType::NUMBER;
@@ -68,4 +68,8 @@ std::string Number::cutStringWithDouble(const std::string &editString) const {
 
 double Number::getNumber() const {
     return number;
+}
+
+bool Number::addedInPostfixFunction() const {
+    return postfix;
 }
