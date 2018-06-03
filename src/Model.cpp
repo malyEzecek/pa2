@@ -29,7 +29,7 @@ Model::Model() {
 }
 
 Model::~Model() {
-    for (unsigned i = 0; i < getHeight(); ++i) {
+    for (unsigned i = 0; i < height; ++i) {
         for (unsigned t = 0; t < width; ++t)
             if (spreadSheet[i][t])
                 delete spreadSheet[i][t];
@@ -134,5 +134,20 @@ bool Model::wasResized() const {
     if(resized)
         return true;
     return false;
+}
+
+void Model::clearTable() {
+    for (unsigned i = 0; i < getHeight(); ++i) {
+        for (unsigned t = 0; t < width; ++t)
+            if (spreadSheet[i][t])
+                delete spreadSheet[i][t];
+    }
+}
+
+void Model::releaseInstance() {
+    if (instance){
+        delete instance;
+        instance = nullptr;
+    }
 }
 

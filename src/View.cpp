@@ -34,8 +34,10 @@ void View::createTable() const {
     bool exit = false;
     // move(3, 0); // posun vystupu o 3 radky dolu
     do {
-        if (exit)
-            return;
+        if (exit){
+            break;
+        }
+
 
         if (changed) {
             for (unsigned i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
@@ -130,11 +132,12 @@ void View::createTable() const {
 
     } while (changed);
 
-    //endwin();
-
+    Model::releaseInstance();
 }
 
-void View::clearTable() const {}
+void View::clearTable() const {
+    Model::getInstance()->clearTable();
+}
 
 void View::StringToLower(std::string &stringToBeChanged) const {
     int i = 0;

@@ -136,303 +136,6 @@ editor/fast:
 	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/build
 .PHONY : editor/fast
 
-Controller/Command.o: Controller/Command.cpp.o
-
-.PHONY : Controller/Command.o
-
-# target to build an object file
-Controller/Command.cpp.o:
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Controller/Command.cpp.o
-.PHONY : Controller/Command.cpp.o
-
-Controller/Command.i: Controller/Command.cpp.i
-
-.PHONY : Controller/Command.i
-
-# target to preprocess a source file
-Controller/Command.cpp.i:
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Controller/Command.cpp.i
-.PHONY : Controller/Command.cpp.i
-
-Controller/Command.s: Controller/Command.cpp.s
-
-.PHONY : Controller/Command.s
-
-# target to generate assembly for a file
-Controller/Command.cpp.s:
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Controller/Command.cpp.s
-.PHONY : Controller/Command.cpp.s
-
-Model/Bool.o: Model/Bool.cpp.o
-
-.PHONY : Model/Bool.o
-
-# target to build an object file
-Model/Bool.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Bool.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Bool.cpp.o
-.PHONY : Model/Bool.cpp.o
-
-Model/Bool.i: Model/Bool.cpp.i
-
-.PHONY : Model/Bool.i
-
-# target to preprocess a source file
-Model/Bool.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Bool.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Bool.cpp.i
-.PHONY : Model/Bool.cpp.i
-
-Model/Bool.s: Model/Bool.cpp.s
-
-.PHONY : Model/Bool.s
-
-# target to generate assembly for a file
-Model/Bool.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Bool.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Bool.cpp.s
-.PHONY : Model/Bool.cpp.s
-
-Model/Cell.o: Model/Cell.cpp.o
-
-.PHONY : Model/Cell.o
-
-# target to build an object file
-Model/Cell.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Cell.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Cell.cpp.o
-.PHONY : Model/Cell.cpp.o
-
-Model/Cell.i: Model/Cell.cpp.i
-
-.PHONY : Model/Cell.i
-
-# target to preprocess a source file
-Model/Cell.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Cell.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Cell.cpp.i
-.PHONY : Model/Cell.cpp.i
-
-Model/Cell.s: Model/Cell.cpp.s
-
-.PHONY : Model/Cell.s
-
-# target to generate assembly for a file
-Model/Cell.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Cell.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Cell.cpp.s
-.PHONY : Model/Cell.cpp.s
-
-Model/Expression.o: Model/Expression.cpp.o
-
-.PHONY : Model/Expression.o
-
-# target to build an object file
-Model/Expression.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Expression.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Expression.cpp.o
-.PHONY : Model/Expression.cpp.o
-
-Model/Expression.i: Model/Expression.cpp.i
-
-.PHONY : Model/Expression.i
-
-# target to preprocess a source file
-Model/Expression.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Expression.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Expression.cpp.i
-.PHONY : Model/Expression.cpp.i
-
-Model/Expression.s: Model/Expression.cpp.s
-
-.PHONY : Model/Expression.s
-
-# target to generate assembly for a file
-Model/Expression.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Expression.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Expression.cpp.s
-.PHONY : Model/Expression.cpp.s
-
-Model/Model.o: Model/Model.cpp.o
-
-.PHONY : Model/Model.o
-
-# target to build an object file
-Model/Model.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Model.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Model.cpp.o
-.PHONY : Model/Model.cpp.o
-
-Model/Model.i: Model/Model.cpp.i
-
-.PHONY : Model/Model.i
-
-# target to preprocess a source file
-Model/Model.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Model.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Model.cpp.i
-.PHONY : Model/Model.cpp.i
-
-Model/Model.s: Model/Model.cpp.s
-
-.PHONY : Model/Model.s
-
-# target to generate assembly for a file
-Model/Model.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Model.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Model.cpp.s
-.PHONY : Model/Model.cpp.s
-
-Model/Number.o: Model/Number.cpp.o
-
-.PHONY : Model/Number.o
-
-# target to build an object file
-Model/Number.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Number.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Number.cpp.o
-.PHONY : Model/Number.cpp.o
-
-Model/Number.i: Model/Number.cpp.i
-
-.PHONY : Model/Number.i
-
-# target to preprocess a source file
-Model/Number.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Number.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Number.cpp.i
-.PHONY : Model/Number.cpp.i
-
-Model/Number.s: Model/Number.cpp.s
-
-.PHONY : Model/Number.s
-
-# target to generate assembly for a file
-Model/Number.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Number.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Number.cpp.s
-.PHONY : Model/Number.cpp.s
-
-Model/Operator.o: Model/Operator.cpp.o
-
-.PHONY : Model/Operator.o
-
-# target to build an object file
-Model/Operator.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Operator.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Operator.cpp.o
-.PHONY : Model/Operator.cpp.o
-
-Model/Operator.i: Model/Operator.cpp.i
-
-.PHONY : Model/Operator.i
-
-# target to preprocess a source file
-Model/Operator.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Operator.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Operator.cpp.i
-.PHONY : Model/Operator.cpp.i
-
-Model/Operator.s: Model/Operator.cpp.s
-
-.PHONY : Model/Operator.s
-
-# target to generate assembly for a file
-Model/Operator.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Operator.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Operator.cpp.s
-.PHONY : Model/Operator.cpp.s
-
-Model/Reference.o: Model/Reference.cpp.o
-
-.PHONY : Model/Reference.o
-
-# target to build an object file
-Model/Reference.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Reference.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Reference.cpp.o
-.PHONY : Model/Reference.cpp.o
-
-Model/Reference.i: Model/Reference.cpp.i
-
-.PHONY : Model/Reference.i
-
-# target to preprocess a source file
-Model/Reference.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Reference.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Reference.cpp.i
-.PHONY : Model/Reference.cpp.i
-
-Model/Reference.s: Model/Reference.cpp.s
-
-.PHONY : Model/Reference.s
-
-# target to generate assembly for a file
-Model/Reference.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Reference.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Reference.cpp.s
-.PHONY : Model/Reference.cpp.s
-
-Model/Text.o: Model/Text.cpp.o
-
-.PHONY : Model/Text.o
-
-# target to build an object file
-Model/Text.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Text.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Text.cpp.o
-.PHONY : Model/Text.cpp.o
-
-Model/Text.i: Model/Text.cpp.i
-
-.PHONY : Model/Text.i
-
-# target to preprocess a source file
-Model/Text.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Text.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Text.cpp.i
-.PHONY : Model/Text.cpp.i
-
-Model/Text.s: Model/Text.cpp.s
-
-.PHONY : Model/Text.s
-
-# target to generate assembly for a file
-Model/Text.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/Model/Text.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/Model/Text.cpp.s
-.PHONY : Model/Text.cpp.s
-
-View/View.o: View/View.cpp.o
-
-.PHONY : View/View.o
-
-# target to build an object file
-View/View.cpp.o:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/View/View.cpp.o
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/View/View.cpp.o
-.PHONY : View/View.cpp.o
-
-View/View.i: View/View.cpp.i
-
-.PHONY : View/View.i
-
-# target to preprocess a source file
-View/View.cpp.i:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/View/View.cpp.i
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/View/View.cpp.i
-.PHONY : View/View.cpp.i
-
-View/View.s: View/View.cpp.s
-
-.PHONY : View/View.s
-
-# target to generate assembly for a file
-View/View.cpp.s:
-	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/View/View.cpp.s
-	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/View/View.cpp.s
-.PHONY : View/View.cpp.s
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -463,6 +166,303 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/Bool.o: src/Bool.cpp.o
+
+.PHONY : src/Bool.o
+
+# target to build an object file
+src/Bool.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Bool.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Bool.cpp.o
+.PHONY : src/Bool.cpp.o
+
+src/Bool.i: src/Bool.cpp.i
+
+.PHONY : src/Bool.i
+
+# target to preprocess a source file
+src/Bool.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Bool.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Bool.cpp.i
+.PHONY : src/Bool.cpp.i
+
+src/Bool.s: src/Bool.cpp.s
+
+.PHONY : src/Bool.s
+
+# target to generate assembly for a file
+src/Bool.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Bool.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Bool.cpp.s
+.PHONY : src/Bool.cpp.s
+
+src/Cell.o: src/Cell.cpp.o
+
+.PHONY : src/Cell.o
+
+# target to build an object file
+src/Cell.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Cell.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Cell.cpp.o
+.PHONY : src/Cell.cpp.o
+
+src/Cell.i: src/Cell.cpp.i
+
+.PHONY : src/Cell.i
+
+# target to preprocess a source file
+src/Cell.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Cell.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Cell.cpp.i
+.PHONY : src/Cell.cpp.i
+
+src/Cell.s: src/Cell.cpp.s
+
+.PHONY : src/Cell.s
+
+# target to generate assembly for a file
+src/Cell.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Cell.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Cell.cpp.s
+.PHONY : src/Cell.cpp.s
+
+src/Command.o: src/Command.cpp.o
+
+.PHONY : src/Command.o
+
+# target to build an object file
+src/Command.cpp.o:
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Command.cpp.o
+.PHONY : src/Command.cpp.o
+
+src/Command.i: src/Command.cpp.i
+
+.PHONY : src/Command.i
+
+# target to preprocess a source file
+src/Command.cpp.i:
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Command.cpp.i
+.PHONY : src/Command.cpp.i
+
+src/Command.s: src/Command.cpp.s
+
+.PHONY : src/Command.s
+
+# target to generate assembly for a file
+src/Command.cpp.s:
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Command.cpp.s
+.PHONY : src/Command.cpp.s
+
+src/Expression.o: src/Expression.cpp.o
+
+.PHONY : src/Expression.o
+
+# target to build an object file
+src/Expression.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Expression.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Expression.cpp.o
+.PHONY : src/Expression.cpp.o
+
+src/Expression.i: src/Expression.cpp.i
+
+.PHONY : src/Expression.i
+
+# target to preprocess a source file
+src/Expression.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Expression.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Expression.cpp.i
+.PHONY : src/Expression.cpp.i
+
+src/Expression.s: src/Expression.cpp.s
+
+.PHONY : src/Expression.s
+
+# target to generate assembly for a file
+src/Expression.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Expression.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Expression.cpp.s
+.PHONY : src/Expression.cpp.s
+
+src/Model.o: src/Model.cpp.o
+
+.PHONY : src/Model.o
+
+# target to build an object file
+src/Model.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Model.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Model.cpp.o
+.PHONY : src/Model.cpp.o
+
+src/Model.i: src/Model.cpp.i
+
+.PHONY : src/Model.i
+
+# target to preprocess a source file
+src/Model.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Model.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Model.cpp.i
+.PHONY : src/Model.cpp.i
+
+src/Model.s: src/Model.cpp.s
+
+.PHONY : src/Model.s
+
+# target to generate assembly for a file
+src/Model.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Model.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Model.cpp.s
+.PHONY : src/Model.cpp.s
+
+src/Number.o: src/Number.cpp.o
+
+.PHONY : src/Number.o
+
+# target to build an object file
+src/Number.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Number.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Number.cpp.o
+.PHONY : src/Number.cpp.o
+
+src/Number.i: src/Number.cpp.i
+
+.PHONY : src/Number.i
+
+# target to preprocess a source file
+src/Number.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Number.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Number.cpp.i
+.PHONY : src/Number.cpp.i
+
+src/Number.s: src/Number.cpp.s
+
+.PHONY : src/Number.s
+
+# target to generate assembly for a file
+src/Number.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Number.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Number.cpp.s
+.PHONY : src/Number.cpp.s
+
+src/Operator.o: src/Operator.cpp.o
+
+.PHONY : src/Operator.o
+
+# target to build an object file
+src/Operator.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Operator.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Operator.cpp.o
+.PHONY : src/Operator.cpp.o
+
+src/Operator.i: src/Operator.cpp.i
+
+.PHONY : src/Operator.i
+
+# target to preprocess a source file
+src/Operator.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Operator.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Operator.cpp.i
+.PHONY : src/Operator.cpp.i
+
+src/Operator.s: src/Operator.cpp.s
+
+.PHONY : src/Operator.s
+
+# target to generate assembly for a file
+src/Operator.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Operator.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Operator.cpp.s
+.PHONY : src/Operator.cpp.s
+
+src/Reference.o: src/Reference.cpp.o
+
+.PHONY : src/Reference.o
+
+# target to build an object file
+src/Reference.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Reference.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Reference.cpp.o
+.PHONY : src/Reference.cpp.o
+
+src/Reference.i: src/Reference.cpp.i
+
+.PHONY : src/Reference.i
+
+# target to preprocess a source file
+src/Reference.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Reference.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Reference.cpp.i
+.PHONY : src/Reference.cpp.i
+
+src/Reference.s: src/Reference.cpp.s
+
+.PHONY : src/Reference.s
+
+# target to generate assembly for a file
+src/Reference.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Reference.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Reference.cpp.s
+.PHONY : src/Reference.cpp.s
+
+src/Text.o: src/Text.cpp.o
+
+.PHONY : src/Text.o
+
+# target to build an object file
+src/Text.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Text.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Text.cpp.o
+.PHONY : src/Text.cpp.o
+
+src/Text.i: src/Text.cpp.i
+
+.PHONY : src/Text.i
+
+# target to preprocess a source file
+src/Text.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Text.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Text.cpp.i
+.PHONY : src/Text.cpp.i
+
+src/Text.s: src/Text.cpp.s
+
+.PHONY : src/Text.s
+
+# target to generate assembly for a file
+src/Text.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/Text.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/Text.cpp.s
+.PHONY : src/Text.cpp.s
+
+src/View.o: src/View.cpp.o
+
+.PHONY : src/View.o
+
+# target to build an object file
+src/View.cpp.o:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/View.cpp.o
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/View.cpp.o
+.PHONY : src/View.cpp.o
+
+src/View.i: src/View.cpp.i
+
+.PHONY : src/View.i
+
+# target to preprocess a source file
+src/View.cpp.i:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/View.cpp.i
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/View.cpp.i
+.PHONY : src/View.cpp.i
+
+src/View.s: src/View.cpp.s
+
+.PHONY : src/View.s
+
+# target to generate assembly for a file
+src/View.cpp.s:
+	$(MAKE) -f CMakeFiles/ncurses.dir/build.make CMakeFiles/ncurses.dir/src/View.cpp.s
+	$(MAKE) -f CMakeFiles/editor.dir/build.make CMakeFiles/editor.dir/src/View.cpp.s
+.PHONY : src/View.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -473,39 +473,39 @@ help:
 	@echo "... edit_cache"
 	@echo "... ncurses"
 	@echo "... editor"
-	@echo "... Controller/Command.o"
-	@echo "... Controller/Command.i"
-	@echo "... Controller/Command.s"
-	@echo "... Model/Bool.o"
-	@echo "... Model/Bool.i"
-	@echo "... Model/Bool.s"
-	@echo "... Model/Cell.o"
-	@echo "... Model/Cell.i"
-	@echo "... Model/Cell.s"
-	@echo "... Model/Expression.o"
-	@echo "... Model/Expression.i"
-	@echo "... Model/Expression.s"
-	@echo "... Model/Model.o"
-	@echo "... Model/Model.i"
-	@echo "... Model/Model.s"
-	@echo "... Model/Number.o"
-	@echo "... Model/Number.i"
-	@echo "... Model/Number.s"
-	@echo "... Model/Operator.o"
-	@echo "... Model/Operator.i"
-	@echo "... Model/Operator.s"
-	@echo "... Model/Reference.o"
-	@echo "... Model/Reference.i"
-	@echo "... Model/Reference.s"
-	@echo "... Model/Text.o"
-	@echo "... Model/Text.i"
-	@echo "... Model/Text.s"
-	@echo "... View/View.o"
-	@echo "... View/View.i"
-	@echo "... View/View.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/Bool.o"
+	@echo "... src/Bool.i"
+	@echo "... src/Bool.s"
+	@echo "... src/Cell.o"
+	@echo "... src/Cell.i"
+	@echo "... src/Cell.s"
+	@echo "... src/Command.o"
+	@echo "... src/Command.i"
+	@echo "... src/Command.s"
+	@echo "... src/Expression.o"
+	@echo "... src/Expression.i"
+	@echo "... src/Expression.s"
+	@echo "... src/Model.o"
+	@echo "... src/Model.i"
+	@echo "... src/Model.s"
+	@echo "... src/Number.o"
+	@echo "... src/Number.i"
+	@echo "... src/Number.s"
+	@echo "... src/Operator.o"
+	@echo "... src/Operator.i"
+	@echo "... src/Operator.s"
+	@echo "... src/Reference.o"
+	@echo "... src/Reference.i"
+	@echo "... src/Reference.s"
+	@echo "... src/Text.o"
+	@echo "... src/Text.i"
+	@echo "... src/Text.s"
+	@echo "... src/View.o"
+	@echo "... src/View.i"
+	@echo "... src/View.s"
 .PHONY : help
 
 

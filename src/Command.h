@@ -12,7 +12,7 @@
 #include <sstream>
 #include <math.h>
 #include <stdexcept>
-#include "../Model/Model.h"
+#include "Model.h"
 
 enum class CommandType {
     CLEAR,

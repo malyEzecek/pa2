@@ -42,6 +42,8 @@ public:
 
     static Model *getInstance();
 
+    static void releaseInstance();
+
     const Cell *getElement(const int &height, const int &width) const;
 
     void resizeTable(const int &xCoor, const int &yCoor);
@@ -51,6 +53,8 @@ public:
     void deleteValue(const int &yCoord, const int &xCoor);
 
     bool wasResized() const;
+
+    void clearTable();
 
 };
 

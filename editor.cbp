@@ -126,85 +126,85 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/julinka/C++Tests/editor/Controller/Command.cpp">
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Controller/Command.h">
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Bool.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Bool.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Cell.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Cell.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Expression.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Expression.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Model.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Model.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Number.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Number.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Operator.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Operator.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Reference.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Reference.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Text.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/Model/Text.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/View/View.cpp">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
-		<Unit filename="/home/julinka/C++Tests/editor/View/View.h">
-			<Option target="ncurses"/>
-			<Option target="editor"/>
-		</Unit>
 		<Unit filename="/home/julinka/C++Tests/editor/main.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Bool.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Bool.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Cell.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Cell.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Command.cpp">
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Command.h">
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Expression.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Expression.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Model.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Model.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Number.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Number.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Operator.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Operator.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Reference.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Reference.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Text.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/Text.h">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/View.cpp">
+			<Option target="ncurses"/>
+			<Option target="editor"/>
+		</Unit>
+		<Unit filename="/home/julinka/C++Tests/editor/src/View.h">
 			<Option target="ncurses"/>
 			<Option target="editor"/>
 		</Unit>

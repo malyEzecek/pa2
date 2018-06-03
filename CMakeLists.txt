@@ -3,8 +3,8 @@ project(editor)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp View/View.h View/View.cpp Model/Model.h Model/Model.cpp Model/Cell.h Model/Bool.h Model/Cell.cpp Model/Bool.cpp Model/Text.cpp Model/Text.h Model/Reference.h Model/Reference.cpp Model/Number.cpp Model/Number.h Model/Operator.cpp Model/Operator.h Model/Expression.cpp Model/Expression.h)
-add_executable(editor ${SOURCE_FILES} Controller/Command.h Controller/Command.cpp)
+set(SOURCE_FILES main.cpp src/View.h src/View.cpp src/Model.h src/Model.cpp src/Cell.h src/Bool.h src/Cell.cpp src/Bool.cpp src/Text.cpp src/Text.h src/Reference.h src/Reference.cpp src/Number.cpp src/Number.h src/Operator.cpp src/Operator.h src/Expression.cpp src/Expression.h)
+add_executable(editor ${SOURCE_FILES} src/Command.h src/Command.cpp)
 
 add_executable(ncurses ${SOURCE_FILES})
 set(CMAKE_CXX_FLAGS "-lncurses")
