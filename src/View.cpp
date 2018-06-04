@@ -22,7 +22,6 @@ void View::createTable() const {
     std::string warnings;
 
     do {
-        warnings.clear();
         if (exit) {
             break;
         }
@@ -104,6 +103,7 @@ void View::createTable() const {
 
         }
         std::cout << warnings << std::endl;
+        warnings.clear();
         changed = false;
         std::cout << "Please, enter a command : ";
 
@@ -134,5 +134,66 @@ void View::StringToLower(std::string &stringToBeChanged) const {
         }
         stringToBeChanged[i] = (char) tolower(stringToBeChanged[i]);
         ++i;
+    }
+}
+
+void View::Help() const {
+    std::string c = "a";
+    c[0] = '"';
+    std::string BashCom = "echo " + c +  "\t\t\t\t\t\t\t\t\t\tConsole \n\n Spreadsheet:"
+            "\n\n\n\n\n\tNAME:"
+            "\n\n\t\t Simple console spreadsheet"
+            "\n\n\n\n\tDESCRIPTION:"
+            "\n\n\t\t  Simple spreadsheet (something like sc). The program on the command line creates simple "
+            "\n\t\t  table. It features basic calculation and can summarizes data from the exact part of the table."
+            "\n\t\t  CS has the basic features of all spreadsheets, using a grid of cells arranged in numbered "
+            "\n\t\t  rows and letter-named columns to organize data manipulations like arithmetic operations."
+            "\n\t\t  Also it supports different trigonometric functions like sin(), cos() and tan()."
+            "\n\t\t  Some aggregate function ( max(), avg(), sum()) are also included in our program."
+            "\n\n\n\n\n\tCOMMANDS:"
+            "\n\t\t  All commands aren't case sensitive."
+            "\n\n\t\t SET( COORDINATES, VALUE )       change value of the cell on COORDINATES position in the table"
+            "\n\n\t\t CLEAR( COORDINATES )            delete value of the cell on COORDINATES position in the table"
+            "\n\n\t\t GETVALUE( COORDINATES )         show value of the cell as a console output"
+            "\n\n\t\t RESIZE( UNSIGNED, UNSIGNED )    change table size. Be CAREFUL!"
+            "\n\t\t                                 DELETE CELL VALUES FROM THE TABLE IF IT'S OUT OF THE TABLE BOARDERS."
+            "\n\n\t\t SAVE( PATH )                    save table values and size like a set of commands to the PATH."
+            "\n\n\t\t LOAD( PATH )                    load saved table values from the PATH. All previous table changes"
+            "\t\t                                 will be deleted."
+            "\n\n\t\t EXIT                            exit program. Asks if user want to save table. If answer is \"yes\""
+            "\t\t                                    write PATH."
+
+
+                                                 "\n\n\n\n\n\tSYNTAX:"
+            "\n\n\t\t COORDINATES                     Position of the cell in the table. Not splitted. Write $LetterOfColumn$NumberOfRow."
+            "\n\t\t                                   LetterOfColumn - a range from A to ZZ. NumberOf Column - a range from 1 to 999."
+            "\n\n\t\t VALUES                          Cell can accept different types of values like TEXT, NUMBER, BOOLEAN, REFERENCE, "
+            "\n\t\t                                   and EXPRESSION."
+            "\n\n\t\t TEXT    Show manual for this program"
+            "\n\t\t           It can be set as first parameter"
+            "\n\n\t\t REFERENCE                       Has the same syntax like coordinates."
+
+            "\n\n\t\t NUMBER                          It's typical double digit."
+
+            "\n\n\t\t BOOLEAN                         Only two possible values : true and false"
+
+            "\n\t\t           "
+            "\n\n\t\t -(w)      Last parameter is web page, which you want to download."
+            "\n\n\n\t\t\t         Example:     downloader -ajp -3 www.example.com/test.html "
+            "\n\n\n\n\n\n" + c + "| less";
+    char *Command = new char[BashCom.length() + 1];
+    strcpy(Command, BashCom.c_str());
+    system(Command);
+
+    delete [] Command;
+}
+
+bool View::CheckParameters(const int &argc, char **argv) const {
+    if(argc == 2){
+        if(argv[1][0] == '-' && argv[1][1] == '-' && argv[1][2] == 'h' && argv[1][3] == 'e'&& argv[1][4] == 'l' && argv[1][5] == 'p'){      //help
+            Help();
+            return true;
+        }
+        return false;
     }
 }

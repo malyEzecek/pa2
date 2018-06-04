@@ -107,6 +107,10 @@ private:
 
     const Number * evaluatePostfixExpression(std::vector<const Cell *> &postfixExpression) const;
 
+    void postfixExpressionError(std::stack<const Number * > ss) const;
+
+    void parseExpressionError(std::vector<Cell *> &possibleCells) const;
+
 public:
 
     Command();

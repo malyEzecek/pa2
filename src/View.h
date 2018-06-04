@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 #include "Command.h"
 
 class View {
@@ -17,6 +18,10 @@ private:
 
 public:
     void createTable() const;
+
+    void Help() const;
+
+    bool CheckParameters(const int & argc, char * argv[]) const;
 
 };
 

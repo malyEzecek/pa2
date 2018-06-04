@@ -153,7 +153,7 @@ double Operator::evaluateNumbers(const double &first, const double &second) cons
         return first * second;
     else {
         if (!second)
-            throw "Divide by zero? Are you normal, man?\n";
+            throw InvalidMathematicalExpression("Divide by zero:                  \033[1;31m DETECTED\033[0m\n");
         return first / second;
     }
 

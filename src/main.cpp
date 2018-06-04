@@ -1,8 +1,13 @@
 #include "View.h"
 
 
-int main() {
+int main(int argc, char *argv[]) {
     View newView;
-    newView.createTable();
+
+    if (argc == 2){
+        newView.createTable();
+    } else  {
+        newView.CheckParameters(argc, argv);
+    }
     return 0;
 }

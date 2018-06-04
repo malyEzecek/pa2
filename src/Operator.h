@@ -39,11 +39,22 @@ enum class OperatorType { // skupiny <1,2>, <3,4>, <5,6>, <7,14>, <15, 17>
     MAXCLOSE = 28 // forth type
 };
 
+class InvalidMathematicalExpression {
+private:
+    std::string warning;
+public:
+    explicit InvalidMathematicalExpression(const std::string &mathematicalWarning) : warning(mathematicalWarning) {}
+
+    const std::string &getStr() const {
+        return warning;
+    }
+};
+
 class Operator : public Cell {
 private:
     OperatorType basicOperator;
 
-    int getWeightOfOperator(const OperatorType & value) const;
+    int getWeightOfOperator(const OperatorType &value) const;
 
 public:
     const double PI = 3.14159265;
@@ -66,15 +77,15 @@ public:
 
     const std::string ToString(bool load) const override;
 
-    void evaluate(std::vector<const Cell *> & inputVector) const override;
+    void evaluate(std::vector<const Cell *> &inputVector) const override;
 
     OperatorType returnOperatorType() const;
 
-    static bool IsClosedOperator(const OperatorType & operators);
+    static bool IsClosedOperator(const OperatorType &operators);
 
-    static bool IsOpenedOperator(const OperatorType & operators);
+    static bool IsOpenedOperator(const OperatorType &operators);
 
-    bool HasHigherPrecedence(const OperatorType & topOfStack) const;
+    bool HasHigherPrecedence(const OperatorType &topOfStack) const;
 
     OperatorType returnOpenedBracket() const;
 
