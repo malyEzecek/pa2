@@ -4,10 +4,97 @@
 
 #include "Command.h"
 
+const std::string Command::SMALLTABLESIZE = "Size of the table is too small. Try to use resize().";
+
+const std::string Command::OPENFILEERROR = "Unable to open file.";
+
+const std::string Command::COMMANDDOESNTEXISTS = "This command doesn't exist. Try 'help' for more information.\n";
+
+const std::string Command::INVALIDPARAMETER = "Invalid parameter syntax. Try 'help' for more information.\n";
+
+const std::string Command::INVALIDEXPRESSION = "Invalid expression. Try 'help' for more information.\n";
+
+const std::string Command::NULLREFERENCE = "Null reference.\n";
+
+const std::string Command::INVALIDREFERNCEINSIDEEXPRESSION = "Invalid reference inside expression.\n";
+
+const std::string Command::CYCLICDEPENDENCY = "Cyclic dependency.\n";
+
+
 Command::Command() {}
 
 CommandType Command::returnCommandType() const {
     return typeOfCommand;
+}
+
+void Command::getValueCommand(std::string &temporaryForCutting, bool *delimiters) {
+    deleteThisUglySpaces(temporaryForCutting);
+    int xCoor, yCoor;
+    parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
+
+    if ((unsigned) xCoor >= Model::getInstance()->getWidth() || (unsigned) yCoor > Model::getInstance()->getHeight()) {
+        std::cout << SMALLTABLESIZE << std::endl;
+        return;
+    }
+
+    if (!Model::getInstance()->getElement(yCoor, xCoor))
+        std::cout << "null" << std::endl;
+    else
+        std::cout << Model::getInstance()->getElement(yCoor, xCoor)->ToString(true) << std::endl;
+}
+
+
+void Command::saveCommand(std::string &temporaryForCutting, bool &exit) {
+    deleteThisUglySpaces(temporaryForCutting);
+    std::string savingPath;
+    getLoadSaveParameter(temporaryForCutting, savingPath, exit);
+    std::ofstream myFileSave(savingPath);
+    if (myFileSave.is_open()) {
+        writeToFile(myFileSave);
+        myFileSave.close();
+    } else
+        std::cout << OPENFILEERROR << std::endl;
+}
+
+
+void Command::loadCommand(std::string &temporaryForCutting, bool &exit) {
+    std::string loadingPath;
+    getLoadSaveParameter(temporaryForCutting, loadingPath, exit);
+    std::ifstream myFileLoad(loadingPath);
+    std::string line;
+    if (myFileLoad.is_open()) {
+        Model::getInstance()->clearTable();
+
+        if (Model::getInstance()->getWidth() != Model::WIDTH ||
+            Model::getInstance()->getHeight() != Model::HIGHT)
+            Model::getInstance()->resizeTable(Model::HIGHT, Model::WIDTH);
+
+        while (getline(myFileLoad, line).good()) {
+            SetCommand(line, exit);
+        }
+        myFileLoad.close();
+    } else {
+        std::cout << OPENFILEERROR << std::endl;
+    }
+}
+
+
+void Command::exitCommand(std::string &temporaryForCutting, bool *delimiters, bool &exit) {
+    exitOrHelpCorrectCommand(temporaryForCutting);
+    std::cout << "Do you want to save table?" << std::endl;
+    std::string input, decision;
+    getline(std::cin, input);
+    std::stringstream ss(input);
+    ss >> decision;
+
+    if (SaveTableBeforeExit(decision)) {
+        std::cout << "Please, write path and name of the document to save." << std::endl;
+        std::string inputString;
+        getline(std::cin, inputString);
+        typeOfCommand = CommandType::SAVE;
+        ExecuteCommand(inputString, delimiters, exit);
+    }
+
 }
 
 void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters, bool &exit) {
@@ -15,8 +102,9 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
         case CommandType::SET : {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
-            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
-                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+            if ((unsigned) xCoor >= Model::getInstance()->getWidth() ||
+                (unsigned) yCoor > Model::getInstance()->getHeight()) {
+                std::cout << SMALLTABLESIZE << std::endl;
                 return;
             }
 
@@ -26,21 +114,7 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             break;
         }
         case CommandType::EXIT : {
-            exitOrHelpCorrectCommand(temporaryForCutting);
-            std::cout << "Do you want to save table?" << std::endl;
-            std::string input, decision;
-            getline(std::cin, input);
-            std::stringstream ss(input);
-            ss >> decision;
-
-            if (SaveTableBeforeExit(decision)) {
-                std::cout << "Please, write path and name of the document to save." << std::endl;
-                std::string inputString;
-                getline(std::cin, inputString);
-                typeOfCommand = CommandType::SAVE;
-                ExecuteCommand(inputString, delimiters, exit);
-            }
-
+            exitCommand(temporaryForCutting, delimiters, exit);
             return;
         }
         case CommandType::CLEAR : {
@@ -56,53 +130,15 @@ void Command::ExecuteCommand(std::string &temporaryForCutting, bool *delimiters,
             break;
         }
         case CommandType::LOAD : {
-            std::string loadingPath;
-            getLoadSaveParameter(temporaryForCutting, loadingPath, exit);
-            std::ifstream myFileLoad(loadingPath);
-            std::string line;
-            if (myFileLoad.is_open()) {
-                Model::getInstance()->clearTable();
-
-                if (Model::getInstance()->getWidth() != Model::WIDTH ||
-                    Model::getInstance()->getHeight() != Model::HIGHT)
-                    Model::getInstance()->resizeTable(Model::HIGHT, Model::WIDTH);
-
-                while (getline(myFileLoad, line).good()) {
-                    SetCommand(line, exit);
-                }
-                myFileLoad.close();
-            } else {
-                std::cout << "Unable to open file." << std::endl;
-            }
-
+            loadCommand(temporaryForCutting, exit);
             break;
         }
         case CommandType::SAVE : {
-            deleteThisUglySpaces(temporaryForCutting);
-            std::string savingPath;
-            getLoadSaveParameter(temporaryForCutting, savingPath, exit);
-            std::ofstream myFileSave(savingPath);
-            if (myFileSave.is_open()) {
-                writeToFile(myFileSave);
-                myFileSave.close();
-            } else
-                std::cout << "Unable to open file." << std::endl;
+            saveCommand(temporaryForCutting, exit);
             return;
         }
         case CommandType::GETVALUE : {
-            deleteThisUglySpaces(temporaryForCutting);
-            int xCoor, yCoor;
-            parseStringToCoordinates(xCoor, yCoor, temporaryForCutting, delimiters);
-
-            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
-                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
-                return;
-            }
-
-            if (!Model::getInstance()->getElement(yCoor, xCoor))
-                std::cout << "null" << std::endl;
-            else
-                std::cout << Model::getInstance()->getElement(yCoor, xCoor)->ToString(true) << std::endl;
+            getValueCommand(temporaryForCutting, delimiters);
         }
     }
 }
@@ -118,7 +154,7 @@ void Command::SetCommand(const std::string &inputString, bool &exit) {
     } else {
         if (!delimiters[1]) {
 
-            throw InvalidInput("This command doesn't exist. Try 'help' for more information.\n");
+            throw InvalidInput(COMMANDDOESNTEXISTS);
         }
     }
     ExecuteCommand(temporaryForCutting, delimiters, exit);
@@ -141,16 +177,15 @@ CommandType Command::SwitchTypeOfCommand(const std::string &parsedCommand) const
     } else if (parsedCommand == "getvalue") {
         return CommandType::GETVALUE;
     } else
-        throw InvalidInput("This command doesn't exist. Try 'help' for more information.\n");
+        throw InvalidInput(COMMANDDOESNTEXISTS);
 }
 
 CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) const {
     std::string parsedCommand;
     deleteThisUglySpaces(inputString);
     if (inputString[0] != 'c' && inputString[0] != 'e' && inputString[0] != 's'
-        && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'h'
-        && inputString[0] != 'g')
-        throw InvalidInput("This command doesn't exist. Try 'help' for more information.\n");
+        && inputString[0] != 'l' && inputString[0] != 'r' && inputString[0] != 'g')
+        throw InvalidInput(COMMANDDOESNTEXISTS);
     std::vector<char> delim = {' ', '(', '\n'};
 
     int CharInCommand = 0;
@@ -176,8 +211,8 @@ CommandType Command::parseToCommand(std::string &inputString, bool *delimiters) 
 
     if (delimiters[0] && !delimiters[1]) {
         deleteThisUglySpaces(inputString);
-        if (inputString[0] != '(' && parsedCommand != "exit" || (parsedCommand == "exit" && !inputString.empty()))
-            throw InvalidInput("This command doesn't exist. Try 'help' for more information.\n");
+        if ((inputString[0] != '(' && parsedCommand != "exit") || (parsedCommand == "exit" && !inputString.empty()))
+            throw InvalidInput(COMMANDDOESNTEXISTS);
         delimiters[1] = true;
     }
     inputString.erase(0, 1);
@@ -208,17 +243,47 @@ void Command::parseToXYString(std::string &inputString, std::string &xCoorString
 
         if (first) {
             if (inputString[position] < 97 || inputString[position] > 122)
-                throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+                throw InvalidInput(INVALIDPARAMETER);
             xCoorString += std::to_string((int) inputString[position] - Reference::FirstA);
         } else {
             if (inputString[position] < 48 || inputString[position] > 57)
-                throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+                throw InvalidInput(INVALIDPARAMETER);
             yCoorString += inputString[position];
         }
 
         if (amount >= 7)
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+            throw InvalidInput(INVALIDPARAMETER);
     }
+}
+
+void Command::checkParsedStrCoordinates(int &xCoor, int &yCoor, std::string &inputString, std::string &xCoorString,
+                                        std::string &yCoorString, bool *delimiters, bool firstParameter) const {
+    if (!delimiters[9] && !delimiters[3]) {
+        if (inputString[0] == ',')
+            delimiters[9] = true;
+        else if (inputString[0] == ')')
+            delimiters[3] = true;
+        else if (inputString[0] == ':') {}
+
+        else
+            throw InvalidInput(INVALIDPARAMETER);
+    }
+
+    if (xCoorString.size() > 2 || yCoorString.size() > 3)
+        throw InvalidInput(INVALIDPARAMETER);
+    try {
+        xCoor = std::stoi(xCoorString);
+    } catch (std::invalid_argument &e) {
+        throw InvalidInput(INVALIDPARAMETER);
+    }
+
+    try {
+        yCoor = std::stoi(yCoorString);
+    } catch (std::invalid_argument &e) {
+        throw InvalidInput(INVALIDPARAMETER);
+    }
+    if (firstParameter)
+        inputString.erase(0, 1);
 }
 
 void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inputString, bool *delimiters,
@@ -226,7 +291,7 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
 
     deleteThisUglySpaces(inputString);
     if (inputString[0] != '$')
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
     inputString.erase(0, 1);
 
     int position = 0;
@@ -240,32 +305,7 @@ void Command::parseStringToCoordinates(int &xCoor, int &yCoor, std::string &inpu
     inputString.erase(0, position);
     deleteThisUglySpaces(inputString);
 
-    if (!delimiters[9] && !delimiters[3]) {
-        if (inputString[0] == ',')
-            delimiters[9] = true;
-        else if (inputString[0] == ')')
-            delimiters[3] = true;
-        else if (inputString[0] == ':') {}
-
-        else
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-    }
-
-    if (xCoorString.size() > 2 || yCoorString.size() > 3)
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-    try{
-        xCoor = std::stoi(xCoorString);
-    } catch (std::invalid_argument &e){
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-    }
-
-    try{
-        yCoor = std::stoi(yCoorString);
-    } catch(std::invalid_argument &e){
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-    }
-    if (firstParameter)
-        inputString.erase(0, 1);
+    checkParsedStrCoordinates(xCoor, yCoor, inputString, xCoorString, yCoorString, delimiters, firstParameter);
 }
 
 Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) const {
@@ -291,7 +331,7 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
             } else if (possibleCells.size() == 1) {
                 return possibleCells[0];
             } else
-                throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+                throw InvalidInput(INVALIDPARAMETER);
         }
     }
 }
@@ -317,7 +357,7 @@ std::string Command::parseStringToText(std::string &inputString) const {
             break;
         }
         if (inputChar == ')') {
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+            throw InvalidInput(INVALIDPARAMETER);
         }
         returnText += inputChar;
         ++position;
@@ -327,7 +367,7 @@ std::string Command::parseStringToText(std::string &inputString) const {
     deleteThisUglySpaces(inputString);
 
     if (inputString[0] != ')')
-        throw ("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw (INVALIDPARAMETER);
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
 
@@ -337,7 +377,7 @@ std::string Command::parseStringToText(std::string &inputString) const {
 void Command::parseStringToBool(std::string &inputString) const {
     deleteThisUglySpaces(inputString);
     if (inputString[0] != ')')
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
     inputString.erase(0, 1);
     deleteThisUglySpaces(inputString);
 }
@@ -346,9 +386,110 @@ void Command::parseExpressionError(std::vector<Cell *> &possibleCells) const {
     for (auto i : possibleCells) {
         delete i;
     }
-    throw InvalidInput("Invalid expression syntax. Try 'help' for more information.\n");
+    throw InvalidInput(INVALIDEXPRESSION);
 }
 
+void Command::parseExpressionFinalControl(std::vector<Cell *> &possibleCells, std::string &inputString,
+                                          bool &operatorFirstType, bool &operatorSecondType, int &brackets,
+                                          OperatorType *&mathOperator) const {
+    if (mathOperator)
+        delete mathOperator;
+    deleteThisUglySpaces(inputString);
+    if (brackets || operatorFirstType || operatorSecondType)
+        throw InvalidInput(INVALIDPARAMETER);
+    deleteThisUglySpaces(inputString);
+    if (inputString.size() > 0)
+        throw InvalidInput(INVALIDPARAMETER);
+
+    delete possibleCells.back();
+    possibleCells.pop_back();
+}
+
+void Command::parseExpressionMathematicalPart(std::vector<Cell *> &possibleCells, std::string &inputString,
+                                              bool &operatorFirstType, bool &operatorSecondType,
+                                              OperatorType *&mathOperator, int &amountOfBracketsForMathFunc,
+                                              int &brackets) const {
+
+    possibleCells.push_back(new Operator(*mathOperator));
+    deleteThisUglySpaces(inputString);
+    if (inputString[0] != '(')
+        parseExpressionError(possibleCells);
+    inputString.erase(0, 1);
+
+    operatorSecondType = true;
+    amountOfBracketsForMathFunc = brackets;
+    if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo reference, tak by zadne problemy vyskytnout nemely
+        operatorFirstType = false;
+}
+
+
+void Command::parseExpressionBracketsPart(std::vector<Cell *> &possibleCells, std::string &inputString,
+                                          bool &operatorSecondType, int &brackets, int &amountOfBracketsForMathFunc,
+                                          OperatorType *&mathOperator) const {
+    if (inputString[0] == '(') {
+        possibleCells.push_back(new Operator(OperatorType::BRACKETOPEN));
+        ++brackets;
+    } else {
+        if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
+            OperatorType reversedOperator;
+            getInverseOperator(mathOperator, reversedOperator);
+            possibleCells.push_back(new Operator(reversedOperator));
+            operatorSecondType = false;
+        } else {
+            possibleCells.push_back(new Operator(OperatorType::BRACKETCLOSE));
+            --brackets;
+        }
+
+    }
+    inputString.erase(0, 1);
+}
+
+
+void Command::parseExpressionBasicOperatorPart(std::vector<Cell *> &possibleCells, std::string &inputString,
+                                               bool &operatorFirstType) const {
+    if (operatorFirstType)
+        parseExpressionError(possibleCells);
+
+    switch (inputString[0]) {
+        case '+': {
+            if (possibleCells.empty())
+                parseExpressionError(possibleCells);
+            possibleCells.push_back(new Operator(OperatorType::PLUS));
+            break;
+        }
+        case '-': {
+            possibleCells.push_back(new Operator(OperatorType::MINUS));
+            break;
+        }
+        case '/': {
+            if (possibleCells.empty())
+                parseExpressionError(possibleCells);
+            possibleCells.push_back(new Operator(OperatorType::DIVIDE));
+            break;
+        }
+        case '*': {
+            if (possibleCells.empty())
+                parseExpressionError(possibleCells);
+            possibleCells.push_back(new Operator(OperatorType::MULTIPLY));
+            break;
+        }
+        default:
+            parseExpressionError(possibleCells);
+    }
+    operatorFirstType = true;
+    inputString.erase(0, 1);
+}
+
+
+void Command::parseExpressionNumberPart(std::vector<Cell *> &possibleCells, std::string &inputString,
+                                        bool &operatorFirstType) const {
+    std::string number;
+    parseStringToNumber(inputString, number);
+    double cellNumber = std::stod(number);
+    possibleCells.push_back(new Number(cellNumber));
+    if (operatorFirstType)
+        operatorFirstType = false;
+}
 
 void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &inputString, bool *delimiters,
                               bool &reference) const {
@@ -362,8 +503,9 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
         if (inputString[0] == '$') {
             int xCoor, yCoor;
             parseStringToCoordinates(xCoor, yCoor, inputString, delimiters, false);
-            if (xCoor >= Model::getInstance()->getWidth() || yCoor > Model::getInstance()->getHeight()) {
-                std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+            if ((unsigned) xCoor >= Model::getInstance()->getWidth() ||
+                (unsigned) yCoor > Model::getInstance()->getHeight()) {
+                std::cout << SMALLTABLESIZE << std::endl;
                 return;
             }
             possibleCells.push_back(new Reference(xCoor, yCoor));
@@ -372,79 +514,20 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
                 operatorFirstType = false;
 
         } else if (inputString[0] >= 48 && inputString[0] <= 57) {
-            std::string number;
-            parseStringToNumber(inputString, number);
-            double cellNumber = std::stod(number);
-            possibleCells.push_back(new Number(cellNumber));
-            if (operatorFirstType)
-                operatorFirstType = false;
-
+            parseExpressionNumberPart(possibleCells, inputString, operatorFirstType);
         } else if (inputString[0] >= 42 && inputString[0] <= 47) {
-            if (operatorFirstType)
-                parseExpressionError(possibleCells);
-
-            switch (inputString[0]) {
-                case '+': {
-                    if (possibleCells.empty())
-                        parseExpressionError(possibleCells);
-                    possibleCells.push_back(new Operator(OperatorType::PLUS));
-                    break;
-                }
-                case '-': {
-                    possibleCells.push_back(new Operator(OperatorType::MINUS));
-                    break;
-                }
-                case '/': {
-                    if (possibleCells.empty())
-                        parseExpressionError(possibleCells);
-                    possibleCells.push_back(new Operator(OperatorType::DIVIDE));
-                    break;
-                }
-                case '*': {
-                    if (possibleCells.empty())
-                        parseExpressionError(possibleCells);
-                    possibleCells.push_back(new Operator(OperatorType::MULTIPLY));
-                    break;
-                }
-                default:
-                    parseExpressionError(possibleCells);
-            }
-            operatorFirstType = true;
-            inputString.erase(0, 1);
+            parseExpressionBasicOperatorPart(possibleCells, inputString, operatorFirstType);
 
         } else if (inputString[0] == '(' || inputString[0] == ')') {
-
-            if (inputString[0] == '(') {
-                possibleCells.push_back(new Operator(OperatorType::BRACKETOPEN));
-                ++brackets;
-            } else {
-                if (operatorSecondType && amountOfBracketsForMathFunc == brackets) {
-                    OperatorType reversedOperator;
-                    getInverseOperator(mathOperator, reversedOperator);
-                    possibleCells.push_back(new Operator(reversedOperator)); // todo proc to vypada podobne???
-                    operatorSecondType = false;
-                } else {
-                    possibleCells.push_back(new Operator(OperatorType::BRACKETCLOSE));
-                    --brackets;
-                }
-
-            }
-            inputString.erase(0, 1);
+            parseExpressionBracketsPart(possibleCells, inputString, operatorSecondType, brackets,
+                                        amountOfBracketsForMathFunc, mathOperator);
         } else {
             if (mathOperator)
                 delete mathOperator;
             mathOperator = parseStringToMathFunction(inputString);
             if (mathOperator) {
-                possibleCells.push_back(new Operator(*mathOperator));
-                deleteThisUglySpaces(inputString);
-                if (inputString[0] != '(')
-                    parseExpressionError(possibleCells);
-                inputString.erase(0, 1);
-
-                operatorSecondType = true;
-                amountOfBracketsForMathFunc = brackets;
-                if (operatorFirstType)   // jestli operator +, -, *, / -pak za nim jde cislo nebo reference, tak by zadne problemy vyskytnout nemely
-                    operatorFirstType = false;
+                parseExpressionMathematicalPart(possibleCells, inputString, operatorFirstType, operatorSecondType,
+                                                mathOperator, amountOfBracketsForMathFunc, brackets);
             } else {
                 aggregationFunction = parseStringToAggregationFunction(inputString);
                 if (aggregationFunction) {
@@ -457,22 +540,11 @@ void Command::parseExpression(std::vector<Cell *> &possibleCells, std::string &i
             }
         }
         deleteThisUglySpaces(inputString);
-
     }
-
-    if (mathOperator)
-        delete mathOperator;
-    deleteThisUglySpaces(inputString);
-    if (brackets || operatorFirstType || operatorSecondType)
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-    deleteThisUglySpaces(inputString);
-    if (inputString.size() > 0)
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
-
-    delete possibleCells.back();
-    possibleCells.pop_back();
-
+    parseExpressionFinalControl(possibleCells, inputString, operatorFirstType, operatorSecondType, brackets,
+                                mathOperator);
 }
+
 
 void Command::parseStringToNumber(std::string &inputString, std::string &number) const {
     int dots = 0, position = 0;
@@ -489,7 +561,7 @@ void Command::parseStringToNumber(std::string &inputString, std::string &number)
     }
     inputString.erase(0, (unsigned long) position);
     if (dots > 1)
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
 }
 
 OperatorType *Command::parseStringToMathFunction(std::string &inputString) const {
@@ -578,7 +650,7 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
 
     deleteThisUglySpaces(inputString);
     if (inputString[0] != '(')
-        throw InvalidInput("Invalid expression. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDEXPRESSION);
     inputString.erase(0, 1);
     int xCoorFirstParameter, yCoorFirstParameter, xCoorSecondParameter, yCoorSecondParameter;
     parseStringToCoordinates(xCoorFirstParameter, yCoorFirstParameter, inputString, delimiters);
@@ -586,7 +658,7 @@ void Command::parseAggregationFuncValue(std::string &inputString, std::vector<Ce
     parseStringToCoordinates(xCoorSecondParameter, yCoorSecondParameter, inputString, delimiters);
 
     if (!delimiters[3])
-        throw InvalidInput("Invalid expression. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDEXPRESSION);
 
     deleteThisUglySpaces(inputString);
     possibleCells.push_back(new Operator(*aggregationFunction));
@@ -624,15 +696,14 @@ const Number *Command::evaluateExpression(const Cell *expression, std::vector<co
 void Command::referenceEvaluation(const Cell *actualCell, std::vector<const Cell *> &detectorOfCyclus,
                                   std::vector<const Cell *> &expressionWithoutReferences) const { //zaroven najdeme cyklickou zavislost
     if (!actualCell)
-        throw InvalidExpressionOrReference("Null reference.\n"); // todo VYJIMKA
+        throw InvalidExpressionOrReference(NULLREFERENCE);
     if (actualCell->getType() != CellType::NUMBER && actualCell->getType() != CellType::REFERENCE &&
         actualCell->getType() != CellType::OPERATION && actualCell->getType() != CellType::EXPRESSION)
-        throw InvalidExpressionOrReference(
-                "Invalid reference inside expression.\n"); // todo STEJNA VYJIMKA JAKO O 2 RADKY VEJS
+        throw InvalidExpressionOrReference(INVALIDREFERNCEINSIDEEXPRESSION);
 
     for (auto dependence : detectorOfCyclus) {
         if (dependence == actualCell)
-            throw InvalidExpressionOrReference("Cyclic dependency.\n");
+            throw InvalidExpressionOrReference(CYCLICDEPENDENCY);
     }
 
     if (actualCell->getType() == CellType::NUMBER || actualCell->getType() == CellType::OPERATION) {
@@ -703,7 +774,7 @@ void Command::getCoord(std::string &temporaryForCutting, std::string &cord) cons
         if (temporaryForCutting[position] >= 48 && temporaryForCutting[position] <= 57) {
             cord += temporaryForCutting[position];
         } else
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+            throw InvalidInput(INVALIDPARAMETER);
     }
     temporaryForCutting.erase(0, (unsigned long) position);
 }
@@ -721,7 +792,7 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
     }
 
     if (temporaryForCutting[0] != ',')
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
     temporaryForCutting.erase(0, 1);
 
     deleteThisUglySpaces(temporaryForCutting);
@@ -732,13 +803,13 @@ void Command::getResizeParameters(std::string &temporaryForCutting, int &yCoor, 
     }
 
     if (temporaryForCutting[0] != ')')
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
 
     temporaryForCutting.erase(0, 1);
     deleteThisUglySpaces(temporaryForCutting);
 
     if (temporaryForCutting.size() > 0)
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
 
     xCoor = std::stoi(firstXCoor);
     yCoor = std::stoi(secondYCoor);
@@ -748,7 +819,7 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
     deleteThisUglySpaces(temporaryForCutting);
 
     if (temporaryForCutting[0] != '"')
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
     temporaryForCutting.erase(0, 1);
     unsigned position = 0;
     for (; position < temporaryForCutting.size(); ++position) {
@@ -763,13 +834,13 @@ void Command::getLoadSaveParameter(std::string &temporaryForCutting, std::string
     deleteThisUglySpaces(temporaryForCutting);
     if (!exit) {
         if (temporaryForCutting.empty() || temporaryForCutting[0] != ')')
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+            throw InvalidInput(INVALIDPARAMETER);
 
         temporaryForCutting.erase(0, 1);
         deleteThisUglySpaces(temporaryForCutting);
 
         if (!temporaryForCutting.empty())
-            throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+            throw InvalidInput(INVALIDPARAMETER);
     }
 }
 
@@ -794,7 +865,7 @@ void Command::writeToFile(std::ofstream &myFileSave) const {
 void Command::exitOrHelpCorrectCommand(std::string &temporaryForCutting) const {
     deleteThisUglySpaces(temporaryForCutting);
     if (!temporaryForCutting.empty())
-        throw InvalidInput("Invalid parameter syntax. Try 'help' for more information.\n");
+        throw InvalidInput(INVALIDPARAMETER);
 }
 
 bool Command::SaveTableBeforeExit(const std::string &decision) const {
@@ -847,9 +918,7 @@ void Command::getInverseOperator(OperatorType *&mathOperator, OperatorType &reve
 }
 
 void Command::postfixExpressionError(std::stack<const Number *> ss) const {
-
     if (!ss.empty()) {
-
         while (!ss.empty()) {
             if (ss.top()->addedInPostfixFunction())
                 delete ss.top();
@@ -858,6 +927,29 @@ void Command::postfixExpressionError(std::stack<const Number *> ss) const {
     }
 }
 
+void Command::evaluatePostfixExpressionBasicOpearators(const Cell *cellPointer, std::stack<const Number *> &ss) const {
+    if (ss.size() < 2) {
+        postfixExpressionError(ss);
+        throw InvalidExpressionOrReference(INVALIDEXPRESSION);
+    }
+    auto second = ss.top()->getNumber();
+    if (ss.top()->addedInPostfixFunction())
+        delete ss.top();
+    ss.pop();
+    auto first = ss.top()->getNumber();
+    if (ss.top()->addedInPostfixFunction())
+        delete ss.top();
+
+    ss.pop();
+    double result;
+    try {
+        result = ((const Operator *) cellPointer)->evaluateNumbers(first, second);
+    } catch (InvalidMathematicalExpression &e) {
+        postfixExpressionError(ss);
+        throw InvalidExpressionOrReference(e.getStr());
+    }
+    ss.push(new Number(result, true));
+}
 
 const Number *Command::evaluatePostfixExpression(std::vector<const Cell *> &postfixExpression) const {
     std::stack<const Number *> ss;
@@ -867,42 +959,16 @@ const Number *Command::evaluatePostfixExpression(std::vector<const Cell *> &post
         } else if (cellPointer->getType() == CellType::OPERATION) {
             int weight = ((const Operator *) cellPointer)->getWeighOfOperator();
             if (weight <= 2) {
-                if (ss.size() < 2) {
-                    postfixExpressionError(ss);
-                    throw InvalidExpressionOrReference("Invalid expression. Try 'help' for more information.\n");
-                }
-
-                auto second = ss.top()->getNumber();
-
-                if (ss.top()->addedInPostfixFunction())
-                    delete ss.top();
-                ss.pop();
-
-                auto first = ss.top()->getNumber();
-
-                if (ss.top()->addedInPostfixFunction())
-                    delete ss.top();
-
-                ss.pop();
-
-                double result;
-                try {
-                    result = ((const Operator *) cellPointer)->evaluateNumbers(first, second);
-                } catch (InvalidMathematicalExpression & e){
-                    postfixExpressionError(ss);
-                    throw InvalidExpressionOrReference(e.getStr());
-                }
-                ss.push(new Number(result, true));
+                evaluatePostfixExpressionBasicOpearators(cellPointer, ss);
             } else if (weight == 3) {
                 if (ss.size() < 2) {
                     postfixExpressionError(ss);
-                    throw InvalidExpressionOrReference("Invalid expression. Try 'help' for more information.\n");
+                    throw InvalidExpressionOrReference(INVALIDEXPRESSION);
                 }
-
             } else {
                 if (ss.empty()) {
                     postfixExpressionError(ss);
-                    throw InvalidExpressionOrReference("Invalid expression. Try 'help' for more information.\n");
+                    throw InvalidExpressionOrReference(INVALIDEXPRESSION);
                 }
 
                 auto first = ss.top()->getNumber();
@@ -921,7 +987,7 @@ const Number *Command::evaluatePostfixExpression(std::vector<const Cell *> &post
 
     if (!ss.empty()) {
         postfixExpressionError(ss);
-        throw InvalidExpressionOrReference("Invalid expression. Try 'help' for more information.\n");
+        throw InvalidExpressionOrReference(INVALIDEXPRESSION);
     }
     return finalResults;
 
@@ -930,12 +996,12 @@ const Number *Command::evaluatePostfixExpression(std::vector<const Cell *> &post
 void Command::evaluateReference(const unsigned &height, const unsigned &width,
                                 std::vector<const Cell *> &checkCycles) const {
     if (width >= Model::getInstance()->getWidth() || height > Model::getInstance()->getHeight()) {
-        std::cout << "Size of the table is too small. Try to use resize()." << std::endl;
+        std::cout << SMALLTABLESIZE << std::endl;
         return;
     }
     for (auto reference : checkCycles) { // kontrola na mozne cyklicke zavislosti
         if (Model::getInstance()->getElement(height, width) == reference)
-            throw InvalidExpressionOrReference("Cyclic dependency.\n");
+            throw InvalidExpressionOrReference(CYCLICDEPENDENCY);
 
     }
 
@@ -961,6 +1027,4 @@ void Command::evaluateReference(const unsigned &height, const unsigned &width,
             std::cout << Model::getInstance()->getElement(newYCoor, newXCoor)->ToString(false) << " ";
         }
     }
-
-
 }

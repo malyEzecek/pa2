@@ -21,7 +21,7 @@ public:
 
     void Help() const;
 
-    bool CheckParameters(const int & argc, char * argv[]) const;
+    bool CheckParameters(char * argv[]) const;
 
 };
 
