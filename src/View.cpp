@@ -16,34 +16,20 @@ void View::createTable() const {
 
     std::string columnName = "         A      ";
 
-//    if (model->getWidth() > WIDTHMAX)
-//        throw "The table can not be wider!\n";
-//    if (model->getHeight() > HEIGHTMAX)
-//        throw "The table can not be higher!\n";
-
-//    initscr(); //open window
-//    start_color();
-//    init_pair(1, COLOR_BLACK, COLOR_WHITE);
-//    nocbreak(); // let the terminal do the line editing
-
     std::string inputString;
     bool changed = true;
     bool exit = false;
-    // move(3, 0); // posun vystupu o 3 radky dolu
+    std::string warnings;
+
     do {
-        if (exit){
+        warnings.clear();
+        if (exit) {
             break;
         }
 
-
         if (changed) {
             for (unsigned i = 0, actualPositionLastLetter = 9; i < model->getWidth(); ++i) {
-
-//                attron(COLOR_PAIR(1));
-//                attron(A_BOLD);
-                std::cout << columnName; // todo const_cast<char *>(columnName.c_str()));
-//                attroff(A_BOLD);
-//                attroff(COLOR_PAIR(1));
+                std::cout << columnName;
                 if (!i) {
                     columnName = "     B      ";
                     actualPositionLastLetter = 5;
@@ -65,7 +51,7 @@ void View::createTable() const {
                     columnName[actualPositionLastLetter] = 'A';
                 }
             }
-            std::cout << std::endl;// todo printw("\n");
+            std::cout << std::endl;
 
             int amountOfNumber;
             for (unsigned i = 1; i <= model->getHeight(); ++i) {
@@ -82,50 +68,57 @@ void View::createTable() const {
                 } else {
                     numberColumn += std::to_string(i);
                 }
-
-//                attron(COLOR_PAIR(1));
-//                attron(A_BOLD);
-                std::cout << numberColumn; //todo printw(const_cast<char *>(numberColumn.c_str()));
-//                attroff(A_BOLD);
-//                attroff(COLOR_PAIR(1));
+                std::cout << numberColumn;
 
                 for (unsigned j = 0; j < model->getWidth(); ++j) {
                     if (!model->getElement(i, j))
-                        std::cout << "            "; //todo
+                        std::cout << "            ";
                     else {
                         std::vector<const Cell *> checkCyclesInReferences;
                         if (model->getElement(i, j)->getType() == CellType::EXPRESSION) {
-                            const Number * number = controller.evaluateExpression(model->getElement(i, j), checkCyclesInReferences);
-                            std::cout << number->ToString(false) << " ";
-                            delete number;
-                        } else if (model->getElement(i, j)->getType() == CellType::REFERENCE){
 
-                            controller.evaluateReference(i, j, checkCyclesInReferences);
-                        }
+                            try {
+                                const Number *number = controller.evaluateExpression(model->getElement(i, j),
+                                                                                     checkCyclesInReferences);
+                                std::cout << number->ToString(false) << " ";
+                                delete number;
+                            } catch (InvalidExpressionOrReference &e) {
+                                std::cout << "       null ";
+                                warnings = e.getStr();
+                            }
 
-                        else
+                        } else if (model->getElement(i, j)->getType() == CellType::REFERENCE) {
+                            try {
+                                controller.evaluateReference(i, j, checkCyclesInReferences);
+                            } catch (InvalidExpressionOrReference & e) {
+                                std::cout << "       null ";
+                                warnings = e.getStr();
+                            }
+
+                        } else
                             std::cout << model->getElement(i, j)->ToString(false) << " ";
-
-                        //todo (const_cast<char *>)
                     }
                 }
-                std::cout << std::endl; // todo
+                std::cout << std::endl;
             }
-            //refresh(); //make it appear on the screen!!!!!
+
         }
+        std::cout << warnings << std::endl;
         changed = false;
-        std::cout << "Please, enter a command : "; //todo in the beginning
-        // move(0, 26);
-//        inputCharacter = getch();
-//        inputString += (char) inputCharacter;
+        std::cout << "Please, enter a command : ";
 
         getline(std::cin, inputString);
-        //if (inputCharacter == '\n') {
+
         StringToLower(inputString);
-        controller.SetCommand(inputString, exit);
+
+        try {
+            controller.SetCommand(inputString, exit);
+        } catch (InvalidInput &e) {
+            std::cout << e.getStr();
+        }
+
         changed = true;
         columnName = "         A      ";
-        //}
 
     } while (changed);
 

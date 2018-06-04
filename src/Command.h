@@ -10,8 +10,10 @@
 #include <stack>
 #include <iostream>
 #include <sstream>
-#include <math.h>
+#include <cmath>
 #include <stdexcept>
+#include <cstdlib>
+#include <fstream>
 #include "Model.h"
 
 enum class CommandType {
@@ -22,6 +24,30 @@ enum class CommandType {
     LOAD,
     RESIZE,
     GETVALUE
+};
+
+class InvalidInput {
+private:
+    std::string warningOfInvalidInput;
+public:
+
+    explicit InvalidInput(const std::string &warning) : warningOfInvalidInput(warning) {}
+
+    const std::string &getStr() const {
+        return warningOfInvalidInput;
+    }
+};
+
+class InvalidExpressionOrReference {
+private:
+    std::string warningOfInvalidExpressionReference;
+
+public:
+    explicit InvalidExpressionOrReference(const std::string &warning) : warningOfInvalidExpressionReference(warning) {}
+
+    const std::string &getStr() const {
+        return warningOfInvalidExpressionReference;
+    }
 };
 
 

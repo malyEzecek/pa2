@@ -26,9 +26,6 @@ private:
 
     ~Model();
 
-    /**
-     * Todo..todo..todo..todotodotodo.todotodoooooooootdoddododo int nahrad Cell *
-     */
     std::vector<std::vector<Cell *>> spreadSheet;
     static Model *instance;
 
