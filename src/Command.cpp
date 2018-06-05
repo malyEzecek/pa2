@@ -327,7 +327,7 @@ Cell *Command::parseStringToCell(std::string inputString, bool *delimiters) cons
             bool reference = false;
             parseExpression(possibleCells, inputString, delimiters, reference);
             if (possibleCells.size() > 1) {
-                return new Expression(possibleCells, reference);
+                return new Expression(possibleCells);
             } else if (possibleCells.size() == 1) {
                 return possibleCells[0];
             } else
@@ -1027,4 +1027,16 @@ void Command::evaluateReference(const unsigned &height, const unsigned &width,
             std::cout << Model::getInstance()->getElement(newYCoor, newXCoor)->ToString(false) << " ";
         }
     }
+}
+
+InvalidInput::InvalidInput(const std::string &warning) : warningOfInvalidInput(warning) {}
+
+const std::string &InvalidInput::getStr() const {
+    return warningOfInvalidInput;
+}
+
+InvalidExpressionOrReference::InvalidExpressionOrReference(const std::string &warning) : warningOfInvalidExpressionReference(warning) {}
+
+const std::string &InvalidExpressionOrReference::getStr() const {
+    return warningOfInvalidExpressionReference;
 }

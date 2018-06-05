@@ -16,8 +16,8 @@ unsigned Model::getWidth() const {
 }
 
 Model::Model() {
-    width = 10;
-    height = 25;
+    width = WIDTH;
+    height = HIGHT;
     spreadSheet.resize(height);
     for (unsigned i = 0; i < height; ++i)
         spreadSheet[i].resize(width);

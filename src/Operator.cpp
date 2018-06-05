@@ -178,3 +178,10 @@ double Operator::evaluateNumbers(const double &first) const {
         return log2(first);
 }
 
+InvalidMathematicalExpression::InvalidMathematicalExpression(const std::string &mathematicalWarning) : warning(mathematicalWarning){}
+
+const std::string &InvalidMathematicalExpression::getStr() const {
+
+        return warning;
+
+}

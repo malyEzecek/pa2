@@ -14,13 +14,22 @@
 
 class Expression : public Cell {
 private:
-
+    /** array of pointers on Cells
+     * every of the is the part of the expression**/
     std::vector<Cell *> parsedStringToCells;
-    bool reference;
-public:
-    Expression();
 
-    explicit Expression(std::vector<Cell *> & parsedCells, bool reference);
+public:
+    /**
+     * Default constructor.
+     */
+    Expression() = default;
+
+    /**
+     * Explicit constructor
+     * @param parsedCells array of pointers on Cell like a parts of the expression to be set
+     */
+
+    explicit Expression(std::vector<Cell *> & parsedCells);
 
     ~Expression() override;
 

@@ -25,7 +25,7 @@ Expression *Expression::clone() const {
     return newExpression;
 }
 
-Expression::Expression(std::vector<Cell *> &parsedCells, bool reference) : reference(reference) {
+Expression::Expression(std::vector<Cell *> &parsedCells)  {
     for(int i = 0; i < (int)parsedCells.size(); ++i){
         parsedStringToCells.push_back(parsedCells[i]);
     }
@@ -36,8 +36,6 @@ Expression::~Expression() {
         delete it;
     }
 }
-
-Expression::Expression() : reference(false) {}
 
 const std::string Expression::ToString(bool load) const { // todo neco s tim udelej
     std::string returnString;
